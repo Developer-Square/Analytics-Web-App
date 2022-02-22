@@ -7,20 +7,23 @@ const options = {};
 
 let client: MongoClient | undefined = undefined;
 let db: Db | undefined = undefined;
+let clientPromise: Promise<MongoClient> | undefined = undefined;
 
 (async function(){
     if (config.env === 'development') {
         // In development mode, use a global variable so that the value
         // is preserved across module reloads caused by HMR (Hot Module Replacement).
         if (!global._mongoClientPromise) {
-            global._mongoClientPromise = new MongoClient(uri, options);
+            client = new MongoClient(uri, options)
+            global._mongoClientPromise = client.connect()
     }
     
-    client = global._mongoClientPromise ;
+    clientPromise = global._mongoClientPromise
     
     } else {
         // In production mode, it's best to not use a global variable.
         client = new MongoClient(uri, options);
+        clientPromise = client.connect()
     }
 
     await client?.connect();
@@ -31,4 +34,4 @@ let db: Db | undefined = undefined;
     
 })();
 
-export default client;
+export { clientPromise, client };

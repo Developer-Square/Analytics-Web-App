@@ -1,4 +1,4 @@
-import client from '../lib/mongodb';
+import { clientPromise, client } from '../lib/mongodb';
 import { InsertOneResult } from 'mongodb';
 
 /**
@@ -6,7 +6,7 @@ import { InsertOneResult } from 'mongodb';
  * @param {} userBody
  */
 export const insertUser = async (userBody: Record<string, any>) => {
-    await client?.connect();
+    await clientPromise;
     if (client){
         const db = client.db('analytics-web-app');
         const users = db.collection('users');
