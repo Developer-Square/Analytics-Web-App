@@ -1,20 +1,22 @@
-import Joi from 'joi';
+// import Joi from 'joi';
 
-const envVarsSchema = Joi.object().keys({
-    NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
-    MONGODB_URI: Joi.string().required().description('Mongo DB uri'),
-});
+// const envVarsSchema = Joi.object().keys({
+//     NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
+//     MONGODB_URI: Joi.string().required().description('Mongo DB uri'),
+//     GJS_DEBUG_TOPICS: Joi.required().description('GJS_DEBUG_TOPICS'),
+//     LESSOPEN: Joi.required(),
+// });
 
-const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
+// const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
 
-if (error) {
-    throw new Error(`Config validation error: ${error.message}`);
-}
+// if (error) {
+//     throw new Error(`Config validation error: ${error.message}`);
+// }
 
 const config = {
-    env: envVars.NODE_ENV,
+    env: process.env.NODE_ENV,
     mongoose: {
-        url: envVars.MONGODB_URI + (envVars.NODE_ENV === 'test' ? 'test' : ''),
+        url: process.env.MONGODB_URI + (process.env.NODE_ENV === 'test' ? 'test' : ''),
     },
 };
 
