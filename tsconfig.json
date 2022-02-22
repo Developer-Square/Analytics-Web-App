@@ -5,6 +5,9 @@
       "@/modules/*": [
         "modules/*"
       ],
+      "@/public/*": [
+        "public/*"
+      ],
     },
     "target": "es5",
     "lib": [
