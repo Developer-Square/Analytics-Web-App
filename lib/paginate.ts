@@ -27,6 +27,11 @@ export default class Paginate {
         this.documents = this.findDocs();
     }
 
+    /**
+     * Cleans up sort input 
+     * @param sortBy - Sorting criteria using the format: sortField:(desc|asc). Multiple sorting criteria should be separated by commas (,)
+     * @returns {string} sorting order
+     */
     sanitizeSort(sortBy: string): string {
         if (sortBy) {
             const sortingCriteria: any = [];
