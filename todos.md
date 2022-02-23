@@ -1,4 +1,5 @@
  - Add Error Boundary
+ - **Use absolute paths(Causing a problem)
  - Split application bundle if performance is bad.
  - Added styled components if necessary.
  - Wrap External Components
