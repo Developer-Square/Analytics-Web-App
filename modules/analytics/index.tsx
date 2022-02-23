@@ -18,32 +18,28 @@ interface UserIdentifyEventProps {
 }
 
 const sendData = (data: any) => {
-    console.log(typeof (data));
-    if (typeof navigator.sendBeacon === 'function') {
-        navigator.sendBeacon('https://t4odney23k.execute-api.us-east-1.amazonaws.com/default/postEventData', JSON.stringify(data))
-    } else {
-        var xhr = new XMLHttpRequest()
-        xhr.open('POST', 'https://t4odney23k.execute-api.us-east-1.amazonaws.com/default/postEventData')
-        xhr.send(data)
-    }
+    // if (typeof navigator.sendBeacon === 'function') {
+    //     navigator.sendBeacon('https://t4odney23k.execute-api.us-east-1.amazonaws.com/default/postEventData', JSON.stringify(data))
+    // } else {
+    //     var xhr = new XMLHttpRequest()
+    //     xhr.open('POST', 'https://t4odney23k.execute-api.us-east-1.amazonaws.com/default/postEventData')
+    //     xhr.send(data)
+    // }
 }
 
 const awsPlugin = () => {
     return {
         name: 'aws-plugin',
         page: function page(_ref: any) {
-            console.log(typeof (_ref));
             const payload = _ref.payload
             console.log('Page Event', payload);
             sendData(payload)
         },
         track: function track(_ref2: any) {
-            console.log(typeof (_ref2));
             const payload = _ref2.payload
             sendData(payload)
         },
         identify: function identify(_ref3: any) {
-            console.log(typeof (_ref3));
             const payload = _ref3.payload
             sendData(payload)
         },
@@ -71,6 +67,21 @@ export interface EventMap {
     checkout: CheckoutEventProps,
     addToCart: AddToCartEventProps,
     identifyUser: UserIdentifyEventProps
+}
+
+const sendDataToApi = (method: string, path: string, data: any) => {
+    let url = ''
+    if (process.env.MODE === 'Development') {
+        url = `http://localhost:3000/${path}`
+    }
+
+    fetch(url, {
+        method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
 }
 
 export const trackEvent = <K extends keyof EventMap>(eventName: K, props: EventMap[K]): void => {
