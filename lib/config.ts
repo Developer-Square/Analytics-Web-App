@@ -15,6 +15,7 @@ const config = {
     env: process.env.NODE_ENV,
     mongoose: {
         url: process.env.MONGODB_URI + (process.env.NODE_ENV === 'test' ? 'test' : ''),
+        dbName: process.env.DB_NAME,
     },
 };
 
