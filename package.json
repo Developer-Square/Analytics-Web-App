@@ -11,11 +11,13 @@
   "dependencies": {
     "@analytics/google-analytics": "^0.5.3",
     "@headlessui/react": "^1.5.0",
+    "@types/styled-components": "^5.1.23",
     "analytics": "^0.8.0",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-query": "^3.34.16"
+    "react-query": "^3.34.16",
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.2",
