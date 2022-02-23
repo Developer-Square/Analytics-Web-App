@@ -1,18 +1,23 @@
 import { clientPromise, client } from '../lib/mongodb';
-import { InsertOneResult } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import config from '../lib/config';
 
-/**
- * Insert a user
- * @param {} userBody
- */
-export const insertUser = async (userBody: Record<string, any>) => {
-    Object.assign(userBody, { _id: userBody.userId })
-    await clientPromise;
-    if (client){
-        const db = client.db(config.mongoose.dbName);
-        const users = db.collection('users');
-        const result: InsertOneResult | undefined = await users?.insertOne(userBody);
-        return result;
+export class User {
+    client: MongoClient;
+
+    constructor(client: MongoClient | undefined){
+        if (!client) throw new Error('Cannot be called directly');
+        this.client = client;
     }
-};
+
+    static async build () {
+        await clientPromise;
+        return new User(client)
+    }
+
+    async insertUser(userBody: Record<string, any>){
+        Object.assign(userBody, { _id: userBody.userId })
+        const db = this.client.db(config.mongoose.dbName);
+        return db.collection('users').insertOne(userBody);
+    }
+}
