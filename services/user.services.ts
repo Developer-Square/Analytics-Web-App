@@ -1,5 +1,5 @@
 import { clientPromise, client } from '../lib/mongodb';
-import { Db, DeleteResult, MongoClient, InsertOneResult } from 'mongodb';
+import { Db, DeleteResult, MongoClient, InsertOneResult, Document } from 'mongodb';
 import config from '../lib/config';
 import Paginate from '../lib/paginate';
 
@@ -54,5 +54,22 @@ export class User {
     async paginate(paginationbody: Record<string, any>) {
         const pagination = new Paginate(paginationbody.filter, paginationbody.options, this.db.collection('users'));
         return await pagination.findDocs();
+    }
+
+    /**
+     * Find a user using an id
+     * @param userId user id
+     */
+    async findById(userId: string) {
+        return await this.db.collection('users').findOne({"_id":userId})
+    }
+
+    /**
+     * Updates a user
+     * @param userId 
+     * @param updateBody 
+     */
+    async update(userId: string, updateBody: Record<string, any>){
+        return await this.db.collection('users').findOneAndUpdate({"_id":userId}, updateBody, { returnDocument: 'after' })
     }
 }
