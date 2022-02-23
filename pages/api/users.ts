@@ -11,5 +11,8 @@ export default async function handler(
     if (req.method === 'POST') {
         const result = await UserCollection.insertUser(req.body);
         res.status(200).json({ result })
+    } else if (req.method === 'GET') {
+        const docs = await UserCollection.paginate(req.body);
+        res.status(200).json({ results: docs })
     }
 }
