@@ -69,19 +69,17 @@ export interface EventMap {
     identifyUser: UserIdentifyEventProps
 }
 
-const sendDataToApi = (method: string, path: string, data: any) => {
-    let url = ''
-    if (process.env.MODE === 'Development') {
-        url = `http://localhost:3000/${path}`
-    }
-
-    fetch(url, {
+const sendDataToApi = async (method: string, path: string, data: any) => {
+    const response = await fetch(path, {
         method,
+        mode: 'cors',
+        cache: 'no-cache',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
     })
+    return response.json()
 }
 
 export const trackEvent = <K extends keyof EventMap>(eventName: K, props: EventMap[K]): void => {
@@ -93,7 +91,9 @@ export const pageVisit = (): void => {
 }
 
 export const userIdentify = (params: UserIdentifyEventProps): void => {
-    analytics.identify(params.userId, { email: params.email, name: params.username })
+    analytics.identify(params.userId, { email: params.email, name: params.username }, ({ payload }: any) => {
+        sendDataToApi('POST', 'api/users', payload).then(res => console.log(res))
+    })
 }
 
 export default analytics
