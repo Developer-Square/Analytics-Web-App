@@ -17,15 +17,15 @@ export default catchAPIError(async (
 
     if (req.method === 'PATCH') {
         const doc = await UserCollection.update(userId, req.body);
-        res.status(httpStatus.OK).json({ doc });
+        res.status(httpStatus.OK).json({ doc: doc.value });
     }
     else if (req.method === 'GET') {
         const doc = await UserCollection.findById(userId);
         res.status(httpStatus.OK).json({ results: doc });
     }
     else if (req.method === 'DELETE') {
-        const result = await UserCollection.deleteUser(userId);
-        res.status(httpStatus.OK).json({ results: result });
+        await UserCollection.deleteUser(userId);
+        res.status(httpStatus.NO_CONTENT);
     }
     else {
         res.status(httpStatus.NOT_FOUND);

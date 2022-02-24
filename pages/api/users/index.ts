@@ -12,8 +12,8 @@ export default catchAPIError(async (
     await User.build();
 
     if (req.method === 'POST') {
-        const result = await UserCollection.insertUser(req.body);
-        res.status(httpStatus.CREATED).json({ result })
+        const user = await UserCollection.insertUser(req.body);
+        res.status(httpStatus.CREATED).json({ user })
     }
     else if (req.method === 'GET') {
         const docs = await UserCollection.paginate(req.body);

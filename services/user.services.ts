@@ -1,5 +1,5 @@
 import { clientPromise, client } from '../lib/mongodb';
-import { Db, DeleteResult, MongoClient, InsertOneResult, Document } from 'mongodb';
+import { Db, DeleteResult, MongoClient, InsertOneResult, Document, WithId, ModifyResult } from 'mongodb';
 import config from '../lib/config';
 import Paginate from '../lib/paginate';
 import ApiError from '../lib/ApiError';
@@ -26,13 +26,14 @@ export class User {
 
     /**
      * Insert as single user
-     * @returns {Promise<InsertOneResult<Document>>}
+     * @returns {Promise<WithId<Document> | null>}
      */
-    async insertUser(userBody: Record<string, any>): Promise<InsertOneResult<Document>>{
+    async insertUser(userBody: Record<string, any>): Promise<WithId<Document> | null>{
         const user = await this.findById(userBody['userId']);
         if(user) throw new ApiError(httpStatus.BAD_REQUEST, 'User already exists');
         delete Object.assign(userBody, {['_id']: userBody['userId'] })['userId'];
-        return this.db.collection('users').insertOne(userBody);
+        await this.db.collection('users').insertOne(userBody);
+        return await this.findById(userBody['_id']);
     }
 
     /**
@@ -56,8 +57,9 @@ export class User {
     /**
      * Paginates users
      * @param paginationbody pagination filter and options
+     * @returns {Promise<WithId<Document>[]>} List of users that satisfy filter
      */
-    async paginate(paginationbody: Record<string, any>) {
+    async paginate(paginationbody: Record<string, any>): Promise<WithId<Document>[]> {
         const pagination = new Paginate(paginationbody.filter, paginationbody.options, this.db.collection('users'));
         return await pagination.findDocs();
     }
@@ -65,8 +67,9 @@ export class User {
     /**
      * Find a user using an id
      * @param userId user id
+     * @returns {Promise<WithId<Document> | null>} user
      */
-    async findById(userId: string) {
+    async findById(userId: string): Promise<WithId<Document> | null> {
         return await this.db.collection('users').findOne({"_id":userId})
     }
 
@@ -74,8 +77,9 @@ export class User {
      * Updates a user
      * @param userId 
      * @param updateBody 
+     * @returns {Promise<ModifyResult<Document>>} updated document
      */
-    async update(userId: string, updateBody: Record<string, any>){
+    async update(userId: string, updateBody: Record<string, any>): Promise<ModifyResult<Document>>{
         const user = await this.findById(userId);
         if(!user) throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
         return await this.db.collection('users').findOneAndUpdate({"_id":userId}, { $set: updateBody }, { returnDocument: 'after' })
