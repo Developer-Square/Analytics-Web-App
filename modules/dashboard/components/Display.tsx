@@ -24,7 +24,7 @@ export default function Display({ }: Props) {
 
     return (
         <div>
-            {data.code == 500 ? <div>An Error occurred</div> : <div>{data}</div>}
+            {data.code == 500 ? <div>An Error occurred</div> : <div>{data.results[0].email}</div>}
         </div>
     )
 }
