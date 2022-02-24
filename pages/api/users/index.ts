@@ -18,4 +18,7 @@ export default async function handler(
         const docs = await UserCollection.paginate(req.body);
         res.status(httpStatus.OK).json({ results: docs })
     }
+    else {
+        res.status(httpStatus.NOT_FOUND);
+    }
 }
