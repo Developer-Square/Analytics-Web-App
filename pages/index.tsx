@@ -1,8 +1,9 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import Head from "next/head"
+import Link from "next/link"
+import React from "react"
 import styles from '../styles/Home.module.css'
 
-const Home: NextPage = () => {
+function Home() {
   return (
     // Add Error Boundary
     // Import dashboard components
@@ -14,6 +15,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        <Link href='/EcommerceAnalytics'>Ecommerce Page</Link>
         <p>Events Dashboard</p>
       </main>
     </div>

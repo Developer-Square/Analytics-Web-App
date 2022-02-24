@@ -15,6 +15,7 @@ interface UserIdentifyEventProps {
     userId: string,
     email: string,
     username: string
+    mutateAsync: Function
 }
 
 const sendData = (data: any) => {
@@ -69,18 +70,6 @@ export interface EventMap {
     identifyUser: UserIdentifyEventProps
 }
 
-const sendDataToApi = async (method: string, path: string, data: any) => {
-    const response = await fetch(path, {
-        method,
-        mode: 'cors',
-        cache: 'no-cache',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    return response.json()
-}
 
 export const trackEvent = <K extends keyof EventMap>(eventName: K, props: EventMap[K]): void => {
     analytics.track(eventName, props)
@@ -91,8 +80,9 @@ export const pageVisit = (): void => {
 }
 
 export const userIdentify = (params: UserIdentifyEventProps): void => {
-    analytics.identify(params.userId, { email: params.email, name: params.username }, ({ payload }: any) => {
-        sendDataToApi('POST', 'api/users', payload).then(res => console.log(res))
+    const { email, userId, username, mutateAsync } = params
+    analytics.identify(userId, { email, name: username }, ({ payload }: any) => {
+        mutateAsync({ method: 'POST', path: 'api/users', data: payload })
     })
 }
 
