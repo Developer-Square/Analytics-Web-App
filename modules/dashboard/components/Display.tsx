@@ -20,9 +20,11 @@ export default function Display({ }: Props) {
         return <p>Loading...</p>
     }
 
+    console.log(data);
+
     return (
         <div>
-            {data}
+            {data.code == 500 ? <div>An Error occurred</div> : <div>{data}</div>}
         </div>
     )
 }

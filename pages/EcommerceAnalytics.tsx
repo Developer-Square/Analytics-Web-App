@@ -18,7 +18,7 @@ export default function EcommerceAnalytics({ }: Props) {
   // Send the new user data to the backend.
   // We're using React Query because it allows us to manage server side
   // state more efficiently.
-  const { mutateAsync } = useMutation(sendUserDataToApi, {
+  const { mutateAsync, isError, error, data } = useMutation(sendUserDataToApi, {
     onSuccess: () => {
       queryClientAccess.invalidateQueries('users')
     },
@@ -28,7 +28,7 @@ export default function EcommerceAnalytics({ }: Props) {
   })
 
   const onSignIn = useCallback(() => {
-    userIdentify({ userId: 'user-id-xyz', username: 'ryann254', email: 'kingzoo.2021@gmail.com', mutateAsync: mutateAsync })
+    userIdentify({ userId: 'user-id-125', username: 'ryann254', email: 'kingzoo.2021@gmail.com', mutateAsync: mutateAsync, isError, error, data })
   }, [])
 
   const onAddToCart = useCallback(() => {
