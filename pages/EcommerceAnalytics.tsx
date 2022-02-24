@@ -21,6 +21,9 @@ export default function EcommerceAnalytics({ }: Props) {
   const { mutateAsync } = useMutation(sendUserDataToApi, {
     onSuccess: () => {
       queryClientAccess.invalidateQueries('users')
+    },
+    onError: () => {
+      alert('Couldn\'t post user')
     }
   })
 

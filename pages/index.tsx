@@ -2,6 +2,8 @@ import Head from "next/head"
 import Link from "next/link"
 import React from "react"
 import styles from '../styles/Home.module.css'
+import Display from "@/modules/dashboard/components/Display"
+
 
 function Home() {
   return (
@@ -16,7 +18,7 @@ function Home() {
 
       <main className={styles.main}>
         <Link href='/EcommerceAnalytics'>Ecommerce Page</Link>
-        <p>Events Dashboard</p>
+        <Display />
       </main>
     </div>
   )

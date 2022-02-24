@@ -6,11 +6,21 @@ interface postDataParams {
     data: any
 }
 
-const sendUserDataToApi = async ({ method, path, data }: postDataParams) => {
+interface getDataParams {
+    method: string,
+    path: string
+}
+
+interface responsePostData {
+    result: {
+        acknowledged: boolean,
+        insertedId: string
+    }
+}
+
+const sendUserDataToApi = async ({ method, path, data }: postDataParams): Promise<responsePostData> => {
     const response = await fetch(path, {
         method,
-        mode: 'cors',
-        cache: 'no-cache',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -19,4 +29,14 @@ const sendUserDataToApi = async ({ method, path, data }: postDataParams) => {
     return response.json()
 }
 
-export { sendUserDataToApi }
+const getUserDataFromApi = async ({ method, path }: getDataParams) => {
+    const response = await fetch(path, {
+        method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    return response.json()
+}
+
+export { sendUserDataToApi, getUserDataFromApi }
