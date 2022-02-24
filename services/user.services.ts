@@ -2,6 +2,8 @@ import { clientPromise, client } from '../lib/mongodb';
 import { Db, DeleteResult, MongoClient, InsertOneResult, Document } from 'mongodb';
 import config from '../lib/config';
 import Paginate from '../lib/paginate';
+import ApiError from '../lib/ApiError';
+import httpStatus from 'http-status';
 
 export class User {
     client: MongoClient;
@@ -26,7 +28,9 @@ export class User {
      * Insert as single user
      * @returns {Promise<InsertOneResult<Document>>}
      */
-    async insertUser(userBody: Record<string, any>) {
+    async insertUser(userBody: Record<string, any>): Promise<InsertOneResult<Document>> {
+        const user = await this.findById(userBody['userId']);
+        if (user) throw new ApiError(httpStatus.BAD_REQUEST, 'User already exists');
         delete Object.assign(userBody, { ['_id']: userBody['userId'] })['userId'];
         return this.db.collection('users').insertOne(userBody);
     }
@@ -36,6 +40,8 @@ export class User {
      * @returns {Promise<DeleteResult>}
      */
     async deleteUser(userId: string): Promise<DeleteResult> {
+        const user = await this.findById(userId);
+        if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
         return this.db.collection('users').deleteOne({ "_id": userId });
     }
 
@@ -70,7 +76,8 @@ export class User {
      * @param updateBody 
      */
     async update(userId: string, updateBody: Record<string, any>) {
-        return await this.db.collection('users').findOneAndReplace({ "_id": userId }, updateBody, { returnDocument: 'after' })
+        const user = await this.findById(userId);
+        if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+        return await this.db.collection('users').findOneAndUpdate({ "_id": userId }, { $set: updateBody }, { returnDocument: 'after' })
     }
 }
-
