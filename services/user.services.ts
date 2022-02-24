@@ -27,7 +27,7 @@ export class User {
      * @returns {Promise<InsertOneResult<Document>>}
      */
     async insertUser(userBody: Record<string, any>) {
-        Object.assign(userBody, { _id: userBody.userId })
+        delete Object.assign(userBody, { ['_id']: userBody['userId'] })['userId'];
         return this.db.collection('users').insertOne(userBody);
     }
 
