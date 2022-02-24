@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
 import { User } from '../../../services/user.services';
 import { client } from '../../../lib/mongodb';
-import catchAPIError from '../../../lib/catchAPIError';
+import catchAPIError from '../../../lib/catchApiError';
 import ApiError from '../../../lib/ApiError';
 
 export default catchAPIError(async (

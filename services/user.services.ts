@@ -8,7 +8,7 @@ export class User {
     db: Db;
 
     constructor(client: MongoClient | undefined) {
-        if (!client) throw new Error('Cannot be called directly');
+        if (!client) throw new Error('MongoDB connection is lost. This could be because you refreshed the server by editing code. Close the server and start again');
         this.client = client;
         this.db = client.db(config.mongoose.dbName);
     }

@@ -13,9 +13,10 @@ export default async function handler(
     if (req.method === 'POST') {
         const result = await UserCollection.insertUser(req.body);
         res.status(httpStatus.CREATED).json({ result })
-    }
-    else if (req.method === 'GET') {
+    } else if (req.method === 'GET') {
         const docs = await UserCollection.paginate(req.body);
         res.status(httpStatus.OK).json({ results: docs })
+    } else {
+        res.status(httpStatus.NOT_FOUND);
     }
 }
