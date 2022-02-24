@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '../../services/user.services';
-import { client } from '../../lib/mongodb';
+import httpStatus from 'http-status';
+import { User } from '../../../services/user.services';
+import { client } from '../../../lib/mongodb';
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,10 +12,10 @@ export default async function handler(
 
     if (req.method === 'POST') {
         const result = await UserCollection.insertUser(req.body);
-        res.status(200).json({ result })
+        res.status(httpStatus.CREATED).json({ result })
     }
     else if (req.method === 'GET') {
         const docs = await UserCollection.paginate(req.body);
-        res.status(200).json({ results: docs })
+        res.status(httpStatus.OK).json({ results: docs })
     }
 }

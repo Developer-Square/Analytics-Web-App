@@ -70,6 +70,6 @@ export class User {
      * @param updateBody 
      */
     async update(userId: string, updateBody: Record<string, any>){
-        return await this.db.collection('users').findOneAndUpdate({"_id":userId}, updateBody, { returnDocument: 'after' })
+        return await this.db.collection('users').findOneAndReplace({"_id":userId}, updateBody, { returnDocument: 'after' })
     }
 }
