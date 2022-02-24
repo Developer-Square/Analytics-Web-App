@@ -18,10 +18,10 @@ export default class Paginate {
     documents;
 
     constructor(filter: Record<string, any>, options: IOptions, collection: Collection){
-        this.filter = filter;
-        this.sort = this.sanitizeSort(options.sortBy);
-        this.limit = this.sanitizelimit(options.limit);
-        this.page = this.sanitizePage(options.page);
+        this.filter = filter ? filter : {};
+        this.sort = options ? this.sanitizeSort(options.sortBy) : 'createdAt';
+        this.limit = options ? this.sanitizelimit(options.limit) : 10;
+        this.page = options ? this.sanitizePage(options.page) : 1;
         this.collection = collection;
         this.count = this.countDocs();
         this.documents = this.findDocs();
