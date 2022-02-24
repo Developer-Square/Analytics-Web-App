@@ -10,7 +10,7 @@ export class User {
     db: Db;
 
     constructor(client: MongoClient | undefined){
-        if (!client) throw new Error('MongoDB connection is lost. This could be because you refreshed the server by editing code. Close the server and start again');
+        if (!client) throw new Error('MongoDB connection is lost. This could be because you refreshed the server by editing and saving code. Close the server and start again. This error should only occur in development mode');
         this.client = client;
         this.db = client.db(config.mongoose.dbName);
     }
