@@ -6,13 +6,12 @@ type Props = {}
 
 export default function Display({ }: Props) {
     const queryData = {
-        method: 'GET',
         path: 'api/users'
     }
-    const { data, isLoading, isError, error } = useQuery(['users', queryData], () => getUserDataFromApi(queryData))
+    const { data, isLoading, isError, error } = useQuery(['users', queryData], () => getUserDataFromApi(queryData), { retry: 3 })
 
     if (isError) {
-        alert(error)
+        alert(error);
         return null
     }
 
@@ -20,11 +19,9 @@ export default function Display({ }: Props) {
         return <p>Loading...</p>
     }
 
-    console.log(data);
-
     return (
         <div>
-            {data.code == 500 ? <div>An Error occurred</div> : <div>{data.results[0].email}</div>}
+            {data.results ? <div>Created userId is: <strong>{data.results[data.results.length - 1]._id}</strong></div> : null}
         </div>
     )
 }

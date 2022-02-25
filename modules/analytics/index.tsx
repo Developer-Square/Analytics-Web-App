@@ -15,10 +15,7 @@ interface UserIdentifyEventProps {
     userId: string,
     email: string,
     username: string
-    mutateAsync: Function,
-    isError: boolean,
-    error: unknown,
-    data: any
+    mutateAsync: Function
 }
 
 const sendData = (data: any) => {
@@ -83,12 +80,9 @@ export const pageVisit = (): void => {
 }
 
 export const userIdentify = (params: UserIdentifyEventProps): void => {
-    const { email, userId, username, mutateAsync, isError, error, data } = params
+    const { email, userId, username, mutateAsync } = params
     analytics.identify(userId, { email, name: username }, ({ payload }: any) => {
         mutateAsync({ method: 'POST', path: 'api/users', data: payload })
-        if (isError) {
-            alert('Couldn\'t post')
-        }
     })
 }
 
