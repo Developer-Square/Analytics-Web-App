@@ -1,6 +1,7 @@
-import { getUserDataFromApi } from '@/modules/utilities/apiCalls'
 import React from 'react'
 import { useQuery } from 'react-query'
+import { getUserDataFromApi } from '@/modules/utilities/apiCalls'
+import { toast } from '@/modules/common'
 
 type Props = {}
 
@@ -8,10 +9,14 @@ export default function Display({ }: Props) {
     const queryData = {
         path: 'api/users'
     }
-    const { data, isLoading, isError, error } = useQuery(['users', queryData], () => getUserDataFromApi(queryData), { retry: 3 })
+    const { data, isLoading, isError, isSuccess, error, status } = useQuery(['users', queryData], () => getUserDataFromApi(queryData), { retry: 3 })
+
+    if (isSuccess) {
+        toast.success('Latest user fetched successfully.');
+    }
 
     if (isError) {
-        alert(error);
+        toast.error(`${error}`);
         return null
     }
 
