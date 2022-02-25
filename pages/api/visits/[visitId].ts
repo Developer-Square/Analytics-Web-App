@@ -22,7 +22,7 @@ export default catchAPIError(async (
     }
     else if (req.method === 'GET') {
         const doc = await PageVisitCollection.findById(new ObjectId(visitId));
-        res.status(httpStatus.OK).json({ results: doc });
+        res.status(httpStatus.OK).json({ doc });
     }
     else if (req.method === 'DELETE') {
         await PageVisitCollection.deletePageVisit(new ObjectId(visitId));
