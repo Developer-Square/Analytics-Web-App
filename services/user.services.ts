@@ -1,7 +1,7 @@
 import { clientPromise, client } from '../lib/mongodb';
-import { Db, DeleteResult, MongoClient, InsertOneResult, Document, WithId, ModifyResult } from 'mongodb';
+import { Db, DeleteResult, MongoClient, Document, WithId, ModifyResult } from 'mongodb';
 import config from '../lib/config';
-import Paginate from '../lib/paginate';
+import Paginate, { IPagination } from '../lib/paginate';
 import ApiError from '../lib/ApiError';
 import httpStatus from 'http-status';
 
@@ -25,7 +25,8 @@ export class User {
     }
 
     /**
-     * Insert as single user
+     * Insert a single user
+     * @param {Record<string, any>} userBody
      * @returns {Promise<WithId<Document> | null>}
      */
     async insertUser(userBody: Record<string, any>): Promise<WithId<Document> | null>{
@@ -38,6 +39,7 @@ export class User {
 
     /**
      * Delete a single user
+     * @param {string} userId
      * @returns {Promise<DeleteResult>}
      */
     async deleteUser(userId: string): Promise<DeleteResult>{
@@ -56,17 +58,17 @@ export class User {
 
     /**
      * Paginates users
-     * @param paginationbody pagination filter and options
+     * @param {IPagination} paginationbody pagination filter and options
      * @returns {Promise<WithId<Document>[]>} List of users that satisfy filter
      */
-    async paginate(paginationbody: Record<string, any>): Promise<WithId<Document>[]> {
+    async paginate(paginationbody: IPagination): Promise<WithId<Document>[]> {
         const pagination = new Paginate(paginationbody.filter, paginationbody.options, this.db.collection('users'));
         return await pagination.findDocs();
     }
 
     /**
      * Find a user using an id
-     * @param userId user id
+     * @param {string} userId user id
      * @returns {Promise<WithId<Document> | null>} user
      */
     async findById(userId: string): Promise<WithId<Document> | null> {
@@ -75,7 +77,7 @@ export class User {
 
     /**
      * Updates a user
-     * @param userId 
+     * @param {string} userId 
      * @param updateBody 
      * @returns {Promise<ModifyResult<Document>>} updated document
      */

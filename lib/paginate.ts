@@ -1,11 +1,14 @@
 import { Collection } from "mongodb";
-import logger from "./logger";
 
 export interface IOptions {
-    sortBy: string;
-    populate: string;
-    limit: number;
-    page: number;
+    sortBy?: string;
+    limit?: number;
+    page?: number;
+}
+
+export interface IPagination {
+    filter: Record<string, any>;
+    options:IOptions;
 }
 
 export default class Paginate {
@@ -32,7 +35,7 @@ export default class Paginate {
      * @param sortBy - Sorting criteria using the format: sortField:(desc|asc). Multiple sorting criteria should be separated by commas (,)
      * @returns {string} sorting order
      */
-    sanitizeSort(sortBy: string) : string {
+    sanitizeSort(sortBy: string | undefined) : string {
         if (sortBy) {
             const sortingCriteria: any = [];
             sortBy.split(',').forEach((sortOption: string) => {
@@ -45,11 +48,11 @@ export default class Paginate {
         }
     }
 
-    sanitizelimit(limit: number) : number {
+    sanitizelimit(limit: number | undefined) : number {
         return limit && parseInt(limit.toString(), 10) > 0 ? parseInt(limit.toString(), 10) : 10;
     }
 
-    sanitizePage(page: number) : number {
+    sanitizePage(page: number | undefined) : number {
         return page && parseInt(page.toString(), 10) > 0 ? parseInt(page.toString(), 10) : 1;
     }
 
