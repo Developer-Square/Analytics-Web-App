@@ -1,16 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
 import User from '../../../services/user.services';
-import { client } from '../../../lib/mongodb';
 import catchAPIError from '../../../lib/catchAPIError';
 import ApiError from '../../../lib/ApiError';
+import connectToDatabase from '../../../lib/database';
 
 export default catchAPIError(async (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
-    const UserCollection = new User(client);
-    await User.build();
+    const { db } = await connectToDatabase();
+    const UserCollection = new User(db);
     const { userId } = req.query;
 
     if (typeof userId !== 'string') throw new ApiError(httpStatus.BAD_REQUEST,'User ID is invalid');
@@ -25,7 +25,7 @@ export default catchAPIError(async (
     }
     else if (req.method === 'DELETE') {
         await UserCollection.deleteUser(userId);
-        res.status(httpStatus.NO_CONTENT);
+        res.status(httpStatus.NO_CONTENT).end();
     }
     else {
         res.status(httpStatus.NOT_FOUND);

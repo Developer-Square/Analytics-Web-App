@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
 import Event from '../../../services/events.services';
-import { client } from '../../../lib/mongodb';
 import catchAPIError from '../../../lib/catchAPIError';
+import connectToDatabase from '../../../lib/database';
 
 export default catchAPIError(async (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
-    const EventCollection = new Event(client);
-    await Event.build();
+    const { db } = await connectToDatabase();
+    const EventCollection = new Event(db);
 
     if (req.method === 'POST') {
         const event = await EventCollection.insertEvent(req.body);

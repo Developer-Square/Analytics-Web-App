@@ -1,17 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
 import Event from '../../../services/events.services';
-import { client } from '../../../lib/mongodb';
 import catchAPIError from '../../../lib/catchAPIError';
 import ApiError from '../../../lib/ApiError';
 import { ObjectId } from 'bson';
+import connectToDatabase from '../../../lib/database';
 
 export default catchAPIError(async (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
-    const EventCollection = new Event(client);
-    await Event.build();
+    const { db } = await connectToDatabase();
+    const EventCollection = new Event(db);
     const { eventId } = req.query;
 
     if (typeof eventId !== 'string') throw new ApiError(httpStatus.BAD_REQUEST,'ID is invalid');

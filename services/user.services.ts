@@ -1,27 +1,13 @@
-import { clientPromise, client } from '../lib/mongodb';
-import { Db, DeleteResult, MongoClient, Document, WithId, ModifyResult } from 'mongodb';
-import config from '../lib/config';
+import { Db, DeleteResult, Document, WithId, ModifyResult } from 'mongodb';
 import Paginate, { IPagination } from '../lib/paginate';
 import ApiError from '../lib/ApiError';
 import httpStatus from 'http-status';
 
 class User {
-    client: MongoClient;
     db: Db;
 
-    constructor(client: MongoClient | undefined){
-        if (!client) throw new Error('MongoDB connection is lost. This could be because you refreshed the server by editing and saving code. Close the server and start again. This error should only occur in development mode');
-        this.client = client;
-        this.db = client.db(config.mongoose.dbName);
-    }
-
-    /**
-     * Ensures the client is defined i.e. not undefined
-     * @returns
-     */
-    static async build () {
-        await clientPromise;
-        return new User(client)
+    constructor(db: Db){
+        this.db = db;
     }
 
     /**
@@ -45,7 +31,7 @@ class User {
     async deleteUser(userId: string): Promise<DeleteResult>{
         const user = await this.findById(userId);
         if(!user) throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
-        return this.db.collection('users').deleteOne({ "_id":userId });
+        return await this.db.collection('users').deleteOne({ "_id":userId });
     }
 
     /**
@@ -53,7 +39,7 @@ class User {
      * @returns {Promise<DeleteResult>}
      */
     async reset(): Promise<DeleteResult>{
-        return this.db.collection('users').deleteMany({});
+        return await this.db.collection('users').deleteMany({});
     }
 
     /**

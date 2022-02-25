@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
 import PageVisit from '../../../services/pageVisits.services';
-import { client } from '../../../lib/mongodb';
 import catchAPIError from '../../../lib/catchAPIError';
+import connectToDatabase from '../../../lib/database';
 
 export default catchAPIError(async (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
-    const PageVisitCollection = new PageVisit(client);
-    await PageVisit.build();
+    const { db } = await connectToDatabase();
+    const PageVisitCollection = new PageVisit(db);
 
     if (req.method === 'POST') {
         const visit = await PageVisitCollection.insertPageVisit(req.body);

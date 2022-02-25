@@ -5,13 +5,14 @@ import { client } from '../../../lib/mongodb';
 import catchAPIError from '../../../lib/catchAPIError';
 import ApiError from '../../../lib/ApiError';
 import { ObjectId } from 'bson';
+import connectToDatabase from '../../../lib/database';
 
 export default catchAPIError(async (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
-    const PageVisitCollection = new PageVisit(client);
-    await PageVisit.build();
+    const { db } = await connectToDatabase();
+    const PageVisitCollection = new PageVisit(db);
     const { visitId } = req.query;
 
     if (typeof visitId !== 'string') throw new ApiError(httpStatus.BAD_REQUEST,'ID is invalid');
