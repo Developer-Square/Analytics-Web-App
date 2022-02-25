@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { useMutation, useQueryClient } from 'react-query'
-import { Popover, styled } from '@/modules/common'
+import { Popover, styled, toast } from '@/modules/common'
 import fruitsOne from '@/public/images/fruits-1.jpg'
 import { trackEvent, userIdentify, pageVisit } from '@/modules/analytics'
 import { sendUserDataToApi } from '@/modules/utilities/apiCalls'
@@ -20,10 +20,11 @@ export default function EcommerceAnalytics({ }: Props) {
   // state more efficiently.
   const { mutateAsync } = useMutation(sendUserDataToApi, {
     onSuccess: () => {
+      toast.success('Added user details successfully')
       queryClientAccess.invalidateQueries('users')
     },
     onError: (error) => {
-      // console.log("Error while sending new user", error);
+      toast.error(`${error}`)
     }
   })
 
