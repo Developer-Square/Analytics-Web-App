@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
-import { User } from '../../../services/user.services';
-import { client } from '../../../lib/mongodb';
+import User from '../../../services/user.services';
 import catchAPIError from '../../../lib/catchApiError';
+import connectToDatabase from '../../../lib/database';
 
 export default catchAPIError(async (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
-    const UserCollection = new User(client);
-    await User.build();
+    const { db } = await connectToDatabase();
+    const UserCollection = new User(db);
 
     if (req.method === 'POST') {
         const user = await UserCollection.insertUser(req.body);
