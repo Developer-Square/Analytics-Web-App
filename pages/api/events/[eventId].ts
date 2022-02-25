@@ -26,7 +26,7 @@ export default catchAPIError(async (
     }
     else if (req.method === 'DELETE') {
         await EventCollection.deleteEvent(new ObjectId(eventId));
-        res.status(httpStatus.NO_CONTENT);
+        res.status(httpStatus.NO_CONTENT).end();
     }
     else {
         res.status(httpStatus.NOT_FOUND);

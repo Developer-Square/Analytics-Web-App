@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
 import PageVisit from '../../../services/pageVisits.services';
-import { client } from '../../../lib/mongodb';
 import catchAPIError from '../../../lib/catchAPIError';
 import ApiError from '../../../lib/ApiError';
 import { ObjectId } from 'bson';
@@ -27,7 +26,7 @@ export default catchAPIError(async (
     }
     else if (req.method === 'DELETE') {
         await PageVisitCollection.deletePageVisit(new ObjectId(visitId));
-        res.status(httpStatus.NO_CONTENT);
+        res.status(httpStatus.NO_CONTENT).end();
     }
     else {
         res.status(httpStatus.NOT_FOUND);
