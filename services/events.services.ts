@@ -5,7 +5,7 @@ import Paginate, { IPagination } from '../lib/paginate';
 import ApiError from '../lib/ApiError';
 import httpStatus from 'http-status';
 
-export class Event {
+class Event {
     client: MongoClient;
     db: Db;
 
@@ -84,3 +84,5 @@ export class Event {
         return await this.db.collection('events').findOneAndUpdate({"_id":eventId}, { $set: updateBody }, { returnDocument: 'after' });
     }
 }
+
+export default Event;

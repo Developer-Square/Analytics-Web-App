@@ -5,7 +5,7 @@ import Paginate, { IPagination } from '../lib/paginate';
 import ApiError from '../lib/ApiError';
 import httpStatus from 'http-status';
 
-export class User {
+class User {
     client: MongoClient;
     db: Db;
 
@@ -87,3 +87,5 @@ export class User {
         return await this.db.collection('users').findOneAndUpdate({"_id":userId}, { $set: updateBody }, { returnDocument: 'after' })
     }
 }
+
+export default User;

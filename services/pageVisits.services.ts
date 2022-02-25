@@ -5,7 +5,7 @@ import Paginate, { IPagination } from '../lib/paginate';
 import ApiError from '../lib/ApiError';
 import httpStatus from 'http-status';
 
-export class PageVisit {
+class PageVisit {
     client: MongoClient;
     db: Db;
 
@@ -84,3 +84,5 @@ export class PageVisit {
         return await this.db.collection('pageVisits').findOneAndUpdate({"_id":pageVisitId}, { $set: updateBody }, { returnDocument: 'after' });
     }
 }
+
+export default PageVisit;
