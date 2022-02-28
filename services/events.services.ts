@@ -1,4 +1,4 @@
-import { Db, DeleteResult, Document, WithId, ModifyResult, ObjectId } from 'mongodb';
+import { Db, DeleteResult, Document, WithId, ModifyResult, ObjectId, InsertManyResult } from 'mongodb';
 import Paginate, { IPagination } from '../lib/paginate';
 import ApiError from '../lib/ApiError';
 import httpStatus from 'http-status';
@@ -51,7 +51,7 @@ class Event {
 
     /**
      * Find a event using an id
-     * @param eventId event id
+     * @param {ObjectId} eventId event id
      * @returns {Promise<WithId<Document> | null>} event
      */
     async findById(eventId: ObjectId): Promise<WithId<Document> | null> {
@@ -60,14 +60,23 @@ class Event {
 
     /**
      * Updates a event
-     * @param eventId 
-     * @param updateBody 
+     * @param {ObjectId} eventId 
+     * @param {Record<string, any>} updateBody 
      * @returns {Promise<ModifyResult<Document>>} updated document
      */
     async update(eventId: ObjectId, updateBody: Record<string, any>): Promise<ModifyResult<Document>>{
         const event = await this.findById(eventId);
         if(!event) throw new ApiError(httpStatus.NOT_FOUND, 'Event does not exist');
         return await this.db.collection('events').findOneAndUpdate({"_id":eventId}, { $set: updateBody }, { returnDocument: 'after' });
+    }
+
+    /**
+     * Inserts many events
+     * @param {Record<string, any>[]} events list of events
+     * @returns {Promise<InsertManyResult<Document>>} 
+     */
+    async insertEvents(events: Record<string, any>[]): Promise<InsertManyResult<Document>>{
+        return await this.db.collection('events').insertMany(events);
     }
 }
 

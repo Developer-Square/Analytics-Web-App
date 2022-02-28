@@ -1,4 +1,4 @@
-import { Db, DeleteResult, Document, WithId, ModifyResult } from 'mongodb';
+import { Db, DeleteResult, Document, WithId, ModifyResult, InsertManyResult } from 'mongodb';
 import Paginate, { IPagination } from '../lib/paginate';
 import ApiError from '../lib/ApiError';
 import httpStatus from 'http-status';
@@ -71,6 +71,15 @@ class User {
         const user = await this.findById(userId);
         if(!user) throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
         return await this.db.collection('users').findOneAndUpdate({"_id":userId}, { $set: updateBody }, { returnDocument: 'after' })
+    }
+
+    /**
+     * Inserts many users
+     * @param {Record<string, any>[]} users list of users
+     * @returns {Promise<InsertManyResult<Document>>} 
+     */
+     async insertUsers(users: Record<string, any>[]): Promise<InsertManyResult<Document>>{
+        return await this.db.collection('users').insertMany(users);
     }
 }
 
