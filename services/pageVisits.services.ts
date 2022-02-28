@@ -1,5 +1,5 @@
 import { Db, DeleteResult, Document, WithId, ModifyResult, ObjectId } from 'mongodb';
-import Paginate, { IPagination } from '../lib/paginate';
+import Paginate, { IPagination, IQueryResult } from '../lib/paginate';
 import ApiError from '../lib/ApiError';
 import httpStatus from 'http-status';
 
@@ -42,11 +42,11 @@ class PageVisit {
     /**
      * Paginates pageVisits
      * @param {IPagination} paginationbody pagination filter and options
-     * @returns {Promise<WithId<Document>[]>} List of pageVisits that satisfy filter
+     * @returns {Promise<IQueryResult>} List of pageVisits that satisfy filter
      */
-    async paginate(paginationbody: IPagination): Promise<WithId<Document>[]> {
+    async paginate(paginationbody: IPagination): Promise<IQueryResult> {
         const pagination = new Paginate(paginationbody.filter, paginationbody.options, this.db.collection('pageVisits'));
-        return await pagination.findDocs();
+        return await pagination.getDocuments();
     }
 
     /**

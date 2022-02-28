@@ -1,4 +1,4 @@
-import { Collection } from "mongodb";
+import { Collection, WithId, Document } from "mongodb";
 
 export interface IOptions {
     sortBy?: string;
@@ -9,6 +9,14 @@ export interface IOptions {
 export interface IPagination {
     filter: Record<string, any>;
     options:IOptions;
+}
+
+export interface IQueryResult {
+    documents: WithId<Document>[];
+    page: number;
+    limit: number;
+    totalPages: number;
+    totalCount: number;
 }
 
 export default class Paginate {
@@ -62,5 +70,20 @@ export default class Paginate {
 
     async findDocs() {
         return await this.collection.find(this.filter).sort(this.sort).skip((this.page - 1) * this.limit).limit(this.limit).toArray();
+    }
+
+    async getDocuments(): Promise<IQueryResult> {
+        return Promise.all([this.documents, this.count]).then(values => {
+            const [docResult, countResult] = values;
+            const totalPages = Math.ceil(countResult/this.limit);
+            const result = {
+                documents: docResult,
+                page: this.page,
+                limit: this.limit,
+                totalPages,
+                totalCount: countResult,
+            }
+            return Promise.resolve(result);
+        })
     }
 };

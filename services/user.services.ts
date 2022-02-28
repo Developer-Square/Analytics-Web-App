@@ -1,5 +1,5 @@
 import { Db, DeleteResult, Document, WithId, ModifyResult, InsertManyResult } from 'mongodb';
-import Paginate, { IPagination } from '../lib/paginate';
+import Paginate, { IPagination, IQueryResult } from '../lib/paginate';
 import ApiError from '../lib/ApiError';
 import httpStatus from 'http-status';
 
@@ -45,11 +45,11 @@ class User {
     /**
      * Paginates users
      * @param {IPagination} paginationbody pagination filter and options
-     * @returns {Promise<WithId<Document>[]>} List of users that satisfy filter
+     * @returns {Promise<IQueryResult>} List of users that satisfy filter
      */
-    async paginate(paginationbody: IPagination): Promise<WithId<Document>[]> {
+    async paginate(paginationbody: IPagination): Promise<IQueryResult> {
         const pagination = new Paginate(paginationbody.filter, paginationbody.options, this.db.collection('users'));
-        return await pagination.findDocs();
+        return await pagination.getDocuments();
     }
 
     /**
