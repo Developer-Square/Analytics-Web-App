@@ -11,7 +11,7 @@ const eventTypes = ['buttonClicked', 'addToCart', 'removeFromCart', 'login', 're
  * @param {number} max maximum value in range
  * @returns {number} random integer from given range
  */
-const getRandonIntFromInterval = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1) + min);
+const getRandomIntFromInterval = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1) + min);
 
 /**
  * Get number of days between current date and given reference date
@@ -55,7 +55,7 @@ const seed = async() => {
         }
         userList.push(newUser);
 
-        for(let j = 0; j < getRandonIntFromInterval(5, 50); j++){
+        for(let j = 0; j < getRandomIntFromInterval(5, 50); j++){
             let newPageVisit = {
                 properties:{
                     title: pageTypes[Math.floor(Math.random()*pageTypes.length)],
@@ -75,7 +75,7 @@ const seed = async() => {
             }
             pageList.push(newPageVisit);
 
-            for(let k = 0; k < getRandonIntFromInterval(1, 10); k++){
+            for(let k = 0; k < getRandomIntFromInterval(1, 10); k++){
                 let newEvent = {
                     event:eventTypes[Math.floor(Math.random()*eventTypes.length)],
                     properties:{
