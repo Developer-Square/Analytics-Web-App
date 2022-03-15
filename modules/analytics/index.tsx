@@ -15,37 +15,34 @@ interface UserIdentifyEventProps {
     userId: string,
     email: string,
     username: string
+    mutateAsync: Function
 }
 
 const sendData = (data: any) => {
-    console.log(typeof (data));
-    if (typeof navigator.sendBeacon === 'function') {
-        navigator.sendBeacon('https://t4odney23k.execute-api.us-east-1.amazonaws.com/default/postEventData', JSON.stringify(data))
-    } else {
-        var xhr = new XMLHttpRequest()
-        xhr.open('POST', 'https://t4odney23k.execute-api.us-east-1.amazonaws.com/default/postEventData')
-        xhr.send(data)
-    }
+    // if (typeof navigator.sendBeacon === 'function') {
+    //     navigator.sendBeacon('https://t4odney23k.execute-api.us-east-1.amazonaws.com/default/postEventData', JSON.stringify(data))
+    // } else {
+    //     var xhr = new XMLHttpRequest()
+    //     xhr.open('POST', 'https://t4odney23k.execute-api.us-east-1.amazonaws.com/default/postEventData')
+    //     xhr.send(data)
+    // }
 }
 
 const awsPlugin = () => {
     return {
         name: 'aws-plugin',
         page: function page(_ref: any) {
-            console.log(typeof (_ref));
             const payload = _ref.payload
             console.log('Page Event', payload);
             sendData(payload)
         },
         track: function track(_ref2: any) {
-            console.log(typeof (_ref2));
             const payload = _ref2.payload
             sendData(payload)
             console.log('User Event', payload);
 
         },
         identify: function identify(_ref3: any) {
-            console.log(typeof (_ref3));
             const payload = _ref3.payload
             sendData(payload)
             console.log('User Identify Event', payload);
@@ -76,6 +73,7 @@ export interface EventMap {
     identifyUser: UserIdentifyEventProps
 }
 
+
 export const trackEvent = <K extends keyof EventMap>(eventName: K, props: EventMap[K]): void => {
     analytics.track(eventName, props)
 }
@@ -85,7 +83,10 @@ export const pageVisit = (): void => {
 }
 
 export const userIdentify = (params: UserIdentifyEventProps): void => {
-    analytics.identify(params.userId, { email: params.email, name: params.username })
+    const { email, userId, username, mutateAsync } = params
+    analytics.identify(userId, { email, name: username }, ({ payload }: any) => {
+        mutateAsync({ method: 'POST', path: 'api/users', data: payload })
+    })
 }
 
 export default analytics
