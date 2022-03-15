@@ -24,7 +24,7 @@ function Home() {
         <div>
           Link to Demo E-commerce page:
           {/* When a new user is added go back to home page and view the id and email. */}
-          <Link href='/EcommerceAnalytics'> Ecommerce Page</Link>
+          <Link href='/EcommerceAnalytics'><strong> Ecommerce Page</strong></Link>
         </div>
 
         <ErrorBoundary>
