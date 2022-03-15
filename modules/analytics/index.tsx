@@ -41,11 +41,14 @@ const awsPlugin = () => {
             console.log(typeof (_ref2));
             const payload = _ref2.payload
             sendData(payload)
+            console.log('User Event', payload);
+
         },
         identify: function identify(_ref3: any) {
             console.log(typeof (_ref3));
             const payload = _ref3.payload
             sendData(payload)
+            console.log('User Identify Event', payload);
         },
         loaded: function loaded() {
             return true

@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
@@ -14,7 +15,15 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <p>Events Dashboard</p>
+        {/* A link for testing the proof of concept. 
+            As of now both creating an identified user and fetching 
+            user details is possible. 
+        */}
+        <div>
+          Link to Demo page:
+          {/* When a new user is added go back to home page and view the id and email. */}
+          <Link href='/EcommerceAnalytics'><strong> Ecommerce Page</strong></Link>
+        </div>
       </main>
     </div>
   )
