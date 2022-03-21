@@ -1,7 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import config from "./config";
 
-class Api {
+class Client {
     instance: AxiosInstance;
 
     constructor() {
@@ -78,4 +78,4 @@ class Api {
     }
 }
 
-export default Api;
+export default Client;
