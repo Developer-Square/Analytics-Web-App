@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
-import User from '../../../services/user.services';
+import PageVisit from '../../../services/pageVisits.services';
 import catchAPIError from '../../../lib/catchAPIError';
 import ApiError from '../../../lib/ApiError';
+import { ObjectId } from 'bson';
 import connectToDatabase from '../../../lib/database';
 
 export default catchAPIError(async (
@@ -10,21 +11,21 @@ export default catchAPIError(async (
     res: NextApiResponse
 ) => {
     const { db } = await connectToDatabase();
-    const UserCollection = new User(db);
-    const { userId } = req.query;
+    const PageVisitCollection = new PageVisit(db);
+    const { visitId } = req.query;
 
-    if (typeof userId !== 'string') throw new ApiError(httpStatus.BAD_REQUEST, 'User ID is invalid');
+    if (typeof visitId !== 'string') throw new ApiError(httpStatus.BAD_REQUEST,'ID is invalid');
 
     if (req.method === 'PATCH') {
-        const doc = await UserCollection.update(userId, req.body);
+        const doc = await PageVisitCollection.update(new ObjectId(visitId), req.body);
         res.status(httpStatus.OK).json({ doc: doc.value });
     }
     else if (req.method === 'GET') {
-        const doc = await UserCollection.findById(userId);
+        const doc = await PageVisitCollection.findById(new ObjectId(visitId));
         res.status(httpStatus.OK).json({ doc });
     }
     else if (req.method === 'DELETE') {
-        await UserCollection.deleteUser(userId);
+        await PageVisitCollection.deletePageVisit(new ObjectId(visitId));
         res.status(httpStatus.NO_CONTENT).end();
     }
     else {

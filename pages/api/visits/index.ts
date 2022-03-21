@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
-import User from '../../../services/user.services';
+import PageVisit from '../../../services/pageVisits.services';
 import catchAPIError from '../../../lib/catchAPIError';
 import connectToDatabase from '../../../lib/database';
 
@@ -9,14 +9,14 @@ export default catchAPIError(async (
     res: NextApiResponse
 ) => {
     const { db } = await connectToDatabase();
-    const UserCollection = new User(db);
+    const PageVisitCollection = new PageVisit(db);
 
     if (req.method === 'POST') {
-        const user = await UserCollection.insertUser(req.body);
-        res.status(httpStatus.CREATED).json({ user })
+        const visit = await PageVisitCollection.insertPageVisit(req.body);
+        res.status(httpStatus.CREATED).json({ visit })
     }
     else if (req.method === 'GET') {
-        const docs = await UserCollection.paginate(req.query);
+        const docs = await PageVisitCollection.paginate(req.body);
         res.status(httpStatus.OK).json({ results: docs })
     }
     else {

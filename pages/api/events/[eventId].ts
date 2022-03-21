@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
-import User from '../../../services/user.services';
+import Event from '../../../services/events.services';
 import catchAPIError from '../../../lib/catchAPIError';
 import ApiError from '../../../lib/ApiError';
+import { ObjectId } from 'bson';
 import connectToDatabase from '../../../lib/database';
 
 export default catchAPIError(async (
@@ -10,21 +11,21 @@ export default catchAPIError(async (
     res: NextApiResponse
 ) => {
     const { db } = await connectToDatabase();
-    const UserCollection = new User(db);
-    const { userId } = req.query;
+    const EventCollection = new Event(db);
+    const { eventId } = req.query;
 
-    if (typeof userId !== 'string') throw new ApiError(httpStatus.BAD_REQUEST, 'User ID is invalid');
+    if (typeof eventId !== 'string') throw new ApiError(httpStatus.BAD_REQUEST,'ID is invalid');
 
     if (req.method === 'PATCH') {
-        const doc = await UserCollection.update(userId, req.body);
+        const doc = await EventCollection.update(new ObjectId(eventId), req.body);
         res.status(httpStatus.OK).json({ doc: doc.value });
     }
     else if (req.method === 'GET') {
-        const doc = await UserCollection.findById(userId);
+        const doc = await EventCollection.findById(new ObjectId(eventId));
         res.status(httpStatus.OK).json({ doc });
     }
     else if (req.method === 'DELETE') {
-        await UserCollection.deleteUser(userId);
+        await EventCollection.deleteEvent(new ObjectId(eventId));
         res.status(httpStatus.NO_CONTENT).end();
     }
     else {

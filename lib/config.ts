@@ -3,6 +3,8 @@
 // const envVarsSchema = Joi.object().keys({
 //     NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
 //     MONGODB_URI: Joi.string().required().description('Mongo DB uri'),
+//     GJS_DEBUG_TOPICS: Joi.required().description('GJS_DEBUG_TOPICS'),
+//     LESSOPEN: Joi.required(),
 // });
 
 // const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
