@@ -1,12 +1,12 @@
 import React from 'react'
-import NavItem from './NavItem'
+import NavGroup from './NavGroup'
 
 type Props = {}
 
 export default function TotalEvents({ }: Props) {
     return (
         <>
-            <NavItem />
+            <NavGroup />
         </>
     )
 }

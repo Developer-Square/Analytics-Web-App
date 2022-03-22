@@ -2,9 +2,19 @@ import React from 'react'
 import { ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import Image from 'next/image';
 
-import pagevisit from '@/public/images/sidebar_icons/page-1.png'
+import pageVisit from '@/public/images/sidebar_icons/page-4.png'
+import cart from '@/public/images/sidebar_icons/cart.png'
+import newOrder from '@/public/images/sidebar_icons/new-order.png'
+import user from '@/public/images/sidebar_icons/user.png'
+import login from '@/public/images/sidebar_icons/login.png'
 
-export default function NavItem() {
+interface NavItemProps {
+    title: string,
+    index: number
+}
+
+export default function NavItem({ title, index }: NavItemProps) {
+    const icons = [pageVisit, cart, newOrder, user, login]
     return (
         <ListItemButton
             sx={{
@@ -17,12 +27,14 @@ export default function NavItem() {
             }}
         >
             <ListItemIcon sx={{ my: 'auto', minWidth: 36 }}>
-                <Image src={pagevisit} width={30} height={30} />
+                {index >= 0 ? <Image src={icons[index]} width={30} height={30} /> : 'loading'}
+
             </ListItemIcon>
             <ListItemText
+                sx={{ fontFamily: 'Inter' }}
                 primary={
-                    <Typography variant='body1' color="inherit">
-                        Page Visit
+                    <Typography color="inherit">
+                        {title}
                     </Typography>
                 }
             >
