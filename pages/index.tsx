@@ -1,9 +1,8 @@
-import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import Display from "@/modules/dashboard/components/Display"
-import Sidebar from "@/modules/dashboard/components/Sidebar"
+import Display from "@/modules/events-page/layout/Display"
+import Sidebar from "@/modules/events-page/layout/sidebar"
 import { ErrorBoundary } from "@/modules/helpers/ErrorBoundary"
 
 

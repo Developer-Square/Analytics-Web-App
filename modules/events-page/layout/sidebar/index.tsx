@@ -1,19 +1,19 @@
 import { ErrorBoundary } from '@/modules/helpers/ErrorBoundary'
 import React from 'react'
-import TimelineFilter from './TimelineFilter'
-import TotalEvents from './TotalEvents'
+import TimelineFilter from './timeline-filter'
+import TotalEvents from './total-events'
 
 type Props = {}
 
 export default function Sidebar({ }: Props) {
     return (
-        <div>
-            <ErrorBoundary>
-                <TimelineFilter />
-            </ErrorBoundary>
+        <>
             <ErrorBoundary>
                 <TotalEvents />
             </ErrorBoundary>
-        </div>
+            <ErrorBoundary>
+                <TimelineFilter />
+            </ErrorBoundary>
+        </>
     )
 }
