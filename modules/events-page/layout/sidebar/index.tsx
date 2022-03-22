@@ -1,5 +1,6 @@
 import { ErrorBoundary } from '@/modules/helpers/ErrorBoundary'
-import React from 'react'
+import { Divider } from '@mui/material';
+
 import TimelineFilter from './timeline-filter'
 import TotalEvents from './total-events'
 
@@ -11,6 +12,8 @@ export default function Sidebar({ }: Props) {
             <ErrorBoundary>
                 <TotalEvents />
             </ErrorBoundary>
+            {/* group divider */}
+            <Divider sx={{ mt: 0.25, mb: 1.25 }} />
             <ErrorBoundary>
                 <TimelineFilter />
             </ErrorBoundary>
