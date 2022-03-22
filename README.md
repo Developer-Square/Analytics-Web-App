@@ -22,6 +22,19 @@ If you click the Signin button multilple times, it'll give you an error of user 
 
 ## Getting Started
 
+Make sure you have yarn installed. Run `brew install yarn`.
+
+- Step 1: Run `yarn install`
+- Step 2: Create a .env.local file with the following details
+
+```bash
+# mongoDB URI
+MONGODB_URI=mongodb://127.0.0.1:27017
+
+# DB_NAME
+DB_NAME=analytics-web-app
+```
+
 First, run the development server:
 
 ```bash
