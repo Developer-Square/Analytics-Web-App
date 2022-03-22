@@ -1,0 +1,18 @@
+ - Add Error Boundary
+ - **Use absolute paths(Causing a problem)
+ - Split application bundle if performance is bad.
+ - Added styled components if necessary.
+ - Wrap External Components
+ - Use absolute paths where necessary.
+ - Assign default props when destructuring
+ - Keep number of props to <= 5
+ - Write comments in jsx if necessary
+ - Add react query definition
+ - **Add redux.
+ - Test for :
+    - A component's props
+    - Everything need by the component renders correctly.
+    - Edges cases
+    - Simulate the events and make sure that the component responds properly to them.
+    - Validate that the handler functions were called and correct arguments were passed.
+

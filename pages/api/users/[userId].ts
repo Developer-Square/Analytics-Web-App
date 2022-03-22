@@ -13,7 +13,7 @@ export default catchAPIError(async (
     const UserCollection = new User(db);
     const { userId } = req.query;
 
-    if (typeof userId !== 'string') throw new ApiError(httpStatus.BAD_REQUEST,'User ID is invalid');
+    if (typeof userId !== 'string') throw new ApiError(httpStatus.BAD_REQUEST, 'User ID is invalid');
 
     if (req.method === 'PATCH') {
         const doc = await UserCollection.update(userId, req.body);

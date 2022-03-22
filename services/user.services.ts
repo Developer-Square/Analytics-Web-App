@@ -6,7 +6,7 @@ import httpStatus from 'http-status';
 class User {
     db: Db;
 
-    constructor(db: Db){
+    constructor(db: Db) {
         this.db = db;
     }
 
@@ -15,10 +15,10 @@ class User {
      * @param {Record<string, any>} userBody
      * @returns {Promise<WithId<Document> | null>}
      */
-    async insertUser(userBody: Record<string, any>): Promise<WithId<Document> | null>{
+    async insertUser(userBody: Record<string, any>): Promise<WithId<Document> | null> {
         const user = await this.findById(userBody['userId']);
-        if(user) throw new ApiError(httpStatus.BAD_REQUEST, 'User already exists');
-        delete Object.assign(userBody, {['_id']: userBody['userId'] })['userId'];
+        if (user) throw new ApiError(httpStatus.BAD_REQUEST, 'User already exists');
+        delete Object.assign(userBody, { ['_id']: userBody['userId'] })['userId'];
         await this.db.collection('users').insertOne(userBody);
         return await this.findById(userBody['_id']);
     }
@@ -28,17 +28,17 @@ class User {
      * @param {string} userId
      * @returns {Promise<DeleteResult>}
      */
-    async deleteUser(userId: string): Promise<DeleteResult>{
+    async deleteUser(userId: string): Promise<DeleteResult> {
         const user = await this.findById(userId);
-        if(!user) throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
-        return await this.db.collection('users').deleteOne({ "_id":userId });
+        if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+        return await this.db.collection('users').deleteOne({ "_id": userId });
     }
 
     /**
      * This will reset the users collection by deleting all documents. Use carefully
      * @returns {Promise<DeleteResult>}
      */
-    async reset(): Promise<DeleteResult>{
+    async reset(): Promise<DeleteResult> {
         return await this.db.collection('users').deleteMany({});
     }
 
@@ -58,7 +58,7 @@ class User {
      * @returns {Promise<WithId<Document> | null>} user
      */
     async findById(userId: string): Promise<WithId<Document> | null> {
-        return await this.db.collection('users').findOne({"_id":userId})
+        return await this.db.collection('users').findOne({ "_id": userId })
     }
 
     /**
@@ -67,10 +67,10 @@ class User {
      * @param updateBody 
      * @returns {Promise<ModifyResult<Document>>} updated document
      */
-    async update(userId: string, updateBody: Record<string, any>): Promise<ModifyResult<Document>>{
+    async update(userId: string, updateBody: Record<string, any>): Promise<ModifyResult<Document>> {
         const user = await this.findById(userId);
-        if(!user) throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
-        return await this.db.collection('users').findOneAndUpdate({"_id":userId}, { $set: updateBody }, { returnDocument: 'after' })
+        if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+        return await this.db.collection('users').findOneAndUpdate({ "_id": userId }, { $set: updateBody }, { returnDocument: 'after' })
     }
 
     /**
@@ -78,7 +78,7 @@ class User {
      * @param {Record<string, any>[]} users list of users
      * @returns {Promise<InsertManyResult<Document>>} 
      */
-     async insertUsers(users: Record<string, any>[]): Promise<InsertManyResult<Document>>{
+    async insertUsers(users: Record<string, any>[]): Promise<InsertManyResult<Document>> {
         return await this.db.collection('users').insertMany(users);
     }
 }

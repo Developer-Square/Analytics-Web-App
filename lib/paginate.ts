@@ -8,7 +8,7 @@ export interface IOptions {
 
 export interface IPagination {
     filter: Record<string, any>;
-    options:IOptions;
+    options: IOptions;
 }
 
 export interface IQueryResult {
@@ -28,7 +28,7 @@ export default class Paginate {
     count: Promise<number>;
     documents;
 
-    constructor(filter: Record<string, any>, options: IOptions, collection: Collection){
+    constructor(filter: Record<string, any>, options: IOptions, collection: Collection) {
         this.filter = filter ? filter : {};
         this.sort = options ? this.sanitizeSort(options.sortBy) : 'createdAt';
         this.limit = options ? this.sanitizelimit(options.limit) : 10;
@@ -43,12 +43,12 @@ export default class Paginate {
      * @param sortBy - Sorting criteria using the format: sortField:(desc|asc). Multiple sorting criteria should be separated by commas (,)
      * @returns {string} sorting order
      */
-    sanitizeSort(sortBy: string | undefined) : string {
+    sanitizeSort(sortBy: string | undefined): string {
         if (sortBy) {
             const sortingCriteria: any = [];
             sortBy.split(',').forEach((sortOption: string) => {
-            const [key, order] = sortOption.split(':');
-            sortingCriteria.push((order === 'desc' ? '-' : '') + key);
+                const [key, order] = sortOption.split(':');
+                sortingCriteria.push((order === 'desc' ? '-' : '') + key);
             });
             return sortingCriteria.join(' ');
         } else {
@@ -56,15 +56,15 @@ export default class Paginate {
         }
     }
 
-    sanitizelimit(limit: number | undefined) : number {
+    sanitizelimit(limit: number | undefined): number {
         return limit && parseInt(limit.toString(), 10) > 0 ? parseInt(limit.toString(), 10) : 10;
     }
 
-    sanitizePage(page: number | undefined) : number {
+    sanitizePage(page: number | undefined): number {
         return page && parseInt(page.toString(), 10) > 0 ? parseInt(page.toString(), 10) : 1;
     }
 
-    async countDocs() : Promise<number> {
+    async countDocs(): Promise<number> {
         return await this.collection.countDocuments(this.filter);
     }
 
@@ -75,7 +75,7 @@ export default class Paginate {
     async getDocuments(): Promise<IQueryResult> {
         return Promise.all([this.documents, this.count]).then(values => {
             const [docResult, countResult] = values;
-            const totalPages = Math.ceil(countResult/this.limit);
+            const totalPages = Math.ceil(countResult / this.limit);
             const result = {
                 documents: docResult,
                 page: this.page,
