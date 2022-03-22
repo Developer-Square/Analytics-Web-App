@@ -1,35 +1,19 @@
 import React, { useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { useMutation, useQueryClient } from 'react-query'
-import { Popover, styled, toast } from '@/modules/common'
+import { Popover, styled } from '@/modules/common'
 import fruitsOne from '@/public/images/fruits-1.jpg'
 import { trackEvent, userIdentify, pageVisit } from '@/modules/analytics'
-import { sendUserDataToApi } from '@/modules/utilities/apiCalls'
 type Props = {}
 
 
 export default function EcommerceAnalytics({ }: Props) {
-  const queryClientAccess = useQueryClient()
 
   useEffect(() => {
     pageVisit()
   }, [])
 
-  // Send the new user data to the backend.
-  // We're using React Query because it allows us to manage server side
-  // state more efficiently.
-  const { mutateAsync } = useMutation(sendUserDataToApi, {
-    onSuccess: () => {
-      toast.success('Added user details successfully')
-      queryClientAccess.invalidateQueries('users')
-    },
-    onError: (error) => {
-      toast.error(`${error}`)
-    }
-  })
-
   const onSignIn = useCallback(() => {
-    userIdentify({ userId: 'user-id-131', username: 'ryann254', email: 'kingzoo.2021@gmail.com', mutateAsync: mutateAsync })
+    userIdentify({ userId: 'user-id-131', username: 'ryann254', email: 'kingzoo.2021@gmail.com' })
   }, [])
 
   const onAddToCart = useCallback(() => {
