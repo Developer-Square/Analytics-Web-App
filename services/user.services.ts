@@ -47,7 +47,7 @@ class User {
      * @param {IPagination} paginationbody pagination filter and options
      * @returns {Promise<IQueryResult>} List of users that satisfy filter
      */
-    async paginate(paginationbody: any): Promise<IQueryResult> {
+    async paginate(paginationbody: IPagination): Promise<IQueryResult> {
         const pagination = new Paginate(paginationbody.filter, paginationbody.options, this.db.collection('users'));
         return await pagination.getDocuments();
     }
