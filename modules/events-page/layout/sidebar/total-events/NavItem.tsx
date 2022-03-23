@@ -33,7 +33,7 @@ export default function NavItem({ title, index }: NavItemProps) {
             <ListItemText
                 sx={{ fontFamily: 'Inter' }}
                 primary={
-                    <Typography color="inherit">
+                    <Typography color="inherit" className='text-sm'>
                         {title}
                     </Typography>
                 }
