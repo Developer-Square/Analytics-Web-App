@@ -8,6 +8,9 @@
       "@/public/*": [
         "public/*"
       ],
+      "@/lib/*": [
+        "lib/*"
+      ],
     },
     "target": "es5",
     "lib": [
