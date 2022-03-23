@@ -1,12 +1,24 @@
-import { createAsyncThunk, createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, createEntityAdapter, PayloadAction, createSelector } from '@reduxjs/toolkit';
 import type { AppState } from '../../app/store';
 import Client from '@/lib/client';
+import { IPaginationResult } from '../../app/types';
 
 const client = new Client();
 
-export const usersAdapter = createEntityAdapter();
+type User = {
+    _id: string;
+    anonymousId: string;
+    traits: Record<string, any>;
+    meta: Record<string, any>;
+}
 
-const initialState = usersAdapter.getInitialState({ loading: false, loaded: false });
+interface IUserPaginationResult extends IPaginationResult {
+    documents: User[]
+}
+
+export const usersAdapter = createEntityAdapter<User>({ selectId: (user) => user._id });
+
+const initialState = usersAdapter.getInitialState({ loading: false, loaded: false, page: 0, limit: 0, totalCount: 0, totalPages: 0 });
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
     const res = await client.User().getAllUsers();
@@ -27,8 +39,12 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.loaded = false;
             })
-            .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<Record<string, any>[]>) => {
-                usersAdapter.setAll(state, action.payload);
+            .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<IUserPaginationResult>) => {
+                usersAdapter.setAll(state, action.payload.documents);
+                state.limit = action.payload.limit;
+                state.page = action.payload.page;
+                state.totalCount = action.payload.totalCount;
+                state.totalPages = action.payload.totalPages;
                 state.loading = false;
                 state.loaded = true;
             })
@@ -46,10 +62,20 @@ export const {
 
 export const { 
     selectAll: selectUsers, 
-    selectById: selectUserById 
+    selectById: selectUserById,
+    selectEntities: selectUserEntities, 
 } = usersAdapter.getSelectors((state: AppState) => state.users);
+
+export const selectCurrentUser = (_id: string) => createSelector(
+    selectUserEntities,
+    (user) => user[_id]
+)
 
 export const selectUsersLoading = (state: AppState) => state.users.loading;
 export const selectUsersLoaded = (state: AppState) => state.users.loaded;
+export const selectUsersLimit = (state: AppState) => state.users.limit;
+export const selectUsersPage = (state: AppState) => state.users.page;
+export const selectUserstotalCount = (state: AppState) => state.users.totalCount;
+export const selectUserstotalPages = (state: AppState) => state.users.totalPages;
 
 export default userSlice.reducer;
