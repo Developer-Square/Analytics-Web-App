@@ -7,6 +7,8 @@ import visitsReducer from '../features/visits/visits.slice';
 import eventsFilterReducer from '../features/events/events.filter.slice';
 import eventsDateFilterReducer from '../features/events/events.dateFilter.slice';
 import visitsFilterReducer from '../features/visits/visits.filter.slice';
+import eventsSortingReducer from '../features/events/events.sorting.slice';
+import visitsSortingReducer from '../features/visits/visits.sorting.slice';
 
 const store = configureStore({
     reducer: {
@@ -16,6 +18,8 @@ const store = configureStore({
         eventFilters: eventsFilterReducer,
         eventDateFilters: eventsDateFilterReducer,
         visitFilters: visitsFilterReducer,
+        eventSorting: eventsSortingReducer,
+        visitSorting: visitsSortingReducer,
     },
 })
 

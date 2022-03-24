@@ -5,6 +5,7 @@ import { IPaginationResult } from '../../app/types';
 import search from '@/modules/filters/search';
 import sanitizeFilters from '@/modules/filters/sanitizeFilters';
 import { filterByDateRangeUsingEmbeddedField } from '@/modules/filters/filterByDateRange';
+import { searchAndSortWithEmbeddedField } from '@/modules/filters/searchAndSort';
 
 const client = new Client();
 
@@ -77,16 +78,23 @@ export const selectCurrentVisit = (_id: string) => createSelector(
     (visit) => visit[_id]
 )
 
-export const selectFilteredVisits = createSelector(
+export const selectVisitsByDateRange = createSelector(
     selectVisits,
+    (state: AppState) => state.eventDateFilters,
+    (visits, dateFilters) => filterByDateRangeUsingEmbeddedField(visits, dateFilters.finalDate, dateFilters.initialDate, dateFilters.outerField, dateFilters.filterKey)
+)
+
+export const selectFilteredVisits = createSelector(
+    selectVisitsByDateRange,
     (state: AppState) => state.visitFilters,
     (visits, visitFilters) => search(visits, sanitizeFilters(visitFilters))
 )
 
-export const selectFilteredVisitsByDateRange = createSelector(
-    selectFilteredVisits,
-    (state: AppState) => state.eventDateFilters,
-    (visits, dateFilters) => filterByDateRangeUsingEmbeddedField(visits, dateFilters.finalDate, dateFilters.initialDate, dateFilters.outerField, dateFilters.filterKey)
+export const selectFilteredSortedVisits = createSelector(
+    selectVisitsByDateRange,
+    (state: AppState) => state.visitFilters,
+    (state: AppState) => state.visitSorting,
+    (visits, visitFilters, sortingFilters) => searchAndSortWithEmbeddedField(visits, sanitizeFilters(visitFilters), sortingFilters.ascending, 'meta', sortingFilters.sortKey)
 )
 
 export const selectVisitsLoading = (state: AppState) => state.visits.loading;
