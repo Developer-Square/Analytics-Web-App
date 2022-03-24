@@ -1,25 +1,23 @@
-import Box from '@mui/material/Box'
-import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import FormHelperText from '@mui/material/FormHelperText'
+import Typography from '@mui/material/Typography'
 import Checkbox from '@mui/material/Checkbox'
 
 type Props = {
-    title?: string
+    title?: string,
 }
 
 export default function NavItem({ title }: Props) {
     return (
         <>
-            <FormControl component="fieldset" variant="standard">
+            <FormControl sx={{ width: '8.3rem' }} component="fieldset" variant="standard">
                 <FormGroup>
                     <FormControlLabel
                         control={
                             <Checkbox name={title} />
                         }
-                        label={title ?? 'No label'}
+                        label={<Typography variant='body2'>{title ?? 'No label'}</Typography>}
                     />
                 </FormGroup>
             </FormControl>

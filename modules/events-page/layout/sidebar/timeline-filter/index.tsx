@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import Date from './Date'
 import Categories from './Categories'
+import Action from './Action'
 
 type Props = {}
 
@@ -10,6 +11,7 @@ export default function TimelineFilter({ }: Props) {
             <Header>Timeline Filter</Header>
             <Date />
             <Categories />
+            <Action />
         </>
     )
 }
