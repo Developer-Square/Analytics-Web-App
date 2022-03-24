@@ -5,6 +5,7 @@ import { IPaginationResult } from '../../app/types';
 import search from '@/modules/filters/search';
 import sanitizeFilters from '@/modules/filters/sanitizeFilters';
 import { filterByDateRangeUsingEmbeddedField } from '@/modules/filters/filterByDateRange';
+import { groupByAndCount } from '@/modules/filters/groupBy';
 
 const client = new Client();
 
@@ -87,6 +88,11 @@ export const selectFilteredEventsByDateRange = createSelector(
     selectFilteredEvents,
     (state: AppState) => state.eventDateFilters,
     (events, eventDateFilters) => filterByDateRangeUsingEmbeddedField(events, eventDateFilters.finalDate, eventDateFilters.initialDate, eventDateFilters.outerField, eventDateFilters.filterKey)
+)
+
+export const selectEventTotals = createSelector(
+    selectFilteredEventsByDateRange,
+    (events) => groupByAndCount(events, 'event')
 )
 
 export const selectEventsLoading = (state: AppState) => state.events.loading;
