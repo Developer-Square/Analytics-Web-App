@@ -3,21 +3,20 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
 import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
 import { DateRange } from '@mui/lab/DateRangePicker';
 import { BrowserView, MobileView } from 'react-device-detect';
-
+import styled from '@emotion/styled'
 
 
 type Props = {}
 
 export default function Date({ }: Props) {
     const [value, setValue] = useState<DateRange<Date>>([null, null]);
-    console.log(value)
     return (
         <>
+            <MiniHeader>Date</MiniHeader>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <MobileView>
                     <MobileDateRangePicker
@@ -57,3 +56,8 @@ export default function Date({ }: Props) {
         </>
     )
 }
+
+export const MiniHeader = styled.h5`
+    font-weight: bold;
+    margin-bottom: 7px
+`
