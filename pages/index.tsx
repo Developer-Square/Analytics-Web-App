@@ -6,8 +6,8 @@ import Display from "@/modules/dashboard/components/Display"
 import Sidebar from "@/modules/dashboard/components/Sidebar"
 import { ErrorBoundary } from "@/modules/helpers/ErrorBoundary"
 
-
 function Home() {
+
   return (
     <div className={styles.container}>
       <Head>
