@@ -2,6 +2,9 @@ import { createAsyncThunk, createSlice, createEntityAdapter, PayloadAction, crea
 import type { AppState } from '../../app/store';
 import Client from '@/lib/client';
 import { IPaginationResult } from '../../app/types';
+import search from '@/modules/filters/search';
+import sanitizeFilters from '@/modules/filters/sanitizeFilters';
+import { filterByDateRangeUsingEmbeddedField } from '@/modules/filters/filterByDateRange';
 
 const client = new Client();
 
@@ -72,6 +75,18 @@ export const {
 export const selectCurrentVisit = (_id: string) => createSelector(
     selectVisitEntities,
     (visit) => visit[_id]
+)
+
+export const selectFilteredVisits = createSelector(
+    selectVisits,
+    (state: AppState) => state.visitFilters,
+    (visits, visitFilters) => search(visits, sanitizeFilters(visitFilters))
+)
+
+export const selectFilteredVisitsByDateRange = createSelector(
+    selectFilteredVisits,
+    (state: AppState) => state.eventDateFilters,
+    (visits, dateFilters) => filterByDateRangeUsingEmbeddedField(visits, dateFilters.finalDate, dateFilters.initialDate, dateFilters.outerField, dateFilters.filterKey)
 )
 
 export const selectVisitsLoading = (state: AppState) => state.visits.loading;
