@@ -1,9 +1,12 @@
 import React from 'react'
+import Button from '@mui/material/Button';
 
 type Props = {}
 
 export default function SortButton({ }: Props) {
     return (
-        <div>SortButton</div>
+        <>
+            <Button variant="outlined">Sort</Button>
+        </>
     )
 }
