@@ -19,6 +19,9 @@ export interface IQueryResult {
     totalCount: number;
 }
 
+/**
+ * Returns a paginated list of documents from a collection
+ */
 export default class Paginate {
     filter: Record<string, any>;
     sort: string;
@@ -26,7 +29,7 @@ export default class Paginate {
     page: number;
     collection: Collection;
     count: Promise<number>;
-    documents;
+    documents: Promise<WithId<Document>[]>;
 
     constructor(filter: Record<string, any>, options: IOptions, collection: Collection) {
         this.filter = filter ? filter : {};
@@ -45,7 +48,7 @@ export default class Paginate {
      */
     sanitizeSort(sortBy: string | undefined): string {
         if (sortBy) {
-            const sortingCriteria: any = [];
+            const sortingCriteria: string[] = [];
             sortBy.split(',').forEach((sortOption: string) => {
                 const [key, order] = sortOption.split(':');
                 sortingCriteria.push((order === 'desc' ? '-' : '') + key);

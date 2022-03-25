@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import ApiError from './ApiError';
 import { MongoError, WriteConcernError, WriteError } from 'mongodb';
 import httpStatus from 'http-status';
-import config from './config';
-import logger from './logger';
+import config from '../config/config';
+import logger from '../config/logger';
 
 export const errorConverter = (error: any) : ApiError => {
     if(error instanceof ApiError) return error;

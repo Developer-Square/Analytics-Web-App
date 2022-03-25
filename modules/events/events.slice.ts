@@ -1,7 +1,13 @@
 import { createAsyncThunk, createSlice, createEntityAdapter, PayloadAction, createSelector } from '@reduxjs/toolkit';
-import type { AppState } from '../../app/store';
-import Client from '@/lib/client';
-import { IPaginationResult } from '../../app/types';
+import type { AppState } from '../redux/app/store';
+import Client from '@/modules/client/client';
+import { IPaginationResult } from '../redux/app/types';
+import search from '@/modules/filters/search';
+import sanitizeFilters from '@/modules/filters/sanitizeFilters';
+import { filterByDateRangeUsingEmbeddedField } from '@/modules/filters/filterByDateRange';
+import { groupByAndCount } from '@/modules/filters/groupBy';
+import { searchAndSortWithEmbeddedField } from '@/modules/filters/searchAndSort';
+import { selectFilteredSortedVisits } from '../visits/visits.slice';
 
 const client = new Client();
 
@@ -21,7 +27,7 @@ interface IEventPaginationResult extends IPaginationResult {
 
 export const eventsAdapter = createEntityAdapter<Event>({ selectId: (event) => event._id });
 
-const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, page: 0, limit: 0, totalCount: 0, totalPages: 0 });
+const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, count: 0 });
 
 export const fetchEvents = createAsyncThunk('events/fetchEvents', async () => {
     const res = await client.Event().getAllEvents();
@@ -33,7 +39,7 @@ const eventSlice = createSlice({
     initialState,
     reducers: {
         eventAdded: eventsAdapter.addOne,
-        eventDeleted: eventsAdapter.removeOne,
+        deleted: eventsAdapter.removeOne,
         eventUpdated: eventsAdapter.updateOne,
     },
     extraReducers: builder => {
@@ -44,10 +50,7 @@ const eventSlice = createSlice({
             })
             .addCase(fetchEvents.fulfilled, (state, action: PayloadAction<IEventPaginationResult>) => {
                 eventsAdapter.setAll(state, action.payload.documents);
-                state.limit = action.payload.limit;
-                state.page = action.payload.page;
-                state.totalCount = action.payload.totalCount;
-                state.totalPages = action.payload.totalPages;
+                state.count = action.payload.count;
                 state.loading = false;
                 state.loaded = true;
             })
@@ -59,7 +62,7 @@ const eventSlice = createSlice({
 
 export const {
     eventAdded,
-    eventDeleted,
+    deleted,
     eventUpdated
 } = eventSlice.actions;
 
@@ -74,11 +77,38 @@ export const selectCurrentEvent = (_id: string) => createSelector(
     (event) => event[_id]
 )
 
+export const selectEventsByDateRange = createSelector(
+    selectEvents,
+    (state: AppState) => state.dateFilters,
+    (events, dateFilters) => filterByDateRangeUsingEmbeddedField(events, dateFilters.finalDate, dateFilters.initialDate, dateFilters.outerField, dateFilters.filterKey)
+)
+
+export const selectFilteredEvents = createSelector(
+    selectEventsByDateRange,
+    (state: AppState) => state.eventFilters,
+    (events, eventFilters) => search(events, sanitizeFilters(eventFilters))
+)
+
+export const selectFilteredSortedEvents = createSelector(
+    selectEventsByDateRange,
+    (state: AppState) => state.eventFilters,
+    (state: AppState) => state.eventSorting,
+    (events, eventFilters, sortingFilters) => searchAndSortWithEmbeddedField(events, sanitizeFilters(eventFilters), sortingFilters.ascending, 'meta', sortingFilters.sortKey)
+)
+
+export const selectEventTotals = createSelector(
+    selectFilteredEvents,
+    (events) => groupByAndCount(events, 'event')
+)
+
+export const selectEventsAndVisits = createSelector(
+    selectFilteredSortedEvents,
+    selectFilteredSortedVisits,
+    (events, visits) => events.concat(visits)
+)
+
 export const selectEventsLoading = (state: AppState) => state.events.loading;
 export const selectEventsLoaded = (state: AppState) => state.events.loaded;
-export const selectEventsLimit = (state: AppState) => state.events.limit;
-export const selectEventsPage = (state: AppState) => state.events.page;
-export const selectEventstotalCount = (state: AppState) => state.events.totalCount;
-export const selectEventstotalPages = (state: AppState) => state.events.totalPages;
+export const selectEventsCount = (state: AppState) => state.events.count;
 
 export default eventSlice.reducer;

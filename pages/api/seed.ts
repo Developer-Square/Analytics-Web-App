@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import catchAPIError from '../../lib/catchAPIError';
-import seed from '../../lib/populate';
-import config from '../../lib/config';
+import catchAPIError from '@/modules/errors/catchAPIError';
+import seed from '@/modules/database/populate';
+import config from '@/modules/config/config';
 
 export default catchAPIError(async (
     req: NextApiRequest,

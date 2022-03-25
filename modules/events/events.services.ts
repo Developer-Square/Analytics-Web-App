@@ -1,7 +1,9 @@
 import { Db, DeleteResult, Document, WithId, ModifyResult, ObjectId, InsertManyResult } from 'mongodb';
-import Paginate, { IQueryResult } from '../lib/paginate';
-import ApiError from '../lib/ApiError';
+import Paginate, { IQueryResult } from '../database/paginate';
+import ApiError from '../errors/ApiError';
 import httpStatus from 'http-status';
+import Recent, { IRecentDocs } from '../database/recent';
+import pick from '../utilities/pick';
 
 class Event {
     db: Db;
@@ -41,12 +43,25 @@ class Event {
 
     /**
      * Paginates events
-     * @param {IPagination} paginationbody pagination filter and options
+     * @param {IPagination} query pagination filter and options
      * @returns {Promise<IQueryResult>} List of events that satisfy filter
      */
-    async paginate(paginationbody: any): Promise<IQueryResult> {
-        const pagination = new Paginate(paginationbody.filter, paginationbody.options, this.db.collection('events'));
+    async paginate(query: any): Promise<IQueryResult> {
+        const filter = pick(query, ['event', 'userId', 'anonymousId']);
+        const options = pick(query, ['sortBy', 'limit', 'page']);
+        const pagination = new Paginate(filter, options, this.db.collection('events'));
         return await pagination.getDocuments();
+    }
+
+    /**
+     * Returns events whose timestamp is within the last 30 days
+     * @param options filter and sorting options
+     * @returns {Promise<IRecentDocs>} events whose timestamp is within the last 30 days that satisty filter
+     */
+    async recent(options: any): Promise<IRecentDocs> {
+        const filter = pick(options, ['event', 'userId', 'anonymousId']);
+        const recent = new Recent(this.db.collection('events'), filter, options.sortBy);
+        return await recent.getDocuments();
     }
 
     /**
