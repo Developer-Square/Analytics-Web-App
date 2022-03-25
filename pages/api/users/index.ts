@@ -16,7 +16,7 @@ export default catchAPIError(async (
         res.status(httpStatus.CREATED).json({ user })
     }
     else if (req.method === 'GET') {
-        const docs = await UserCollection.paginate(req.query);
+        const docs = await UserCollection.recent(req.query);
         res.status(httpStatus.OK).json({ results: docs })
     }
     else {

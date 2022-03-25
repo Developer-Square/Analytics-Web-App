@@ -25,7 +25,7 @@ interface IVisitPaginationResult extends IPaginationResult {
 
 export const visitsAdapter = createEntityAdapter<Visit>({ selectId: (visit) => visit._id });
 
-const initialState = visitsAdapter.getInitialState({ loading: false, loaded: false, page: 0, limit: 0, totalCount: 0, totalPages: 0 });
+const initialState = visitsAdapter.getInitialState({ loading: false, loaded: false, count: 0 });
 
 export const fetchVisits = createAsyncThunk('visits/fetchVisits', async () => {
     const res = await client.Visit().getAllVisits();
@@ -48,10 +48,7 @@ const visitSlice = createSlice({
             })
             .addCase(fetchVisits.fulfilled, (state, action: PayloadAction<IVisitPaginationResult>) => {
                 visitsAdapter.setAll(state, action.payload.documents);
-                state.limit = action.payload.limit;
-                state.page = action.payload.page;
-                state.totalCount = action.payload.totalCount;
-                state.totalPages = action.payload.totalPages;
+                state.count = action.payload.count;
                 state.loading = false;
                 state.loaded = true;
             })
@@ -99,9 +96,6 @@ export const selectFilteredSortedVisits = createSelector(
 
 export const selectVisitsLoading = (state: AppState) => state.visits.loading;
 export const selectVisitsLoaded = (state: AppState) => state.visits.loaded;
-export const selectVisitsLimit = (state: AppState) => state.visits.limit;
-export const selectVisitsPage = (state: AppState) => state.visits.page;
-export const selectVisitstotalCount = (state: AppState) => state.visits.totalCount;
-export const selectVisitstotalPages = (state: AppState) => state.visits.totalPages;
+export const selectVisitsCount = (state: AppState) => state.visits.count;
 
 export default visitSlice.reducer;

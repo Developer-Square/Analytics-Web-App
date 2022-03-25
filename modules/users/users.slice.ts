@@ -18,7 +18,7 @@ interface IUserPaginationResult extends IPaginationResult {
 
 export const usersAdapter = createEntityAdapter<User>({ selectId: (user) => user._id });
 
-const initialState = usersAdapter.getInitialState({ loading: false, loaded: false, page: 0, limit: 0, totalCount: 0, totalPages: 0 });
+const initialState = usersAdapter.getInitialState({ loading: false, loaded: false, count: 0 });
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
     const res = await client.User().getAllUsers();
@@ -41,10 +41,7 @@ const userSlice = createSlice({
             })
             .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<IUserPaginationResult>) => {
                 usersAdapter.setAll(state, action.payload.documents);
-                state.limit = action.payload.limit;
-                state.page = action.payload.page;
-                state.totalCount = action.payload.totalCount;
-                state.totalPages = action.payload.totalPages;
+                state.count = action.payload.count;
                 state.loading = false;
                 state.loaded = true;
             })
@@ -73,9 +70,6 @@ export const selectCurrentUser = (_id: string) => createSelector(
 
 export const selectUsersLoading = (state: AppState) => state.users.loading;
 export const selectUsersLoaded = (state: AppState) => state.users.loaded;
-export const selectUsersLimit = (state: AppState) => state.users.limit;
-export const selectUsersPage = (state: AppState) => state.users.page;
-export const selectUserstotalCount = (state: AppState) => state.users.totalCount;
-export const selectUserstotalPages = (state: AppState) => state.users.totalPages;
+export const selectUsersCount = (state: AppState) => state.users.count;
 
 export default userSlice.reducer;

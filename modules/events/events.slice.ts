@@ -27,7 +27,7 @@ interface IEventPaginationResult extends IPaginationResult {
 
 export const eventsAdapter = createEntityAdapter<Event>({ selectId: (event) => event._id });
 
-const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, page: 0, limit: 0, totalCount: 0, totalPages: 0 });
+const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, count: 0 });
 
 export const fetchEvents = createAsyncThunk('events/fetchEvents', async () => {
     const res = await client.Event().getAllEvents();
@@ -50,10 +50,7 @@ const eventSlice = createSlice({
             })
             .addCase(fetchEvents.fulfilled, (state, action: PayloadAction<IEventPaginationResult>) => {
                 eventsAdapter.setAll(state, action.payload.documents);
-                state.limit = action.payload.limit;
-                state.page = action.payload.page;
-                state.totalCount = action.payload.totalCount;
-                state.totalPages = action.payload.totalPages;
+                state.count = action.payload.count;
                 state.loading = false;
                 state.loaded = true;
             })
@@ -112,9 +109,6 @@ export const selectEventsAndVisits = createSelector(
 
 export const selectEventsLoading = (state: AppState) => state.events.loading;
 export const selectEventsLoaded = (state: AppState) => state.events.loaded;
-export const selectEventsLimit = (state: AppState) => state.events.limit;
-export const selectEventsPage = (state: AppState) => state.events.page;
-export const selectEventstotalCount = (state: AppState) => state.events.totalCount;
-export const selectEventstotalPages = (state: AppState) => state.events.totalPages;
+export const selectEventsCount = (state: AppState) => state.events.count;
 
 export default eventSlice.reducer;
