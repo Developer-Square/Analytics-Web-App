@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '@/modules/helpers/ErrorBoundary'
+import { ErrorBoundary } from '@/modules/errors/ErrorBoundary'
 import React from 'react'
 import TimelineFilter from './TimelineFilter'
 import TotalEvents from './TotalEvents'

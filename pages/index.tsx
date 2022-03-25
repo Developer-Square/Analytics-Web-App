@@ -4,7 +4,7 @@ import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 import Display from "@/modules/dashboard/components/Display"
 import Sidebar from "@/modules/dashboard/components/Sidebar"
-import { ErrorBoundary } from "@/modules/helpers/ErrorBoundary"
+import { ErrorBoundary } from "@/modules/errors/ErrorBoundary"
 
 function Home() {
 

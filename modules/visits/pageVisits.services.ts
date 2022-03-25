@@ -1,6 +1,6 @@
 import { Db, DeleteResult, Document, WithId, ModifyResult, ObjectId } from 'mongodb';
-import Paginate, { IQueryResult } from '../lib/paginate';
-import ApiError from '../lib/ApiError';
+import Paginate, { IQueryResult } from '../database/paginate';
+import ApiError from '../errors/ApiError';
 import httpStatus from 'http-status';
 
 class PageVisit {

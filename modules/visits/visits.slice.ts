@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, createEntityAdapter, PayloadAction, createSelector } from '@reduxjs/toolkit';
-import type { AppState } from '../../app/store';
-import Client from '@/lib/client';
-import { IPaginationResult } from '../../app/types';
+import type { AppState } from '../redux/app/store';
+import Client from '@/modules/client/client';
+import { IPaginationResult } from '../redux/app/types';
 import search from '@/modules/filters/search';
 import sanitizeFilters from '@/modules/filters/sanitizeFilters';
 import { filterByDateRangeUsingEmbeddedField } from '@/modules/filters/filterByDateRange';
@@ -80,7 +80,7 @@ export const selectCurrentVisit = (_id: string) => createSelector(
 
 export const selectVisitsByDateRange = createSelector(
     selectVisits,
-    (state: AppState) => state.eventDateFilters,
+    (state: AppState) => state.dateFilters,
     (visits, dateFilters) => filterByDateRangeUsingEmbeddedField(visits, dateFilters.finalDate, dateFilters.initialDate, dateFilters.outerField, dateFilters.filterKey)
 )
 

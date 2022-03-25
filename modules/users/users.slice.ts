@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, createEntityAdapter, PayloadAction, createSelector } from '@reduxjs/toolkit';
-import type { AppState } from '../../app/store';
-import Client from '@/lib/client';
-import { IPaginationResult } from '../../app/types';
+import type { AppState } from '../redux/app/store';
+import Client from '@/modules/client/client';
+import { IPaginationResult } from '../redux/app/types';
 
 const client = new Client();
 

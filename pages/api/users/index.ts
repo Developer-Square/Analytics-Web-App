@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
-import User from '../../../services/user.services';
-import catchAPIError from '../../../lib/catchAPIError';
-import connectToDatabase from '../../../lib/database';
+import User from '@/modules/users/user.services';
+import catchAPIError from '@/modules/errors/catchAPIError';
+import connectToDatabase from '@/modules/database/database';
 
 export default catchAPIError(async (
     req: NextApiRequest,

@@ -12,24 +12,24 @@ import storageSession from 'redux-persist/lib/storage/session'
 import { combineReducers } from "redux"; 
 
 // Reducers
-import usersReducer from '../features/users/users.slice';
-import eventsReducer from '../features/events/events.slice';
-import visitsReducer from '../features/visits/visits.slice';
-import eventsFilterReducer from '../features/events/events.filter.slice';
-import eventsDateFilterReducer from '../features/events/events.dateFilter.slice';
-import visitsFilterReducer from '../features/visits/visits.filter.slice';
-import eventsSortingReducer from '../features/events/events.sorting.slice';
-import visitsSortingReducer from '../features/visits/visits.sorting.slice';
+import usersReducer from '../../users/users.slice';
+import eventsReducer from '../../events/events.slice';
+import visitsReducer from '../../visits/visits.slice';
+import eventsFilterReducer from '../../events/events.filter.slice';
+import visitsFilterReducer from '../../visits/visits.filter.slice';
+import eventsSortingReducer from '../../events/events.sorting.slice';
+import visitsSortingReducer from '../../visits/visits.sorting.slice';
+import dateFilterReducer from '../universalReducers/dateFilter.slice';
 
 const rootReducer = combineReducers({
     users: usersReducer,
     events: eventsReducer,
     visits: visitsReducer,
     eventFilters: eventsFilterReducer,
-    eventDateFilters: eventsDateFilterReducer,
     visitFilters: visitsFilterReducer,
     eventSorting: eventsSortingReducer,
     visitSorting: visitsSortingReducer,
+    dateFilters: dateFilterReducer,
 });
 
 const persistConfig = {

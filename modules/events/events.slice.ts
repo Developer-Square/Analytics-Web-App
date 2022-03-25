@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, createEntityAdapter, PayloadAction, createSelector } from '@reduxjs/toolkit';
-import type { AppState } from '../../app/store';
-import Client from '@/lib/client';
-import { IPaginationResult } from '../../app/types';
+import type { AppState } from '../redux/app/store';
+import Client from '@/modules/client/client';
+import { IPaginationResult } from '../redux/app/types';
 import search from '@/modules/filters/search';
 import sanitizeFilters from '@/modules/filters/sanitizeFilters';
 import { filterByDateRangeUsingEmbeddedField } from '@/modules/filters/filterByDateRange';
@@ -39,7 +39,7 @@ const eventSlice = createSlice({
     initialState,
     reducers: {
         eventAdded: eventsAdapter.addOne,
-        eventDeleted: eventsAdapter.removeOne,
+        deleted: eventsAdapter.removeOne,
         eventUpdated: eventsAdapter.updateOne,
     },
     extraReducers: builder => {
@@ -65,7 +65,7 @@ const eventSlice = createSlice({
 
 export const {
     eventAdded,
-    eventDeleted,
+    deleted,
     eventUpdated
 } = eventSlice.actions;
 
@@ -82,8 +82,8 @@ export const selectCurrentEvent = (_id: string) => createSelector(
 
 export const selectEventsByDateRange = createSelector(
     selectEvents,
-    (state: AppState) => state.eventDateFilters,
-    (events, eventDateFilters) => filterByDateRangeUsingEmbeddedField(events, eventDateFilters.finalDate, eventDateFilters.initialDate, eventDateFilters.outerField, eventDateFilters.filterKey)
+    (state: AppState) => state.dateFilters,
+    (events, dateFilters) => filterByDateRangeUsingEmbeddedField(events, dateFilters.finalDate, dateFilters.initialDate, dateFilters.outerField, dateFilters.filterKey)
 )
 
 export const selectFilteredEvents = createSelector(

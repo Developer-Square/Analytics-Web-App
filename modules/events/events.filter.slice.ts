@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppState } from '../../app/store';
+import { AppState } from '../redux/app/store';
 
 interface IEventFilterState {
     event: string;

@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
-import Event from '../../../services/events.services';
-import catchAPIError from '../../../lib/catchAPIError';
-import ApiError from '../../../lib/ApiError';
+import Event from '@/modules/events/events.services';
+import catchAPIError from '@/modules/errors/catchAPIError';
+import ApiError from '@/modules/errors/ApiError';
 import { ObjectId } from 'bson';
-import connectToDatabase from '../../../lib/database';
+import connectToDatabase from '@/modules/database/database';
 
 export default catchAPIError(async (
     req: NextApiRequest,

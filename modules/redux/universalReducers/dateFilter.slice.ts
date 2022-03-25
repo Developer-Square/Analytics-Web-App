@@ -1,23 +1,23 @@
 import addMonths from '@/modules/filters/addMonths';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppState } from '../../app/store';
+import { AppState } from '../app/store';
 
-interface IEventDateFilterState {
+interface IDateFilterState {
     finalDate: number;
     initialDate: number;
     filterKey: string;
     outerField: string;
 }
 
-const initialState: IEventDateFilterState = {
+const initialState: IDateFilterState = {
     finalDate: new Date().getTime(),
     initialDate: addMonths(new Date(), -1),
     filterKey: 'timestamp',
     outerField: 'meta',
 }
 
-const eventDateFilterSlice = createSlice({
-    name: 'eventDateFilters',
+const dateFilterSlice = createSlice({
+    name: 'dateFilters',
     initialState,
     reducers: {
         finalDateChanged(state, action: PayloadAction<number>){
@@ -35,11 +35,11 @@ const eventDateFilterSlice = createSlice({
     }
 });
 
-export const { finalDateChanged, initialDateChanged, filterKeyChanged, outerFieldChanged } = eventDateFilterSlice.actions;
+export const { finalDateChanged, initialDateChanged, filterKeyChanged, outerFieldChanged } = dateFilterSlice.actions;
 
-export const selectFinalDate = (state: AppState) => state.eventDateFilters.finalDate;
-export const selectInitialDate = (state: AppState) => state.eventDateFilters.initialDate;
-export const selectFilterKey = (state: AppState) => state.eventDateFilters.filterKey;
-export const selectOuterField = (state: AppState) => state.eventDateFilters.outerField;
+export const selectFinalDate = (state: AppState) => state.dateFilters.finalDate;
+export const selectInitialDate = (state: AppState) => state.dateFilters.initialDate;
+export const selectFilterKey = (state: AppState) => state.dateFilters.filterKey;
+export const selectOuterField = (state: AppState) => state.dateFilters.outerField;
 
-export default eventDateFilterSlice.reducer;
+export default dateFilterSlice.reducer;

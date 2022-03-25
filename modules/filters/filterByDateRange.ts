@@ -12,14 +12,14 @@ const filterByDateRange = (arr: Record<string, any>[], finalDate: string, initia
 /**
  * Filters array objects using a date range and embedded filterKey
  * @param {Record<string, any>[]} arr array to be filtered 
- * @param {string} finalDate maximum date 
- * @param {string} initialDate minimum date 
+ * @param {number} finalDate maximum date 
+ * @param {number} initialDate minimum date 
  * @param {tring} outerField key for the embedded filterKey
  * @param {string} filterKey Object key used for the filter. 
  * @returns {Record<string, any>[]} array filtered using date range
  * @example filterByDateRangeUsingEmbeddedField(arr, 21-01-31, 21-01-01, 'meta', 'timestamp')
  */
-export const filterByDateRangeUsingEmbeddedField = (arr: Record<string, any>[], finalDate: Date, initialDate: Date, outerField: string, filterKey: string): Record<string, any>[] => arr.filter(item => new Date(item[outerField][filterKey]) <= finalDate && new Date(item[outerField][filterKey]) >= initialDate);
+export const filterByDateRangeUsingEmbeddedField = (arr: Record<string, any>[], finalDate: number, initialDate: number, outerField: string, filterKey: string): Record<string, any>[] => arr.filter(item => new Date(item[outerField][filterKey]) <= new Date(finalDate) && new Date(item[outerField][filterKey]) >= new Date(initialDate));
 
 
 export default filterByDateRange;

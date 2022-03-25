@@ -1,6 +1,6 @@
 import { Analytics } from "analytics";
 import googleAnalytics from '@analytics/google-analytics'
-import Client from "@/lib/client";
+import Client from "@/modules/client/client";
 
 interface CheckoutEventProps {
     products: string[]
