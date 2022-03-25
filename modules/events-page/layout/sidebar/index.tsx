@@ -8,7 +8,7 @@ type Props = {}
 
 export default function Sidebar({ }: Props) {
     return (
-        <div className='mb-28'>
+        <div className='md:mb-28'>
             <ErrorBoundary>
                 <TotalEvents />
             </ErrorBoundary>

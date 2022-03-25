@@ -34,7 +34,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     }),
-    marginLeft: '300px',
+    marginLeft: 0,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     width: `calc(100% - ${drawerWidth}px)`,

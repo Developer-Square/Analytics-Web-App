@@ -13,7 +13,7 @@ export default function Action({ }: Props) {
             {titlesOnTheLeft.length && titlesOnTheLeft.map((title, index) => (
                 <Box className='flex'>
                     <NavItem key={index} title={title} />
-                    <NavItem key={index} title={titlesOnTheRight[index]} />
+                    <NavItem key={Math.random() * (20 - 7) + 7} title={titlesOnTheRight[index]} />
                 </Box>
             ))
             }
