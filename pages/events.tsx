@@ -5,6 +5,7 @@ import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material'
 import Display from '@/modules/events-page/layout/main/Display'
 import DisplayWrapper from '@/modules/events-page/layout/main/DisplayWrapper'
 import SideBarWrapper from '@/modules/events-page/layout/sidebar/SideBarWrapper'
+import Header from '@/modules/events-page/layout/app-bar/Header'
 import Sidebar from '@/modules/events-page/layout/sidebar'
 import { ErrorBoundary } from '@/modules/helpers/ErrorBoundary'
 
@@ -34,7 +35,7 @@ export default function Events() {
                         }}
                     >
                         <Toolbar>
-                            Logo Browser
+                            <Header open={sideBarOpen} setOpen={setSideBarOpen} />
                         </Toolbar>
                     </AppBar>
                 </ErrorBoundary>

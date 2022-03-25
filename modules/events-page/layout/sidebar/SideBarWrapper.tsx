@@ -3,6 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import { Box, Drawer, useMediaQuery } from '@mui/material';
 import { BrowserView, MobileView } from 'react-device-detect';
 
+
 const drawerWidth = 300;
 
 type Props = {
