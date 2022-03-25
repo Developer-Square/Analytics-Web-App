@@ -8,7 +8,7 @@ type Props = {}
 
 export default function Sidebar({ }: Props) {
     return (
-        <>
+        <div className='mb-28'>
             <ErrorBoundary>
                 <TotalEvents />
             </ErrorBoundary>
@@ -17,6 +17,6 @@ export default function Sidebar({ }: Props) {
             <ErrorBoundary>
                 <TimelineFilter />
             </ErrorBoundary>
-        </>
+        </div>
     )
 }

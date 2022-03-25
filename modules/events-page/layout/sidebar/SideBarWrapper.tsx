@@ -46,8 +46,9 @@ export default function SideBarWrapper({ children, open }: Props) {
                             color: theme.palette.text.primary,
                             borderRight: 'none',
                             [theme.breakpoints.up('md')]: {
-                                top: '88px'
-                            }
+                                top: '88px',
+                            },
+                            marginBottom: '108px'
                         }
                     }}
                     ModalProps={{ keepMounted: true }}
