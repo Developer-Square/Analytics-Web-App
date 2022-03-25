@@ -1,20 +1,25 @@
+import React, { useState } from 'react'
+
 import Display from '@/modules/events-page/layout/main/Display'
-import Wrapper from '@/modules/events-page/layout/main/wrapper'
+import DisplayWrapper from '@/modules/events-page/layout/main/DisplayWrapper'
+import SideBarWrapper from '@/modules/events-page/layout/sidebar/SideBarWrapper'
 import Sidebar from '@/modules/events-page/layout/sidebar'
 import { ErrorBoundary } from '@/modules/helpers/ErrorBoundary'
-import Head from 'next/head'
-import React from 'react'
 
 export default function Events() {
+    const [sideBarOpen, setSideBarOpen] = useState(true)
+
     return (
         <>
             <ErrorBoundary>
-                <Sidebar />
+                <SideBarWrapper open={sideBarOpen} setOpen={setSideBarOpen}>
+                    <Sidebar />
+                </SideBarWrapper>
             </ErrorBoundary>
             <ErrorBoundary>
-                <Wrapper>
+                <DisplayWrapper open={sideBarOpen}>
                     <Display />
-                </Wrapper>
+                </DisplayWrapper>
             </ErrorBoundary>
         </>
     )

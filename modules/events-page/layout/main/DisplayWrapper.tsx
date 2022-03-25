@@ -1,10 +1,10 @@
-import React, { ReactNode, useState } from 'react'
-import { styled, useTheme } from '@mui/material/styles';
+import React, { ReactNode } from 'react'
+import { styled, useTheme, Theme } from '@mui/material/styles';
 
-const drawerWidth = 260;
+const drawerWidth = 300;
 
 // styles
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }: { theme: Theme, open: boolean }) => ({
   ...theme.typography.mainContent,
   ...(!open && {
     borderBottomLeftRadius: 0,
@@ -34,7 +34,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     }),
-    marginLeft: 0,
+    marginLeft: '300px',
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     width: `calc(100% - ${drawerWidth}px)`,
@@ -48,16 +48,16 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 }));
 
 type Props = {
-  children: ReactNode
+  children: ReactNode,
+  open: boolean
 }
 
-export default function Wrapper({ children }: Props) {
+export default function DisplayWrapper({ children, open }: Props) {
   const theme = useTheme();
-  const [sideBarOpen, setSideBarOpen] = useState(true)
 
   return (
     <>
-      <Main theme={theme} open={sideBarOpen}>
+      <Main theme={theme} open={open}>
         {children}
       </Main>
     </>

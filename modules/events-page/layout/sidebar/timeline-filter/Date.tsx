@@ -20,8 +20,8 @@ export default function Date({ }: Props) {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <MobileView>
                     <MobileDateRangePicker
-                        startText="Pick a starting date"
-                        endText="Pick an ending date"
+                        startText="Starting date"
+                        endText="Ending date"
                         value={value}
                         onChange={(newValue) => {
                             setValue(newValue);
@@ -37,8 +37,8 @@ export default function Date({ }: Props) {
                 </MobileView>
                 <BrowserView>
                     <DesktopDateRangePicker
-                        startText="Pick a starting date"
-                        endText="Pick an ending date"
+                        startText="Starting date"
+                        endText="Ending date"
                         value={value}
                         onChange={(newValue) => {
                             setValue(newValue);
