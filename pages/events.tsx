@@ -1,4 +1,5 @@
-import Display from '@/modules/events-page/layout/Display'
+import Display from '@/modules/events-page/layout/main/Display'
+import Wrapper from '@/modules/events-page/layout/main/wrapper'
 import Sidebar from '@/modules/events-page/layout/sidebar'
 import { ErrorBoundary } from '@/modules/helpers/ErrorBoundary'
 import Head from 'next/head'
@@ -8,10 +9,12 @@ export default function Events() {
     return (
         <>
             <ErrorBoundary>
-                <Display />
+                <Sidebar />
             </ErrorBoundary>
             <ErrorBoundary>
-                <Sidebar />
+                <Wrapper>
+                    <Display />
+                </Wrapper>
             </ErrorBoundary>
         </>
     )

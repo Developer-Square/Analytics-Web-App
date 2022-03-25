@@ -1,5 +1,6 @@
-import Display from './layout/Display'
+import Wrapper from './layout/main/wrapper'
+import Display from './layout/main/Display'
 import Sidebar from './layout/sidebar'
 
 
-export default { Display, Sidebar }
+export default { Display, Wrapper, Sidebar }
