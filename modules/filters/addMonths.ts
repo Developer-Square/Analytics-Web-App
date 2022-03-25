@@ -5,6 +5,6 @@
  * @returns {number} modified date in epoch format
  * @example addMonths(new Date(23-01-2022), -3)
  */
-const addMonths = (initialDate: Date, months: number): Date => new Date(initialDate.setMonth(initialDate.getMonth() + months));
+const addMonths = (initialDate: Date, months: number): number => initialDate.setMonth(initialDate.getMonth() + months);
 
 export default addMonths;

@@ -3,14 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from '../../app/store';
 
 interface IEventDateFilterState {
-    finalDate: Date;
-    initialDate: Date;
+    finalDate: number;
+    initialDate: number;
     filterKey: string;
     outerField: string;
 }
 
 const initialState: IEventDateFilterState = {
-    finalDate: new Date(),
+    finalDate: new Date().getTime(),
     initialDate: addMonths(new Date(), -1),
     filterKey: 'timestamp',
     outerField: 'meta',
@@ -20,10 +20,10 @@ const eventDateFilterSlice = createSlice({
     name: 'eventDateFilters',
     initialState,
     reducers: {
-        finalDateChanged(state, action: PayloadAction<Date>){
+        finalDateChanged(state, action: PayloadAction<number>){
             state.finalDate = action.payload;
         },
-        initialDateChanged(state, action: PayloadAction<Date>){
+        initialDateChanged(state, action: PayloadAction<number>){
             state.initialDate = action.payload;
         },
         filterKeyChanged(state, action: PayloadAction<string>){
