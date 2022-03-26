@@ -1,4 +1,4 @@
-import { Collection, WithId, Document } from "mongodb";
+import { Collection, WithId, Document, Sort } from "mongodb";
 
 export interface IOptions {
     sortBy?: string;
@@ -24,18 +24,18 @@ export interface IQueryResult {
  */
 export default class Paginate {
     filter: Record<string, any>;
-    sort: string;
+    sort: Sort;
     limit: number;
     page: number;
     collection: Collection;
     count: Promise<number>;
     documents: Promise<WithId<Document>[]>;
 
-    constructor(filter: Record<string, any>, options: IOptions, collection: Collection) {
-        this.filter = filter ? filter : {};
-        this.sort = options ? this.sanitizeSort(options.sortBy) : 'createdAt';
-        this.limit = options ? this.sanitizelimit(options.limit) : 10;
-        this.page = options ? this.sanitizePage(options.page) : 1;
+    constructor(collection: Collection, filter?: Record<string, any>, options?: IOptions) {
+        this.filter = filter ?? {};
+        this.sort = this.sanitizeSort(options?.sortBy);
+        this.limit = this.sanitizelimit(options?.limit);
+        this.page = this.sanitizePage(options?.page);
         this.collection = collection;
         this.count = this.countDocs();
         this.documents = this.findDocs();
@@ -44,26 +44,26 @@ export default class Paginate {
     /**
      * Cleans up sort input 
      * @param sortBy - Sorting criteria using the format: sortField:(desc|asc). Multiple sorting criteria should be separated by commas (,)
-     * @returns {string} sorting order
+     * @returns {Sort} sorting order
      */
-    sanitizeSort(sortBy: string | undefined): string {
+     sanitizeSort(sortBy?: string): Sort {
         if (sortBy) {
-            const sortingCriteria: string[] = [];
+            const sortingCriteria: Sort = {};
             sortBy.split(',').forEach((sortOption: string) => {
                 const [key, order] = sortOption.split(':');
-                sortingCriteria.push((order === 'desc' ? '-' : '') + key);
+                sortingCriteria[key] = order === 'desc' ? -1 : 1;
             });
-            return sortingCriteria.join(' ');
+            return sortingCriteria;
         } else {
-            return 'createdAt';
+            return { 'meta.timestamp': -1 };
         }
     }
 
-    sanitizelimit(limit: number | undefined): number {
+    sanitizelimit(limit?: number): number {
         return limit && parseInt(limit.toString(), 10) > 0 ? parseInt(limit.toString(), 10) : 10;
     }
 
-    sanitizePage(page: number | undefined): number {
+    sanitizePage(page?: number): number {
         return page && parseInt(page.toString(), 10) > 0 ? parseInt(page.toString(), 10) : 1;
     }
 

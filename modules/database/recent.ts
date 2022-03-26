@@ -1,4 +1,4 @@
-import { Collection, WithId, Document } from "mongodb";
+import { Collection, WithId, Document, Sort } from "mongodb";
 import addMonths from "../filters/addMonths";
 
 export interface IRecentDocs {
@@ -10,16 +10,14 @@ export interface IRecentDocs {
  * Returns documents whose timestamp is within the last 30 days
  */
 export default class Recent {
-    dateFilter: Record<string, any>;
     filter: Record<string, any>;
-    sort: string;
+    sort: Sort;
     collection: Collection;
     count: Promise<number>;
     documents: Promise<WithId<Document>[]>;
 
     constructor(collection: Collection, filter?: Record<string, any>, sortBy?: string) {
-        this.dateFilter = { 'meta.timestamp': { $gt: addMonths(new Date(), -1)}};
-        this.filter = this.sanitizeFilter(filter);
+        this.filter = filter ? { 'meta.timestamp': { $gt: addMonths(new Date(), -1)}, ...filter } : { 'meta.timestamp': { $gt: addMonths(new Date(), -1)}};
         this.sort = this.sanitizeSort(sortBy);
         this.collection = collection;
         this.count = this.countDocs();
@@ -29,26 +27,18 @@ export default class Recent {
     /**
      * Cleans up sort input 
      * @param sortBy - Sorting criteria using the format: sortField:(desc|asc). Multiple sorting criteria should be separated by commas (,)
-     * @returns {string} sorting order
+     * @returns {Sort} sorting order
      */
-    sanitizeSort(sortBy?: string): string {
+    sanitizeSort(sortBy?: string): Sort {
         if (sortBy) {
-            const sortingCriteria: string[] = [];
+            const sortingCriteria: Sort = {};
             sortBy.split(',').forEach((sortOption: string) => {
                 const [key, order] = sortOption.split(':');
-                sortingCriteria.push((order === 'desc' ? '-' : '') + key);
+                sortingCriteria[key] = order === 'desc' ? -1 : 1;
             });
-            return sortingCriteria.join(' ');
+            return sortingCriteria;
         } else {
-            return 'createdAt';
-        }
-    }
-
-    sanitizeFilter(incomingFilter?: Record<string, any>): Record<string, any> {
-        if(incomingFilter){
-            return { ...this.dateFilter, ...incomingFilter }
-        } else {
-            return { ...this.dateFilter }
+            return { 'meta.timestamp': -1 };
         }
     }
 
