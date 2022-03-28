@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ThemeProvider } from '@mui/material/styles';
 import { Toaster } from '@/modules/common'
-import themes from '../modules/themes';
+import themes from '@/modules/themes';
 import '../styles/globals.css'
 
 const queryClient = new QueryClient({

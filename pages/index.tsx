@@ -27,7 +27,7 @@ function Home() {
         </div>
         <div>
           Link to Events Dashboard:
-          <Link href='/events'><strong> Events</strong></Link>
+          <Link href='/Events'><strong> Events</strong></Link>
         </div>
       </main>
     </div>
