@@ -7,7 +7,7 @@ type Props = {}
 export default function Categories({ }: Props) {
     return (
         <>
-            <MiniHeader>Categories</MiniHeader>
+            <MiniHeader className='mt-3'>Categories</MiniHeader>
             <NavItem title='Commerce' />
             <NavItem title='User' />
         </>

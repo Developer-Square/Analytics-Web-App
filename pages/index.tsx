@@ -25,13 +25,10 @@ function Home() {
           {/* When a new user is added go back to home page and view the id and email. */}
           <Link href='/EcommerceAnalytics'><strong> Ecommerce Page</strong></Link>
         </div>
-
-        <ErrorBoundary>
-          <Display />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <Sidebar />
-        </ErrorBoundary>
+        <div>
+          Link to Events Dashboard:
+          <Link href='/events'><strong> Events</strong></Link>
+        </div>
       </main>
     </div>
   )

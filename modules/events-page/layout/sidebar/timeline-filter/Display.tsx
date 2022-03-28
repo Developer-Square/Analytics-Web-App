@@ -36,7 +36,7 @@ export default function Display({ }: Props) {
                     </Select>
                 </FormControl>
             </div>
-            <div className="flex mb-3">
+            <div className="flex mb-3 mt-4">
                 <Typography variant='body2'>Events Per Page:</Typography>
                 <TextField
                     sx={{ ml: 1, maxWidth: 60 }}
