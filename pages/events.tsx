@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles';
 import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
 
-import Display from '@/modules/events-page/layout/main/Display'
-import DisplayWrapper from '@/modules/events-page/layout/main/DisplayWrapper'
-import SideBarWrapper from '@/modules/events-page/layout/sidebar/SideBarWrapper'
-import Header from '@/modules/events-page/layout/app-bar/Header'
-import Sidebar from '@/modules/events-page/layout/sidebar'
-import { ErrorBoundary } from '@/modules/helpers/ErrorBoundary'
+import Display from '@/modules/events/events-page/layout/main/Display'
+import DisplayWrapper from '@/modules/events/events-page/layout/main/DisplayWrapper'
+import SideBarWrapper from '@/modules/events/events-page/layout/sidebar/SideBarWrapper'
+import Header from '@/modules/events/events-page/layout/app-bar/Header'
+import Sidebar from '@/modules/events/events-page/layout/sidebar'
+import { ErrorBoundary } from '@/modules/errors/ErrorBoundary'
 
 export default function Events() {
     const theme = useTheme();
