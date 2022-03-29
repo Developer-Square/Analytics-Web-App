@@ -1,9 +1,6 @@
-import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import Display from "@/modules/dashboard/components/Display"
-import Sidebar from "@/modules/dashboard/components/Sidebar"
 import { ErrorBoundary } from "@/modules/errors/ErrorBoundary"
 
 function Home() {
@@ -26,13 +23,10 @@ function Home() {
           {/* When a new user is added go back to home page and view the id and email. */}
           <Link href='/EcommerceAnalytics'><strong> Ecommerce Page</strong></Link>
         </div>
-
-        <ErrorBoundary>
-          <Display />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <Sidebar />
-        </ErrorBoundary>
+        <div>
+          Link to Events Dashboard:
+          <Link href='/Events'><strong> Events</strong></Link>
+        </div>
       </main>
     </div>
   )
