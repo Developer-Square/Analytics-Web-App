@@ -1,7 +1,9 @@
 import { Db, DeleteResult, Document, WithId, ModifyResult, InsertManyResult } from 'mongodb';
-import Paginate, { IPagination, IQueryResult } from '../lib/paginate';
-import ApiError from '../lib/ApiError';
+import Paginate, { IQueryResult } from '../database/paginate';
+import ApiError from '../errors/ApiError';
 import httpStatus from 'http-status';
+import pick from '../utilities/pick';
+import Recent, { IRecentDocs } from '../database/recent';
 
 class User {
     db: Db;
@@ -44,12 +46,25 @@ class User {
 
     /**
      * Paginates users
-     * @param {IPagination} paginationbody pagination filter and options
+     * @param {IPagination} query pagination filter and options
      * @returns {Promise<IQueryResult>} List of users that satisfy filter
      */
-    async paginate(paginationbody: any): Promise<IQueryResult> {
-        const pagination = new Paginate(paginationbody.filter, paginationbody.options, this.db.collection('users'));
+    async paginate(query: any): Promise<IQueryResult> {
+        const filter = pick(query, []);
+        const options = pick(query, ['sortBy', 'limit', 'page']);
+        const pagination = new Paginate(filter, options, this.db.collection('users'));
         return await pagination.getDocuments();
+    }
+
+    /**
+     * Returns users whose timestamp is within the last 30 days
+     * @param options filter and sorting options
+     * @returns {Promise<IRecentDocs>} users whose timestamp is within the last 30 days that satisty filter
+     */
+     async recent(options: any): Promise<IRecentDocs> {
+        const filter = pick(options, []);
+        const recent = new Recent(this.db.collection('users'), filter, options.sortBy);
+        return await recent.getDocuments();
     }
 
     /**

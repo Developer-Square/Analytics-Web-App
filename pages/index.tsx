@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import Display from "@/modules/events-page/layout/main/Display"
-import Sidebar from "@/modules/events-page/layout/sidebar"
-import { ErrorBoundary } from "@/modules/helpers/ErrorBoundary"
-
+import { ErrorBoundary } from "@/modules/errors/ErrorBoundary"
 
 function Home() {
+
   return (
     <div className={styles.container}>
       <Head>

@@ -1,4 +1,4 @@
-import { errorHandler } from '@/modules/helpers/ErrorHandler';
+import { errorHandler } from '@/modules/errors/ErrorHandler';
 import axios from "axios"
 interface postDataParams {
     path: string,

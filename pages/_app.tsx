@@ -1,29 +1,26 @@
 import type { AppProps } from 'next/app'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { ThemeProvider } from '@mui/material/styles';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
+
 import { Toaster } from '@/modules/common'
 import themes from '@/modules/themes';
 import '../styles/globals.css'
+import store from '@/modules/redux/app/store';
 
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            refetchOnWindowFocus: false,
-            useErrorBoundary: true
-        },
-    }
-})
+let persistor = persistStore(store);
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <>
-            <QueryClientProvider client={queryClient}>
-                <ThemeProvider theme={themes()}>
+        <ThemeProvider theme={themes()}>
+            <Provider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
                     <Toaster />
                     <Component {...pageProps} />
-                </ThemeProvider>
-            </QueryClientProvider>
-        </>
+                </PersistGate>
+            </Provider>
+        </ThemeProvider>
 
     )
 }

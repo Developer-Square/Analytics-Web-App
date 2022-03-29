@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import httpStatus from 'http-status';
-import Event from '../../../services/events.services';
-import catchAPIError from '../../../lib/catchAPIError';
-import connectToDatabase from '../../../lib/database';
+import Event from '@/modules/events/events.services';
+import catchAPIError from '@/modules/errors/catchAPIError';
+import connectToDatabase from '@/modules/database/database';
 
 export default catchAPIError(async (
     req: NextApiRequest,
@@ -16,7 +16,7 @@ export default catchAPIError(async (
         res.status(httpStatus.CREATED).json({ event })
     }
     else if (req.method === 'GET') {
-        const docs = await EventCollection.paginate(req.body);
+        const docs = await EventCollection.recent(req.query);
         res.status(httpStatus.OK).json({ results: docs })
     }
     else {

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import connectToDatabase from './database';
-import logger from './logger';
+import logger from '../config/logger';
 
 const pageTypes = ['Home', 'Product', 'Single Product', 'Add to Cart', 'Checkout', 'Confirmation', 'Contact'];
 const eventTypes = ['buttonClicked', 'addToCart', 'removeFromCart', 'login', 'register', 'contact', 'search', 'comment', 'order', 'payment'];

@@ -1,5 +1,6 @@
 import { Analytics } from "analytics";
 import googleAnalytics from '@analytics/google-analytics'
+import Client from "@/modules/client/client";
 
 interface CheckoutEventProps {
     products: string[]
@@ -15,7 +16,6 @@ interface UserIdentifyEventProps {
     userId: string,
     email: string,
     username: string
-    mutateAsync: Function
 }
 
 const sendData = (data: any) => {
@@ -83,9 +83,10 @@ export const pageVisit = (): void => {
 }
 
 export const userIdentify = (params: UserIdentifyEventProps): void => {
-    const { email, userId, username, mutateAsync } = params
+    const { email, userId, username } = params
+    const client = new Client()
     analytics.identify(userId, { email, name: username }, ({ payload }: any) => {
-        mutateAsync({ method: 'POST', path: 'api/users', data: payload })
+        client.User().createUser(payload)
     })
 }
 
