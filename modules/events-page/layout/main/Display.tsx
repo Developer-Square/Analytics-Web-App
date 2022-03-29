@@ -8,7 +8,9 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
+import Button from '@mui/material/Button';
 import Image from 'next/image';
+import { ReactNode } from 'react';
 
 import { gridSpacing } from '@/modules/themes/Constants';
 import colors from 'assets/_themes-vars.module.css';
@@ -20,8 +22,46 @@ import login from '@/public/images/sidebar_icons/login.png'
 
 type Props = {}
 
-export default function Display({ }: Props) {
+interface displayEvents {
+    color: string,
+    image: StaticImageData,
+    time: string,
+    span: ReactNode,
+}
 
+export default function Display({ }: Props) {
+    const events = [
+        {
+            color: '#90caf9',
+            image: pageVisit,
+            time: '4:55am',
+            span: <>Page <span className='text-[#0090d3]'>Checkout</span> was visited</>,
+        },
+        {
+            color: '#ffcccb',
+            image: cart,
+            time: '8:43pm',
+            span: <><span className='text-[#0090d3]'>Laptop</span> was added to cart</>,
+        },
+        {
+            color: '#ffcccb',
+            image: newOrder,
+            time: '11:43am',
+            span: <>New order in the amount of 40500.00 KES</>,
+        },
+        {
+            color: '#b8ea7e',
+            image: login,
+            time: '6:13pm',
+            span: <>Successful login as <span className='text-[#0090d3]'>ryann254</span></>,
+        },
+        {
+            color: '#ffe670',
+            image: user,
+            time: '3:01pm',
+            span: <>User identified: keddelyronjoz@gmail.com</>,
+        },
+    ] as displayEvents[]
     return (
         <Card sx={{
             border: '1px solid',
@@ -77,90 +117,26 @@ export default function Display({ }: Props) {
                             </TimelineContent>
                         </TimelineItem>
                         {/* Information */}
-                        <TimelineItem>
-                            <TimelineOppositeContent sx={{
-                                marginLeft: '-90%'
-                            }}></TimelineOppositeContent>
-                            <TimelineSeparator className='mr-3'>
-                                <TimelineDot className='rounded-full bg-[#90caf9] text-black font-bold flex items-center justify-center h-8 w-8 shadow-none'>
-                                    <Image src={pageVisit} width={30} height={30} />
-                                </TimelineDot>
-                                <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
-                            </TimelineSeparator>
-                            <TimelineContent className='shadow-lg border-l-4 border-l-[#0090d3] flex items-center h-14 mt-3'>
-                                <Typography component='span' className='font-bold ml-7'>4:55 am</Typography>
-                                <Typography className='font-bold text-base text-black ml-3'>
-                                    Page <span className='text-[#0090d3]'>Checkout</span> was visited
-                                </Typography>
-                            </TimelineContent>
-                        </TimelineItem>
-                        <TimelineItem>
-                            <TimelineOppositeContent sx={{
-                                marginLeft: '-90%'
-                            }}></TimelineOppositeContent>
-                            <TimelineSeparator className='mr-3'>
-                                <TimelineDot className='rounded-full bg-[#ffcccb] text-black font-bold flex items-center justify-center h-8 w-8 shadow-none'>
-                                    <Image src={cart} width={30} height={30} />
-                                </TimelineDot>
-                                <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
-                            </TimelineSeparator>
-                            <TimelineContent className='shadow-lg border-l-4 border-l-[#ffcccb] flex items-center h-14 mt-3'>
-                                <Typography component='span' className='font-bold ml-7'>4:55 am</Typography>
-                                <Typography className='font-bold text-base text-black ml-3'>
-                                    <span className='text-[#0090d3]'>Laptop</span> was added to the cart
-                                </Typography>
-                            </TimelineContent>
-                        </TimelineItem>
-                        <TimelineItem>
-                            <TimelineOppositeContent sx={{
-                                marginLeft: '-90%'
-                            }}></TimelineOppositeContent>
-                            <TimelineSeparator className='mr-3'>
-                                <TimelineDot className='rounded-full bg-[#ffcccb] text-black font-bold flex items-center justify-center h-8 w-8 shadow-none'>
-                                    <Image src={newOrder} width={30} height={30} />
-                                </TimelineDot>
-                                <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
-                            </TimelineSeparator>
-                            <TimelineContent className='shadow-lg border-l-4 border-l-[#ffcccb] flex items-center h-14 mt-3'>
-                                <Typography component='span' className='font-bold ml-7'>4:55 am</Typography>
-                                <Typography className='font-bold text-base text-black ml-3'>
-                                    New order in the amount of 40500.00 KES
-                                </Typography>
-                            </TimelineContent>
-                        </TimelineItem>
-                        <TimelineItem>
-                            <TimelineOppositeContent sx={{
-                                marginLeft: '-90%'
-                            }}></TimelineOppositeContent>
-                            <TimelineSeparator className='mr-3'>
-                                <TimelineDot className='rounded-full bg-[#b8ea7e] text-black font-bold flex items-center justify-center h-8 w-8 shadow-none'>
-                                    <Image src={login} width={30} height={30} />
-                                </TimelineDot>
-                                <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
-                            </TimelineSeparator>
-                            <TimelineContent className='shadow-lg border-l-4 border-l-[#b8ea7e] flex items-center h-14 mt-3'>
-                                <Typography component='span' className='font-bold ml-7'>4:55 am</Typography>
-                                <Typography className='font-bold text-base text-black ml-3'>
-                                    Successful login as <span className='text-[#0090d3]'>ryann254</span>
-                                </Typography>
-                            </TimelineContent>
-                        </TimelineItem>
-                        <TimelineItem>
-                            <TimelineOppositeContent sx={{
-                                marginLeft: '-90%'
-                            }}></TimelineOppositeContent>
-                            <TimelineSeparator className='mr-3'>
-                                <TimelineDot className='rounded-full bg-[#ffe670] text-black font-bold flex items-center justify-center h-8 w-8 shadow-none'>
-                                    <Image src={user} width={30} height={30} />
-                                </TimelineDot>
-                            </TimelineSeparator>
-                            <TimelineContent className='shadow-lg border-l-4 border-l-[#ffe670] flex items-center h-14 mt-3'>
-                                <Typography component='span' className='font-bold ml-7'>4:55 am</Typography>
-                                <Typography className='font-bold text-base text-black ml-3'>
-                                    User identified: keddelyronjoz@gmail.com
-                                </Typography>
-                            </TimelineContent>
-                        </TimelineItem>
+                        {events.length && events.map((event, index) => (
+                            <TimelineItem key={index}>
+                                <TimelineOppositeContent sx={{
+                                    marginLeft: '-90%'
+                                }}></TimelineOppositeContent>
+                                <TimelineSeparator className='mr-3'>
+                                    <TimelineDot className={`rounded-full bg-[${event.color}] text-black font-bold flex items-center justify-center h-8 w-8 shadow-none`}>
+                                        <Image src={event.image} width={30} height={30} />
+                                    </TimelineDot>
+                                    <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
+                                </TimelineSeparator>
+                                <TimelineContent className={`shadow-lg border-l-4 border-l-[${event.color}] flex items-center h-14 group mt-3`}>
+                                    <Typography component='span' className='font-bold ml-7'>{event.time}</Typography>
+                                    <Typography className='font-bold text-base text-black ml-3'>
+                                        {event.span}
+                                    </Typography>
+                                    <Button className='shadow-none bg-[#e55444] text-white h-8 ml-auto hidden group-hover:block cursor-pointer hover:bg-[#ffcccb]'>Delete</Button>
+                                </TimelineContent>
+                            </TimelineItem>
+                        ))}
                     </Timeline>
                 </Grid>
             </Grid>
