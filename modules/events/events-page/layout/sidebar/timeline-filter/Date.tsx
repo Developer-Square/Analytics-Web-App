@@ -1,55 +1,56 @@
-import { useState } from 'react'
-import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import Box from '@mui/material/Box';
-import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
-import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
-import { DateRange } from '@mui/lab/DateRangePicker';
 import { BrowserView, MobileView } from 'react-device-detect';
 import styled from '@emotion/styled'
+import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
+import { finalDateChanged, initialDateChanged, selectFinalDate, selectInitialDate } from '@/modules/redux/universalReducers/dateFilter.slice';
+import { CustomMobileDatePicker, CustomDesktopDatePicker } from './CustomDatePicker';
 
 
 type Props = {}
 
 export default function Date({ }: Props) {
-    const [value, setValue] = useState<DateRange<Date>>([null, null]);
+    const dispatch = useAppDispatch();
+    const initialDate = useAppSelector(selectInitialDate);
+    const finalDate = useAppSelector(selectFinalDate);
+
     return (
         <>
             <MiniHeader>Date</MiniHeader>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <MobileView>
-                    <MobileDateRangePicker
-                        startText="Starting date"
-                        endText="Ending date"
-                        value={value}
+                    <CustomMobileDatePicker 
+                        label='Starting date'
+                        value={initialDate}
                         onChange={(newValue) => {
-                            setValue(newValue);
+                            if(newValue) dispatch(initialDateChanged(newValue.getTime()))
                         }}
-                        renderInput={(startProps, endProps) => (
-                            <>
-                                <TextField size='small' {...startProps} />
-                                <Box sx={{ mx: 2 }}> to </Box>
-                                <TextField size='small' {...endProps} />
-                            </>
-                        )}
+                    />
+                    <Box sx={{ my: 2 }}> to </Box>
+                    <CustomMobileDatePicker 
+                        label='Ending date'
+                        value={finalDate}
+                        onChange={(newValue) => {
+                            if(newValue) dispatch(finalDateChanged(newValue.getTime()))
+                        }}
                     />
                 </MobileView>
                 <BrowserView>
-                    <DesktopDateRangePicker
-                        startText="Starting date"
-                        endText="Ending date"
-                        value={value}
+                    <CustomDesktopDatePicker 
+                        label='Starting date'
+                        value={initialDate}
                         onChange={(newValue) => {
-                            setValue(newValue);
+                            if(newValue) dispatch(initialDateChanged(newValue.getTime()))
                         }}
-                        renderInput={(startProps, endProps) => (
-                            <>
-                                <TextField size='small' {...startProps} />
-                                <Box sx={{ mx: 2 }}> to </Box>
-                                <TextField size='small' {...endProps} />
-                            </>
-                        )}
+                    />
+                    <Box sx={{ my: 2 }}> to </Box>
+                    <CustomDesktopDatePicker 
+                        label='Ending date'
+                        value={finalDate}
+                        onChange={(newValue) => {
+                            if(newValue) dispatch(finalDateChanged(newValue.getTime()))
+                        }}
                     />
                 </BrowserView>
             </LocalizationProvider>
