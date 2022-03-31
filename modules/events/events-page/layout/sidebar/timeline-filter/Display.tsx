@@ -1,20 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { MiniHeader } from './Date'
+import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
+import { eventsPerPageChanged, selectEventsPerPage } from '@/modules/events/events.slice';
+import PaginationFilter from '@/modules/pagination/PaginationFilter';
 
 
 type Props = {}
 
 export default function Display({ }: Props) {
+    const dispatch = useAppDispatch();
+    const eventsPerPage = useAppSelector(selectEventsPerPage);
     const [identification, setIdentification] = useState('');
 
     const handleChange = (event: SelectChangeEvent) => {
         setIdentification(event.target.value as string);
     };
+
+    const handleEventsPerPageChanged = (event: ChangeEvent<HTMLInputElement>) => {
+        dispatch(eventsPerPageChanged(parseInt(event.target.value, 10)));
+    }
 
     const menuItems = ['Show All', 'Identified Only', 'Unidentified Only']
 
@@ -38,10 +47,10 @@ export default function Display({ }: Props) {
             </div>
             <div className="flex mb-3 mt-4">
                 <Typography variant='body2'>Events Per Page:</Typography>
-                <TextField
-                    sx={{ ml: 1, maxWidth: 60 }}
-                    defaultValue="10"
-                    size="small"
+                <PaginationFilter
+                    value={eventsPerPage}
+                    label='Events Per Page'
+                    onChange={handleEventsPerPageChanged}
                 />
             </div>
         </>
