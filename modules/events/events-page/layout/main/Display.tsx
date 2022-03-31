@@ -1,3 +1,4 @@
+import { useEffect, useState, ChangeEvent } from 'react';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -8,70 +9,34 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
-import Button from '@mui/material/Button';
-import Image from 'next/image';
-import { ReactNode, useEffect } from 'react';
 
 import { gridSpacing } from '@/modules/themes/Constants';
 import colors from 'assets/_themes-vars.module.css';
-import pageVisit from '@/public/images/sidebar_icons/page-4.png'
-import cart from '@/public/images/sidebar_icons/cart.png'
-import newOrder from '@/public/images/sidebar_icons/new-order.png'
-import user from '@/public/images/sidebar_icons/user.png'
-import login from '@/public/images/sidebar_icons/login.png'
 import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
-import { selectFilteredSortedEvents, selectEventsLoaded, fetchEvents } from '@/modules/events/events.slice';
+import { selectFilteredSortedEvents, selectEventsLoaded, fetchEvents, selectEventsPerPage } from '@/modules/events/events.slice';
+import paginateList from '@/modules/pagination/paginateList';
+import MyPagination from '@/modules/pagination/Pagination';
 
 type Props = {}
 
-interface displayEvents {
-    color: string,
-    image: StaticImageData,
-    time: string,
-    span: ReactNode,
-}
-
 export default function Display({ }: Props) {
     const dispatch = useAppDispatch();
-    const events = useAppSelector(selectFilteredSortedEvents).slice(-10);
+    const events = useAppSelector(selectFilteredSortedEvents);
     const eventsLoaded = useAppSelector(selectEventsLoaded);
+    const eventsPerPage = useAppSelector(selectEventsPerPage);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    let eventList = paginateList(events, currentPage, eventsPerPage);
+    const totalPages = Math.ceil(events.length/eventsPerPage);
 
     useEffect(() => {
         if(events.length === 0) dispatch(fetchEvents());
     }, [dispatch, events]);
 
-    const events2 = [
-        {
-            color: '#90caf9',
-            image: pageVisit,
-            time: '4:55am',
-            span: <>Page <span className='text-[#0090d3]'>Checkout</span> was visited</>,
-        },
-        {
-            color: '#ffcccb',
-            image: cart,
-            time: '8:43pm',
-            span: <><span className='text-[#0090d3]'>Laptop</span> was added to cart</>,
-        },
-        {
-            color: '#ffcccb',
-            image: newOrder,
-            time: '11:43am',
-            span: <>New order in the amount of 40500.00 KES</>,
-        },
-        {
-            color: '#b8ea7e',
-            image: login,
-            time: '6:13pm',
-            span: <>Successful login as <span className='text-[#0090d3]'>ryann254</span></>,
-        },
-        {
-            color: '#ffe670',
-            image: user,
-            time: '3:01pm',
-            span: <>User identified: keddelyronjoz@gmail.com</>,
-        },
-    ] as displayEvents[]
+    const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+        setCurrentPage(value);
+    }
+
     return (
         <Card sx={{
             border: '1px solid',
@@ -127,7 +92,7 @@ export default function Display({ }: Props) {
                             </TimelineContent>
                         </TimelineItem>
                         {/* Information */}
-                        {eventsLoaded && events.map((event, index) => (
+                        {eventsLoaded && eventList.map((event, index) => (
                             <TimelineItem key={index}>
                                 <TimelineOppositeContent sx={{
                                     marginLeft: '-90%'
@@ -142,10 +107,12 @@ export default function Display({ }: Props) {
                                     <Typography className='font-bold text-base text-black ml-3'>
                                         <span>{event.event} at {new Date(event.meta.timestamp).toLocaleDateString()}</span>
                                     </Typography>
-                                    <Button className='shadow-none bg-[#e55444] text-white h-8 ml-auto hidden group-hover:block cursor-pointer hover:bg-[#ffcccb]'>Delete</Button>
                                 </TimelineContent>
                             </TimelineItem>
                         ))}
+                        <Grid container justifyContent="center">
+                            <MyPagination count={totalPages} page={currentPage} onChange={handlePageChange} />
+                        </Grid>
                     </Timeline>
                 </Grid>
             </Grid>
