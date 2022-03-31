@@ -10,7 +10,7 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import Button from '@mui/material/Button';
 import Image from 'next/image';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 import { gridSpacing } from '@/modules/themes/Constants';
 import colors from 'assets/_themes-vars.module.css';
@@ -19,6 +19,8 @@ import cart from '@/public/images/sidebar_icons/cart.png'
 import newOrder from '@/public/images/sidebar_icons/new-order.png'
 import user from '@/public/images/sidebar_icons/user.png'
 import login from '@/public/images/sidebar_icons/login.png'
+import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
+import { selectFilteredSortedEvents, selectEventsLoaded, fetchEvents } from '@/modules/events/events.slice';
 
 type Props = {}
 
@@ -30,7 +32,15 @@ interface displayEvents {
 }
 
 export default function Display({ }: Props) {
-    const events = [
+    const dispatch = useAppDispatch();
+    const events = useAppSelector(selectFilteredSortedEvents).slice(-10);
+    const eventsLoaded = useAppSelector(selectEventsLoaded);
+
+    useEffect(() => {
+        if(events.length === 0) dispatch(fetchEvents());
+    }, [dispatch, events]);
+
+    const events2 = [
         {
             color: '#90caf9',
             image: pageVisit,
@@ -117,21 +127,20 @@ export default function Display({ }: Props) {
                             </TimelineContent>
                         </TimelineItem>
                         {/* Information */}
-                        {events.length && events.map((event, index) => (
+                        {eventsLoaded && events.map((event, index) => (
                             <TimelineItem key={index}>
                                 <TimelineOppositeContent sx={{
                                     marginLeft: '-90%'
                                 }}></TimelineOppositeContent>
                                 <TimelineSeparator className='mr-3'>
-                                    <TimelineDot className={`rounded-full bg-[${event.color}] text-black font-bold flex items-center justify-center h-8 w-8 shadow-none`}>
-                                        <Image src={event.image} width={30} height={30} />
+                                    <TimelineDot className={`rounded-full text-black font-bold flex items-center justify-center h-8 w-8 shadow-none`}>
                                     </TimelineDot>
                                     <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
                                 </TimelineSeparator>
-                                <TimelineContent className={`shadow-lg border-l-4 border-l-[${event.color}] flex items-center h-14 group mt-3`}>
+                                <TimelineContent className={`shadow-lg border-l-4 border-l-black flex items-center h-14 group mt-3`}>
                                     <Typography component='span' className='font-bold ml-7'>{event.time}</Typography>
                                     <Typography className='font-bold text-base text-black ml-3'>
-                                        {event.span}
+                                        <span>{event.event} at {new Date(event.meta.timestamp).toLocaleDateString()}</span>
                                     </Typography>
                                     <Button className='shadow-none bg-[#e55444] text-white h-8 ml-auto hidden group-hover:block cursor-pointer hover:bg-[#ffcccb]'>Delete</Button>
                                 </TimelineContent>

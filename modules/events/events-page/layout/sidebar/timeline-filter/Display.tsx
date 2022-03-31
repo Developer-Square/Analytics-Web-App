@@ -31,7 +31,7 @@ export default function Display({ }: Props) {
                         sx={{ height: '40px' }}
                     >
                         {menuItems.length && menuItems.map((item, index) => (
-                            <MenuItem value={item}>{item}</MenuItem>
+                            <MenuItem key={index} value={item}>{item}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>

@@ -11,7 +11,7 @@ import { selectFilteredSortedVisits } from '../visits/visits.slice';
 
 const client = new Client();
 
-type Event = {
+export type Event = {
     _id: string;
     event: string;
     properties: Record<string, any>;
@@ -27,7 +27,7 @@ interface IEventPaginationResult extends IPaginationResult {
 
 export const eventsAdapter = createEntityAdapter<Event>({ selectId: (event) => event._id });
 
-const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, count: 0 });
+const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, count: 0, eventsPerPage: 10 });
 
 export const fetchEvents = createAsyncThunk('events/fetchEvents', async () => {
     const res = await client.Event().getAllEvents();
@@ -41,6 +41,9 @@ const eventSlice = createSlice({
         eventAdded: eventsAdapter.addOne,
         deleted: eventsAdapter.removeOne,
         eventUpdated: eventsAdapter.updateOne,
+        eventsPerPageChanged(state, action: PayloadAction<number>) {
+            state.eventsPerPage = action.payload;
+        }
     },
     extraReducers: builder => {
         builder
@@ -63,7 +66,8 @@ const eventSlice = createSlice({
 export const {
     eventAdded,
     deleted,
-    eventUpdated
+    eventUpdated,
+    eventsPerPageChanged
 } = eventSlice.actions;
 
 export const { 
@@ -110,5 +114,6 @@ export const selectEventsAndVisits = createSelector(
 export const selectEventsLoading = (state: AppState) => state.events.loading;
 export const selectEventsLoaded = (state: AppState) => state.events.loaded;
 export const selectEventsCount = (state: AppState) => state.events.count;
+export const selectEventsPerPage = (state: AppState) => state.events.eventsPerPage;
 
 export default eventSlice.reducer;
