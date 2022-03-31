@@ -13,7 +13,7 @@ const initialState: IDateFilterState = {
     finalDate: new Date().getTime(),
     initialDate: addMonths(new Date(), -1),
     filterKey: 'timestamp',
-    outerField: 'meta',
+    outerField: 'meta'
 }
 
 const dateFilterSlice = createSlice({

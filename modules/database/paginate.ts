@@ -1,9 +1,11 @@
 import { Collection, WithId, Document, Sort } from "mongodb";
+import addMonths from "../filters/addMonths";
 
 export interface IOptions {
     sortBy?: string;
     limit?: number;
     page?: number;
+    groupBy?: string;
 }
 
 export interface IPagination {
@@ -32,7 +34,7 @@ export default class Paginate {
     documents: Promise<WithId<Document>[]>;
 
     constructor(collection: Collection, filter?: Record<string, any>, options?: IOptions) {
-        this.filter = filter ?? {};
+        this.filter = filter ? { 'meta.timestamp': { $gt: addMonths(new Date(), -1)}, ...filter } : { 'meta.timestamp': { $gt: addMonths(new Date(), -1)}};
         this.sort = this.sanitizeSort(options?.sortBy);
         this.limit = this.sanitizelimit(options?.limit);
         this.page = this.sanitizePage(options?.page);
@@ -46,7 +48,7 @@ export default class Paginate {
      * @param sortBy - Sorting criteria using the format: sortField:(desc|asc). Multiple sorting criteria should be separated by commas (,)
      * @returns {Sort} sorting order
      */
-     sanitizeSort(sortBy?: string): Sort {
+    sanitizeSort(sortBy?: string): Sort {
         if (sortBy) {
             const sortingCriteria: Sort = {};
             sortBy.split(',').forEach((sortOption: string) => {
@@ -71,7 +73,7 @@ export default class Paginate {
         return await this.collection.countDocuments(this.filter);
     }
 
-    async findDocs() {
+    async findDocs(): Promise<WithId<Document>[]> {
         return await this.collection.find(this.filter).sort(this.sort).skip((this.page - 1) * this.limit).limit(this.limit).toArray();
     }
 

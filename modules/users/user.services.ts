@@ -52,7 +52,7 @@ class User {
     async paginate(query: any): Promise<IQueryResult> {
         const filter = pick(query, []);
         const options = pick(query, ['sortBy', 'limit', 'page']);
-        const pagination = new Paginate(filter, options, this.db.collection('users'));
+        const pagination = new Paginate(this.db.collection('users'), filter, options);
         return await pagination.getDocuments();
     }
 
