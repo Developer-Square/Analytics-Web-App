@@ -13,7 +13,7 @@ const eventFilterSlice = createSlice({
     name: 'eventFilters',
     initialState,
     reducers: {
-        categoryFilterChanged(state, action: PayloadAction<string>){
+        categoryFilterChanged(state, action: PayloadAction<string>) {
             state.event = action.payload
         }
     }

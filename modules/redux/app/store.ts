@@ -9,13 +9,14 @@ import {
     REGISTER,
 } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session'
-import { combineReducers } from "redux"; 
+import { combineReducers } from "redux";
 
 // Reducers
 import usersReducer from '../../users/users.slice';
 import eventsReducer from '../../events/events.slice';
 import visitsReducer from '../../visits/visits.slice';
 import eventsFilterReducer from '../../events/events.filter.slice';
+import eventsMultipleFilterReducer from '../../events/events.multifilter.slice';
 import visitsFilterReducer from '../../visits/visits.filter.slice';
 import eventsSortingReducer from '../../events/events.sorting.slice';
 import visitsSortingReducer from '../../visits/visits.sorting.slice';
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
     events: eventsReducer,
     visits: visitsReducer,
     eventFilters: eventsFilterReducer,
+    eventsMultipleFilters: eventsMultipleFilterReducer,
     visitFilters: visitsFilterReducer,
     eventSorting: eventsSortingReducer,
     visitSorting: visitsSortingReducer,

@@ -3,6 +3,7 @@ import type { AppState } from '../redux/app/store';
 import Client from '@/modules/client/client';
 import { IPaginationResult } from '../redux/app/types';
 import search from '@/modules/filters/search';
+import filterByEnum from '@/modules/filters/filterByEnum';
 import sanitizeFilters from '@/modules/filters/sanitizeFilters';
 import { filterByDateRangeUsingEmbeddedField } from '@/modules/filters/filterByDateRange';
 import { groupByAndCount } from '@/modules/filters/groupBy';
@@ -106,6 +107,12 @@ export const selectFilteredSortedEvents = createSelector(
     (state: AppState) => state.eventFilters,
     (state: AppState) => state.eventSorting,
     (events, eventFilters, sortingFilters) => searchAndSortWithEmbeddedField(events, sanitizeFilters(eventFilters), sortingFilters.ascending, 'meta', sortingFilters.sortKey)
+)
+
+export const selectMultipleFilteredSortedEvts = createSelector(
+    selectEventsByDateRange,
+    (state: AppState) => state.eventsMultipleFilters.events,
+    (events, eventMultipleFilters) => filterByEnum(events, eventMultipleFilters, 'event')
 )
 
 export const selectEventTotals = createSelector(
