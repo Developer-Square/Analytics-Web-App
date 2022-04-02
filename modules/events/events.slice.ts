@@ -27,7 +27,7 @@ interface IEventPaginationResult extends IPaginationResult {
 
 export const eventsAdapter = createEntityAdapter<Event>({ selectId: (event) => event._id });
 
-const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, count: 0, eventsPerPage: 10 });
+const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, count: 0, eventsPerPage: 10, loadingCount: 0 });
 
 export const fetchEvents = createAsyncThunk('events/fetchEvents', async () => {
     const res = await client.Event().getAllEvents();
@@ -35,7 +35,7 @@ export const fetchEvents = createAsyncThunk('events/fetchEvents', async () => {
 });
 
 const eventSlice = createSlice({
-    name:'events',
+    name: 'events',
     initialState,
     reducers: {
         eventAdded: eventsAdapter.addOne,
@@ -43,6 +43,12 @@ const eventSlice = createSlice({
         eventUpdated: eventsAdapter.updateOne,
         eventsPerPageChanged(state, action: PayloadAction<number>) {
             state.eventsPerPage = action.payload;
+        },
+        addLoadingTimes(state) {
+            state.loadingCount += 1
+        },
+        resetLoadingTimes(state) {
+            state.loadingCount = 0
         }
     },
     extraReducers: builder => {
@@ -67,13 +73,15 @@ export const {
     eventAdded,
     deleted,
     eventUpdated,
-    eventsPerPageChanged
+    eventsPerPageChanged,
+    addLoadingTimes,
+    resetLoadingTimes
 } = eventSlice.actions;
 
-export const { 
-    selectAll: selectEvents, 
+export const {
+    selectAll: selectEvents,
     selectById: selectEventById,
-    selectEntities: selectEventEntities, 
+    selectEntities: selectEventEntities,
 } = eventsAdapter.getSelectors((state: AppState) => state.events);
 
 export const selectCurrentEvent = (_id: string) => createSelector(
