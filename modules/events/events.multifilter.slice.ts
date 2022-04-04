@@ -19,11 +19,17 @@ const eventsFilterSlice = createSlice({
         },
         categoriesFilterRemoved(state, action: PayloadAction<string>) {
             state.events = state.events.filter(evt => evt !== action.payload)
+        },
+        multipleCategoriesAdded(state, action: PayloadAction<string[]>) {
+            state.events = action.payload
+        },
+        multipleCategoriesRemoved(state) {
+            state.events = ['All']
         }
     }
 });
 
-export const { categoriesFilterAdded, categoriesFilterRemoved } = eventsFilterSlice.actions;
+export const { categoriesFilterAdded, categoriesFilterRemoved, multipleCategoriesAdded, multipleCategoriesRemoved } = eventsFilterSlice.actions;
 
 export const selectEventsCategory = (state: AppState) => state.eventsMultipleFilters.events;
 
