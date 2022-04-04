@@ -7,7 +7,7 @@ import Checkbox from '@mui/material/Checkbox'
 
 import camelize from '@/modules/utilities/camelize'
 import { useAppDispatch } from '@/modules/redux/app/hooks';
-import { categoryFilterChanged } from '@/modules/events/events.filter.slice'
+import { categoriesFilterAdded, categoriesFilterRemoved } from '@/modules/events/events.multifilter.slice'
 
 type Props = {
     title?: string,
@@ -17,11 +17,11 @@ export default function NavItem({ title }: Props) {
     const dispatch = useAppDispatch()
     const [checked, setChecked] = useState(false)
     const handleChange = (evt: React.ChangeEvent<HTMLInputElement>, title: string) => {
+        const result = camelize(title)
         if (evt.target.checked) {
-            const result = camelize(title)
-            dispatch(categoryFilterChanged(result))
+            dispatch(categoriesFilterAdded(result))
         } else {
-            dispatch(categoryFilterChanged('All'))
+            dispatch(categoriesFilterRemoved(result))
         }
 
         setChecked(evt.target.checked)

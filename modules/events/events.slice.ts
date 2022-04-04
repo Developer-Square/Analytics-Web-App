@@ -9,6 +9,7 @@ import { filterByDateRangeUsingEmbeddedField } from '@/modules/filters/filterByD
 import { groupByAndCount } from '@/modules/filters/groupBy';
 import { searchAndSortWithEmbeddedField } from '@/modules/filters/searchAndSort';
 import { selectFilteredSortedVisits } from '../visits/visits.slice';
+import filterByEnumAndSort from '../filters/filterByEnumAndSort';
 
 const client = new Client();
 
@@ -112,7 +113,8 @@ export const selectFilteredSortedEvents = createSelector(
 export const selectMultipleFilteredSortedEvts = createSelector(
     selectEventsByDateRange,
     (state: AppState) => state.eventsMultipleFilters.events,
-    (events, eventMultipleFilters) => filterByEnum(events, eventMultipleFilters, 'event')
+    (state: AppState) => state.eventSorting,
+    (events, eventMultipleFilters, sortingFilters) => filterByEnumAndSort(events, eventMultipleFilters, 'event', sortingFilters.ascending, 'meta', sortingFilters.sortKey)
 )
 
 export const selectEventTotals = createSelector(

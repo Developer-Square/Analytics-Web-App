@@ -30,7 +30,6 @@ export default function Display({ }: Props) {
     const [currentPage, setCurrentPage] = useState(1);
     let eventList = paginateList(multipleEvents, currentPage, eventsPerPage);
     const totalPages = Math.ceil(multipleEvents.length / eventsPerPage);
-    console.log(multipleEvents, 'multipleEvents')
 
     useEffect(() => {
         // This is meant to reduce the endless loop that happens

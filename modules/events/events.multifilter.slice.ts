@@ -6,21 +6,24 @@ interface IEventsFilterState {
 }
 
 const initialState: IEventsFilterState = {
-    events: ['login']
+    events: ['All']
 }
 
 const eventsFilterSlice = createSlice({
     name: 'eventFilters',
     initialState,
     reducers: {
-        categoriesFilterChanged(state, action: PayloadAction<string>) {
-            state.events = []
+        categoriesFilterAdded(state, action: PayloadAction<string>) {
+            state.events = state.events.filter(evt => evt !== 'All')
             state.events.push(action.payload)
+        },
+        categoriesFilterRemoved(state, action: PayloadAction<string>) {
+            state.events = state.events.filter(evt => evt !== action.payload)
         }
     }
 });
 
-export const { categoriesFilterChanged } = eventsFilterSlice.actions;
+export const { categoriesFilterAdded, categoriesFilterRemoved } = eventsFilterSlice.actions;
 
 export const selectEventsCategory = (state: AppState) => state.eventsMultipleFilters.events;
 
