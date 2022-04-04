@@ -6,7 +6,7 @@ type Props = {}
 
 export default function Action({ }: Props) {
     const titlesOnTheLeft = ['Visit Page', 'Search', 'Exit Intent', 'Login', 'Register', 'Comment']
-    const titlesOnTheRight = ['User Identified', 'New Order', 'Payment', 'Add To Cart', 'Remove From Cart']
+    const titlesOnTheRight = ['New Order', 'Payment', 'Add To Cart', 'Remove From Cart']
     return (
         <>
             <MiniHeader>Actions</MiniHeader>

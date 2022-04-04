@@ -5,8 +5,8 @@
  * @returns {Record<string, Record<string, any>[]>} object with property as keys and grouped objects in an array as values
  * @example groupBy(incidents, 'category')
  */
- export const groupBy = (objectArray: Record<string, any>[], property: string): Record<string, Record<string, any>[]> => objectArray.reduce(function (acc, obj) {
-    var key = obj[property].title;
+export const groupBy = (objectArray: Record<string, any>[], property: string): Record<string, Record<string, any>[]> => objectArray.reduce(function (acc, obj) {
+    var key = obj[property];
     if (!acc[key]) {
         acc[key] = [];
     }
@@ -27,7 +27,7 @@ export const groupByAndCount = (objectArray: Record<string, any>[], property: st
     let countObj: Record<string, number> = {};
 
     keys.forEach((key, index) => {
-        countObj.key = groupedObjects[key].length;
+        countObj[key] = groupedObjects[key].length;
     })
     return countObj;
 }
