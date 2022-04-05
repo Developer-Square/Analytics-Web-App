@@ -3,10 +3,12 @@ import { AppState } from '../redux/app/store';
 
 interface IEventsFilterState {
     events: string[];
+    previousFilter: string;
 }
 
 const initialState: IEventsFilterState = {
-    events: ['All']
+    events: ['All'],
+    previousFilter: ''
 }
 
 const eventsFilterSlice = createSlice({
@@ -25,11 +27,14 @@ const eventsFilterSlice = createSlice({
         },
         multipleCategoriesRemoved(state) {
             state.events = ['All']
+        },
+        addPreviousFilter(state, action: PayloadAction<string>) {
+            state.previousFilter = action.payload
         }
     }
 });
 
-export const { categoriesFilterAdded, categoriesFilterRemoved, multipleCategoriesAdded, multipleCategoriesRemoved } = eventsFilterSlice.actions;
+export const { categoriesFilterAdded, categoriesFilterRemoved, multipleCategoriesAdded, multipleCategoriesRemoved, addPreviousFilter } = eventsFilterSlice.actions;
 
 export const selectEventsCategory = (state: AppState) => state.eventsMultipleFilters.events;
 
