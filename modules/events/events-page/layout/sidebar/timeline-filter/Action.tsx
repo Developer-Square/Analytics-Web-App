@@ -11,8 +11,8 @@ export default function Action({ }: Props) {
         <>
             <MiniHeader>Actions</MiniHeader>
             {titlesOnTheLeft.length && titlesOnTheLeft.map((title, index) => (
-                <Box className='flex'>
-                    <NavItem key={index} title={title} />
+                <Box className='flex' key={index}>
+                    <NavItem title={title} />
                     {/* The Math.random is just meant to randomize the keys */}
                     <NavItem key={Math.random() * (20 - 7) + 7} title={titlesOnTheRight[index]} />
                 </Box>

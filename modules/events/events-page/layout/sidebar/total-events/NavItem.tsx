@@ -52,7 +52,7 @@ export default function NavItem({ title, index }: NavItemProps) {
                 onClick={() => handleClick(title)}
                 primary={
                     <Typography color="inherit" className='text-sm'>
-                        {title} {Object.keys(eventTotals).length ? eventTotals[camelize(title)] : 0}
+                        {title} <span className='font-bold'>{Object.keys(eventTotals).length ? `(${eventTotals[camelize(title)]})` : (0)}</span>
                     </Typography>
                 }
             >

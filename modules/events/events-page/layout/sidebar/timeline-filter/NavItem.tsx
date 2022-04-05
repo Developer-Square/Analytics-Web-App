@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import FormControl from '@mui/material/FormControl'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import Checkbox from '@mui/material/Checkbox'
 
 import camelize from '@/modules/utilities/camelize'
-import { useAppDispatch } from '@/modules/redux/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
 import { categoriesFilterAdded, categoriesFilterRemoved, multipleCategoriesAdded, multipleCategoriesRemoved } from '@/modules/events/events.multifilter.slice'
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
 
 export default function NavItem({ title }: Props) {
     const dispatch = useAppDispatch()
-    const [checked, setChecked] = useState(false)
+    const events = useAppSelector(state => state.eventsMultipleFilters.events)
     const handleChange = (evt: React.ChangeEvent<HTMLInputElement>, title: string) => {
         const result = camelize(title)
         const commerceItems = ['addToCart', 'removeFromCart', 'newOrder', 'payment']
@@ -46,8 +46,6 @@ export default function NavItem({ title }: Props) {
                 dispatch(categoriesFilterRemoved(result))
             }
         }
-
-        setChecked(evt.target.checked)
     }
     return (
         <>
@@ -55,7 +53,9 @@ export default function NavItem({ title }: Props) {
                 <FormGroup>
                     <FormControlLabel
                         control={
-                            <Checkbox checked={checked}
+                            // If the action/filter has already been selected then the checkbox should be
+                            // checked
+                            <Checkbox checked={events.includes(camelize(title ?? '')) ? true : false}
                                 onChange={(e) => handleChange(e, title ?? '')} name={title} />
                         }
 
