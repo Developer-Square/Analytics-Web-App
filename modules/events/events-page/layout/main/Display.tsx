@@ -13,7 +13,7 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import { gridSpacing } from '@/modules/themes/Constants';
 import colors from 'assets/_themes-vars.module.css';
 import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
-import { selectFilteredSortedEvents, selectEventsLoaded, fetchEvents, selectEventsPerPage } from '@/modules/events/events.slice';
+import { selectMultipleFilteredSortedEvts, selectEventsLoaded, fetchEvents, selectEventsPerPage, addLoadingTimes, resetLoadingTimes } from '@/modules/events/events.slice';
 import paginateList from '@/modules/pagination/paginateList';
 import MyPagination from '@/modules/pagination/Pagination';
 
@@ -21,17 +21,26 @@ type Props = {}
 
 export default function Display({ }: Props) {
     const dispatch = useAppDispatch();
-    const events = useAppSelector(selectFilteredSortedEvents);
+    const multipleEvents = useAppSelector(selectMultipleFilteredSortedEvts);
     const eventsLoaded = useAppSelector(selectEventsLoaded);
     const eventsPerPage = useAppSelector(selectEventsPerPage);
+    const loadingTimes = useAppSelector(state => state.events.loadingCount)
 
     const [currentPage, setCurrentPage] = useState(1);
-    let eventList = paginateList(events, currentPage, eventsPerPage);
-    const totalPages = Math.ceil(events.length/eventsPerPage);
+    let eventList = paginateList(multipleEvents, currentPage, eventsPerPage);
+    const totalPages = Math.ceil(multipleEvents.length / eventsPerPage);
 
     useEffect(() => {
-        if(events.length === 0) dispatch(fetchEvents());
-    }, [dispatch, events]);
+        // This is meant to reduce the endless loop that happens
+        // when there no events in the database or when you filter
+        // and there are no events for that filter
+        if (multipleEvents.length === 0 && loadingTimes < 3) {
+            dispatch(fetchEvents());
+            dispatch(addLoadingTimes())
+        }
+
+        if (multipleEvents.length > 0) dispatch(resetLoadingTimes())
+    }, [dispatch,]);
 
     const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
         setCurrentPage(value);

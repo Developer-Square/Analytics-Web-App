@@ -3,11 +3,13 @@ import type { AppState } from '../redux/app/store';
 import Client from '@/modules/client/client';
 import { IPaginationResult } from '../redux/app/types';
 import search from '@/modules/filters/search';
+import filterByEnum from '@/modules/filters/filterByEnum';
 import sanitizeFilters from '@/modules/filters/sanitizeFilters';
 import { filterByDateRangeUsingEmbeddedField } from '@/modules/filters/filterByDateRange';
 import { groupByAndCount } from '@/modules/filters/groupBy';
 import { searchAndSortWithEmbeddedField } from '@/modules/filters/searchAndSort';
 import { selectFilteredSortedVisits } from '../visits/visits.slice';
+import filterByEnumAndSort from '../filters/filterByEnumAndSort';
 
 const client = new Client();
 
@@ -27,7 +29,7 @@ interface IEventPaginationResult extends IPaginationResult {
 
 export const eventsAdapter = createEntityAdapter<Event>({ selectId: (event) => event._id });
 
-const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, count: 0, eventsPerPage: 10 });
+const initialState = eventsAdapter.getInitialState({ loading: false, loaded: false, count: 0, eventsPerPage: 10, loadingCount: 0 });
 
 export const fetchEvents = createAsyncThunk('events/fetchEvents', async () => {
     const res = await client.Event().getAllEvents();
@@ -35,7 +37,7 @@ export const fetchEvents = createAsyncThunk('events/fetchEvents', async () => {
 });
 
 const eventSlice = createSlice({
-    name:'events',
+    name: 'events',
     initialState,
     reducers: {
         eventAdded: eventsAdapter.addOne,
@@ -43,6 +45,12 @@ const eventSlice = createSlice({
         eventUpdated: eventsAdapter.updateOne,
         eventsPerPageChanged(state, action: PayloadAction<number>) {
             state.eventsPerPage = action.payload;
+        },
+        addLoadingTimes(state) {
+            state.loadingCount += 1
+        },
+        resetLoadingTimes(state) {
+            state.loadingCount = 0
         }
     },
     extraReducers: builder => {
@@ -67,13 +75,15 @@ export const {
     eventAdded,
     deleted,
     eventUpdated,
-    eventsPerPageChanged
+    eventsPerPageChanged,
+    addLoadingTimes,
+    resetLoadingTimes
 } = eventSlice.actions;
 
-export const { 
-    selectAll: selectEvents, 
+export const {
+    selectAll: selectEvents,
     selectById: selectEventById,
-    selectEntities: selectEventEntities, 
+    selectEntities: selectEventEntities,
 } = eventsAdapter.getSelectors((state: AppState) => state.events);
 
 export const selectCurrentEvent = (_id: string) => createSelector(
@@ -87,26 +97,20 @@ export const selectEventsByDateRange = createSelector(
     (events, dateFilters) => filterByDateRangeUsingEmbeddedField(events, dateFilters.finalDate, dateFilters.initialDate, dateFilters.outerField, dateFilters.filterKey)
 )
 
-export const selectFilteredEvents = createSelector(
+export const selectMultipleFilteredSortedEvts = createSelector(
     selectEventsByDateRange,
-    (state: AppState) => state.eventFilters,
-    (events, eventFilters) => search(events, sanitizeFilters(eventFilters))
-)
-
-export const selectFilteredSortedEvents = createSelector(
-    selectEventsByDateRange,
-    (state: AppState) => state.eventFilters,
+    (state: AppState) => state.eventsMultipleFilters.events,
     (state: AppState) => state.eventSorting,
-    (events, eventFilters, sortingFilters) => searchAndSortWithEmbeddedField(events, sanitizeFilters(eventFilters), sortingFilters.ascending, 'meta', sortingFilters.sortKey)
+    (events, eventMultipleFilters, sortingFilters) => filterByEnumAndSort(events, eventMultipleFilters, 'event', sortingFilters.ascending, 'meta', sortingFilters.sortKey)
 )
 
 export const selectEventTotals = createSelector(
-    selectFilteredEvents,
+    selectMultipleFilteredSortedEvts,
     (events) => groupByAndCount(events, 'event')
 )
 
 export const selectEventsAndVisits = createSelector(
-    selectFilteredSortedEvents,
+    selectMultipleFilteredSortedEvts,
     selectFilteredSortedVisits,
     (events, visits) => events.concat(visits)
 )

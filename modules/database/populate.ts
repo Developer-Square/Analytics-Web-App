@@ -3,7 +3,7 @@ import connectToDatabase from './database';
 import logger from '../config/logger';
 
 const pageTypes = ['Home', 'Product', 'Single Product', 'Add to Cart', 'Checkout', 'Confirmation', 'Contact'];
-const eventTypes = ['buttonClicked', 'addToCart', 'removeFromCart', 'login', 'register', 'contact', 'search', 'comment', 'order', 'payment'];
+const eventTypes = ['buttonClicked', 'addToCart', 'removeFromCart', 'login', 'register', 'contact', 'search', 'comment', 'newOrder', 'payment', 'visitPage', 'exitIntent'];
 
 /**
  * Get random integer from a given range
@@ -18,9 +18,9 @@ const getRandomIntFromInterval = (min: number, max: number): number => Math.floo
  * @param {number} refDate reference date in epoch format
  * @returns {number} number of days between current date and given reference date
  */
-const getEpochDays = (refDate: number): number =>  Math.floor(((new Date().getTime()) - refDate) / (1000 * 3600 * 24));
+const getEpochDays = (refDate: number): number => Math.floor(((new Date().getTime()) - refDate) / (1000 * 3600 * 24));
 
-const seed = async() => {
+const seed = async () => {
     logger.warn('This operation will delete all documents in your database!');
 
     // Db setup
@@ -38,8 +38,8 @@ const seed = async() => {
     let userList: Record<string, any>[] = [];
     let eventList: Record<string, any>[] = [];
     let pageList: Record<string, any>[] = [];
-    
-    for(let i = 0; i < 5000; i++){
+
+    for (let i = 0; i < 50; i++) {
         let newUser = {
             _id: faker.datatype.uuid(),
             anonymousId: faker.datatype.uuid(),
@@ -55,38 +55,38 @@ const seed = async() => {
         }
         userList.push(newUser);
 
-        for(let j = 0; j < getRandomIntFromInterval(5, 50); j++){
+        for (let j = 0; j < getRandomIntFromInterval(5, 50); j++) {
             let newPageVisit = {
-                properties:{
-                    title: pageTypes[Math.floor(Math.random()*pageTypes.length)],
+                properties: {
+                    title: pageTypes[Math.floor(Math.random() * pageTypes.length)],
                     url: faker.internet.url(),
-                    path:"/",
-                    hash:"",
-                    search:"",
-                    width:1294,
-                    height:636
+                    path: "/",
+                    hash: "",
+                    search: "",
+                    width: 1294,
+                    height: 636
                 },
-                options:{},
-                userId:newUser._id,
-                anonymousId:newUser.anonymousId,
-                meta:{
-                    timestamp:faker.date.recent(getEpochDays(newUser.meta.timestamp)).getTime(),
+                options: {},
+                userId: newUser._id,
+                anonymousId: newUser.anonymousId,
+                meta: {
+                    timestamp: faker.date.recent(getEpochDays(newUser.meta.timestamp)).getTime(),
                 }
             }
             pageList.push(newPageVisit);
 
-            for(let k = 0; k < getRandomIntFromInterval(1, 10); k++){
+            for (let k = 0; k < getRandomIntFromInterval(1, 10); k++) {
                 let newEvent = {
-                    event:eventTypes[Math.floor(Math.random()*eventTypes.length)],
-                    properties:{
-                        propertyOne:faker.lorem.word(),
-                        propertyTwo:faker.lorem.word(),
+                    event: eventTypes[Math.floor(Math.random() * eventTypes.length)],
+                    properties: {
+                        propertyOne: faker.lorem.word(),
+                        propertyTwo: faker.lorem.word(),
                     },
-                    options:{},
-                    userId:newUser._id,
-                    anonymousId:newUser.anonymousId,
-                    meta:{
-                        "timestamp":faker.date.recent(getEpochDays(newUser.meta.timestamp)).getTime(),
+                    options: {},
+                    userId: newUser._id,
+                    anonymousId: newUser.anonymousId,
+                    meta: {
+                        "timestamp": faker.date.recent(getEpochDays(newUser.meta.timestamp)).getTime(),
                     }
                 }
                 eventList.push(newEvent);

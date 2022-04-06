@@ -3,7 +3,7 @@ import Date from './Date'
 import Categories from './Categories'
 import Action from './Action'
 import Display from './Display'
-import SortButton from './SortButton'
+import SortButton from './ResetButton'
 
 type Props = {}
 
