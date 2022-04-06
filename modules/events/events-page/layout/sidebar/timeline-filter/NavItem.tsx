@@ -18,9 +18,9 @@ export default function NavItem({ title }: Props) {
     const events = useAppSelector(state => state.eventsMultipleFilters.events)
     const handleChange = (evt: React.ChangeEvent<HTMLInputElement>, title: string) => {
         const result = camelize(title)
-        const commerceItems = ['addToCart', 'removeFromCart', 'newOrder', 'payment']
-        const userItems = ['login', 'register', 'userIdentified']
-        const trafficItems = ['visitPage']
+        const commerceItems = ['addToCart', 'removeFromCart', 'newOrder', 'payment', 'commerce']
+        const userItems = ['login', 'register', 'userIdentified', 'user']
+        const trafficItems = ['visitPage', 'traffic']
 
         if (evt.target.checked) {
             // If the user has selected 'Commerce' in the categories section then display any event
