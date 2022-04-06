@@ -97,19 +97,6 @@ export const selectEventsByDateRange = createSelector(
     (events, dateFilters) => filterByDateRangeUsingEmbeddedField(events, dateFilters.finalDate, dateFilters.initialDate, dateFilters.outerField, dateFilters.filterKey)
 )
 
-export const selectFilteredEvents = createSelector(
-    selectEventsByDateRange,
-    (state: AppState) => state.eventFilters,
-    (events, eventFilters) => search(events, sanitizeFilters(eventFilters))
-)
-
-export const selectFilteredSortedEvents = createSelector(
-    selectEventsByDateRange,
-    (state: AppState) => state.eventFilters,
-    (state: AppState) => state.eventSorting,
-    (events, eventFilters, sortingFilters) => searchAndSortWithEmbeddedField(events, sanitizeFilters(eventFilters), sortingFilters.ascending, 'meta', sortingFilters.sortKey)
-)
-
 export const selectMultipleFilteredSortedEvts = createSelector(
     selectEventsByDateRange,
     (state: AppState) => state.eventsMultipleFilters.events,
@@ -118,12 +105,12 @@ export const selectMultipleFilteredSortedEvts = createSelector(
 )
 
 export const selectEventTotals = createSelector(
-    selectFilteredEvents,
+    selectMultipleFilteredSortedEvts,
     (events) => groupByAndCount(events, 'event')
 )
 
 export const selectEventsAndVisits = createSelector(
-    selectFilteredSortedEvents,
+    selectMultipleFilteredSortedEvts,
     selectFilteredSortedVisits,
     (events, visits) => events.concat(visits)
 )

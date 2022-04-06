@@ -13,7 +13,7 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import { gridSpacing } from '@/modules/themes/Constants';
 import colors from 'assets/_themes-vars.module.css';
 import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
-import { selectFilteredSortedEvents, selectMultipleFilteredSortedEvts, selectEventsLoaded, fetchEvents, selectEventsPerPage, addLoadingTimes, resetLoadingTimes } from '@/modules/events/events.slice';
+import { selectMultipleFilteredSortedEvts, selectEventsLoaded, fetchEvents, selectEventsPerPage, addLoadingTimes, resetLoadingTimes } from '@/modules/events/events.slice';
 import paginateList from '@/modules/pagination/paginateList';
 import MyPagination from '@/modules/pagination/Pagination';
 
@@ -21,7 +21,6 @@ type Props = {}
 
 export default function Display({ }: Props) {
     const dispatch = useAppDispatch();
-    const events = useAppSelector(selectFilteredSortedEvents);
     const multipleEvents = useAppSelector(selectMultipleFilteredSortedEvts);
     const eventsLoaded = useAppSelector(selectEventsLoaded);
     const eventsPerPage = useAppSelector(selectEventsPerPage);

@@ -36,11 +36,7 @@ export default function NavItem({ title }: Props) {
                 dispatch(categoriesFilterAdded(result))
             }
         } else {
-            if (title === 'Commerce') {
-                dispatch(multipleCategoriesRemoved())
-            } else if (title === 'User') {
-                dispatch(multipleCategoriesRemoved())
-            } else if (title === 'Traffic') {
+            if (title === 'Commerce' || title === 'User' || title === 'Traffic') {
                 dispatch(multipleCategoriesRemoved())
             } else {
                 dispatch(categoriesFilterRemoved(result))
@@ -58,7 +54,6 @@ export default function NavItem({ title }: Props) {
                             <Checkbox checked={events.includes(camelize(title ?? '')) ? true : false}
                                 onChange={(e) => handleChange(e, title ?? '')} name={title} />
                         }
-
                         label={<Typography variant='body2'>{title ?? 'No label'}</Typography>}
                     />
                 </FormGroup>

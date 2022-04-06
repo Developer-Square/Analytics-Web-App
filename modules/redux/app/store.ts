@@ -15,7 +15,6 @@ import { combineReducers } from "redux";
 import usersReducer from '../../users/users.slice';
 import eventsReducer from '../../events/events.slice';
 import visitsReducer from '../../visits/visits.slice';
-import eventsFilterReducer from '../../events/events.filter.slice';
 import eventsMultipleFilterReducer from '../../events/events.multifilter.slice';
 import visitsFilterReducer from '../../visits/visits.filter.slice';
 import eventsSortingReducer from '../../events/events.sorting.slice';
@@ -26,7 +25,6 @@ const rootReducer = combineReducers({
     users: usersReducer,
     events: eventsReducer,
     visits: visitsReducer,
-    eventFilters: eventsFilterReducer,
     eventsMultipleFilters: eventsMultipleFilterReducer,
     visitFilters: visitsFilterReducer,
     eventSorting: eventsSortingReducer,
