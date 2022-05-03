@@ -34,13 +34,13 @@ export default function Display({ }: Props) {
         // This is meant to reduce the endless loop that happens
         // when there no events in the database or when you filter
         // and there are no events for that filter
-        if (multipleEvents.length === 0 && loadingTimes < 3) {
+        if (multipleEvents.length === 0 && loadingTimes < 5) {
             dispatch(fetchEvents());
             dispatch(addLoadingTimes())
         }
 
         if (multipleEvents.length > 0) dispatch(resetLoadingTimes())
-    }, [dispatch,]);
+    }, [dispatch]);
 
     const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
         setCurrentPage(value);
