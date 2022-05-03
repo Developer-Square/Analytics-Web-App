@@ -19,7 +19,7 @@ const config = {
         url: process.env.MONGODB_URI + (process.env.NODE_ENV === 'test' ? 'test' : ''),
         dbName: process.env.DB_NAME,
     },
-    apiKey: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api/' : 'https://analytics-web-8kcsutrs5-techive.vercel.app/api/'
+    apiKey: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api/' : 'https://analytics-web-app-techive.vercel.app/api/'
 };
 
 export default config;
