@@ -1,6 +1,8 @@
 import React, { useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { Popover, styled } from '@/modules/common'
+import styled from '@emotion/styled'
+
+import { Popover } from '@/modules/common'
 import fruitsOne from '@/public/images/fruits-1.jpg'
 import { trackEvent, userIdentify, pageVisit } from '@/modules/analytics'
 type Props = {}
@@ -37,7 +39,7 @@ export default function EcommerceAnalytics({ }: Props) {
             <div className="flex justify-start lg:w-0 lg:flex-1">
               <a href="#">
                 <span className="sr-only">Workflow</span>
-                <img
+                <Image
                   className="h-8 w-auto sm:h-10"
                   src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
                   alt=""
@@ -60,7 +62,7 @@ export default function EcommerceAnalytics({ }: Props) {
       <main>
         <section className='flex justify-center items-center'>
           <Image src={fruitsOne} width={400}
-            height={300} />
+            height={300} alt='fruits' />
           <div className='flex flex-col items-center ml-3'>
             <div className='mb-3'>Price: $45.00</div>
             <div>

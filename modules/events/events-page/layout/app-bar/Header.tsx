@@ -30,7 +30,9 @@ export default function Header({ open, setOpen }: Props) {
                     <Avatar
                         variant="rounded"
                         sx={{
+                            // @ts-ignore
                             ...theme.typography.commonAvatar,
+                            // @ts-ignore
                             ...theme.typography.mediumAvatar,
                             transition: 'all .2s ease-in-out',
                             background: theme.palette.secondary.light,
