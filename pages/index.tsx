@@ -21,11 +21,11 @@ function Home() {
         <div>
           Link to Demo E-commerce page:
           {/* When a new user is added go back to home page and view the id and email. */}
-          <Link href='/EcommerceAnalytics' passHref><strong> Ecommerce Page</strong></Link>
+          <Link href='/EcommerceAnalytics' passHref><strong className='cursor-pointer'> Ecommerce Page</strong></Link>
         </div>
         <div>
           Link to Events Dashboard:
-          <Link href='/Events' passHref><strong> Events</strong></Link>
+          <Link href='/Events' passHref><strong className='cursor-pointer'> Events</strong></Link>
         </div>
       </main>
     </div>
