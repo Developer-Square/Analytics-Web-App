@@ -16,11 +16,13 @@ import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
 import { selectMultipleFilteredSortedEvts, selectEventsLoaded, fetchEvents, selectEventsPerPage, addLoadingTimes, resetLoadingTimes } from '@/modules/events/events.slice';
 import paginateList from '@/modules/pagination/paginateList';
 import MyPagination from '@/modules/pagination/Pagination';
+import useTimeConverter from '@/modules/utilities/useTimeConverter';
 
 type Props = {}
 
 export default function Display({ }: Props) {
     const dispatch = useAppDispatch();
+    const timeConverter = useTimeConverter()
     const multipleEvents = useAppSelector(selectMultipleFilteredSortedEvts);
     const eventsLoaded = useAppSelector(selectEventsLoaded);
     const eventsPerPage = useAppSelector(selectEventsPerPage);
@@ -62,8 +64,8 @@ export default function Display({ }: Props) {
                                 marginLeft: '-90%'
                             }}></TimelineOppositeContent>
                             <TimelineSeparator className='mr-3'>
-                                <TimelineDot className='rounded-full bg-white shadow-none border-3 border-[#0090d3] h-12 w-12 flex items-center justify-center'>
-                                    <Typography className='text-sm font-bold text-black'>2022</Typography>
+                                <TimelineDot className='rounded-full !bg-white !shadow-none !border-3 !border-[#0090d3] h-12 w-12 flex items-center justify-center'>
+                                    <span className='text-sm font-bold text-black'>2022</span>
                                 </TimelineDot>
                                 <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
                             </TimelineSeparator>
@@ -74,14 +76,14 @@ export default function Display({ }: Props) {
                                 marginLeft: '-90%'
                             }}></TimelineOppositeContent>
                             <TimelineSeparator className='mr-3'>
-                                <TimelineDot className='rounded-full bg-white h-5 w-5 shadow-none border-3 border-[#0090d3]'>
+                                <TimelineDot className='rounded-full !bg-white h-5 w-5 !shadow-none !border-3 !border-[#0090d3]'>
                                 </TimelineDot>
                                 <TimelineConnector className='h-14 bg-[#0090d3] w-1' />
                             </TimelineSeparator>
                             <TimelineContent className='bg-[#0090d3] h-10 flex items-center'>
-                                <Typography className='font-bold text-base uppercase text-white ml-8'>
+                                <span className='font-bold text-base uppercase text-white ml-8'>
                                     March 2022
-                                </Typography>
+                                </span>
                             </TimelineContent>
                         </TimelineItem>
                         <TimelineItem>
@@ -89,12 +91,12 @@ export default function Display({ }: Props) {
                                 marginLeft: '-90%'
                             }}></TimelineOppositeContent>
                             <TimelineSeparator className='mr-3'>
-                                <TimelineDot className='rounded-full bg-white text-black font-bold flex items-center justify-center h-10 w-10 shadow-none border-3 border-[#0090d3]'>
+                                <TimelineDot className='rounded-full !bg-white !text-black !font-bold flex items-center justify-center h-10 w-10 !shadow-none !border-3 !border-[#0090d3]'>
                                     28
                                 </TimelineDot>
                                 <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
                             </TimelineSeparator>
-                            <TimelineContent className='bg-white flex items-center h-10 mt-3'>
+                            <TimelineContent className='bg-white flex items-center h-14 mt-3'>
                                 <Typography className='font-bold text-base uppercase text-black ml-7'>
                                     Monday, 28.03.2022
                                 </Typography>
@@ -107,13 +109,13 @@ export default function Display({ }: Props) {
                                     marginLeft: '-90%'
                                 }}></TimelineOppositeContent>
                                 <TimelineSeparator className='mr-3'>
-                                    <TimelineDot className={`rounded-full text-black font-bold flex items-center justify-center h-8 w-8 shadow-none`}>
+                                    <TimelineDot className={`rounded-full !text-black !font-bold flex items-center justify-center h-8 w-8 !shadow-none`}>
                                     </TimelineDot>
                                     <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
                                 </TimelineSeparator>
                                 <TimelineContent className={`shadow-lg border-l-4 border-l-black flex items-center h-14 group mt-3`}>
-                                    <Typography component='span' className='font-bold ml-7'>{event.time}</Typography>
-                                    <Typography className='font-bold text-base text-black ml-3'>
+                                    <Typography component='span' className='font-bold ml-7'>{timeConverter(eventList[0].meta.timestamp)}</Typography>
+                                    <Typography className='!font-bold text-base text-black !ml-3'>
                                         <span>{event.event} at {new Date(event.meta.timestamp).toLocaleDateString()}</span>
                                     </Typography>
                                 </TimelineContent>
