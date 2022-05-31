@@ -9,6 +9,7 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
+import Image from 'next/image';
 
 import { gridSpacing } from '@/modules/themes/Constants';
 import colors from 'assets/_themes-vars.module.css';
@@ -17,6 +18,7 @@ import { selectMultipleFilteredSortedEvts, selectEventsLoaded, fetchEvents, sele
 import paginateList from '@/modules/pagination/paginateList';
 import MyPagination from '@/modules/pagination/Pagination';
 import useTimeConverter from '@/modules/utilities/useTimeConverter';
+import pageVisit from '@/public/images/sidebar_icons/page-4.png'
 
 type Props = {}
 
@@ -110,6 +112,7 @@ export default function Display({ }: Props) {
                                 }}></TimelineOppositeContent>
                                 <TimelineSeparator className='mr-3'>
                                     <TimelineDot className={`rounded-full !text-black !font-bold flex items-center justify-center h-8 w-8 !shadow-none`}>
+                                        <Image src={pageVisit} width={30} height={30} />
                                     </TimelineDot>
                                     <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
                                 </TimelineSeparator>
