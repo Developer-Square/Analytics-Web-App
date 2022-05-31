@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
 import camelize from '@/modules/utilities/camelize';
 import { addPreviousFilter, categoriesFilterAdded, categoriesFilterRemoved } from '@/modules/events/events.multifilter.slice';
 import { selectEventTotals } from '@/modules/events/events.slice';
+import useColorAssigner from '@/modules/utilities/useColorAssigner';
 interface NavItemProps {
     title: string,
     index: number
@@ -18,19 +19,11 @@ interface NavItemProps {
 
 export default function NavItem({ title, index }: NavItemProps) {
     const dispatch = useAppDispatch()
+    const assignColor = useColorAssigner()
     const eventTotals = useAppSelector(selectEventTotals)
     const previousFilter = useAppSelector(state => state.eventsMultipleFilters.previousFilter)
     const icons = [pageVisit, cart, newOrder, login]
-    let background = ''
-    if (title.includes('Page')) {
-        background = 'bg-[#2A97D7]'
-    } else if (title.includes('Cart')) {
-        background = 'bg-[#F36959]'
-    } else if (title.includes('Order')) {
-        background = 'bg-[#A24A92]'
-    } else if (title.includes('Login')) {
-        background = 'bg-[#fcc914]'
-    } 
+
 
     const handleClick = (title: string) => {
         const result = camelize(title)
@@ -53,7 +46,7 @@ export default function NavItem({ title, index }: NavItemProps) {
                 pl: '24px'
             }}
         >
-            <ListItemIcon sx={{ my: 'auto', minWidth: 36, height: '34px' }} className={`rounded-full flex items-center justify-center ${background}`}>
+            <ListItemIcon sx={{ my: 'auto', minWidth: 36, height: '34px' }} className={`rounded-full flex items-center justify-center bg-[${assignColor(title)}]`}>
                 {index >= 0 ? <IconImage><Image src={icons[index]} width={30} height={30} /></IconImage> : 'loading'}
 
             </ListItemIcon>
