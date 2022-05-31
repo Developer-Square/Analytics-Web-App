@@ -3,7 +3,7 @@ import { useCallback } from "react";
 const useTimeConverter = () : ((timestamp: any) => string) => 
     useCallback((timestamp) => {
     const date = new Date(timestamp)
-    let time: any = `${date.getHours() < 10 ? '0'+date.getHours() : date.getHours()}:${date.getMinutes()}`
+    let time: any = `${date.getHours() < 10 ? '0'+date.getHours() : date.getHours()}:${date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()}`
     // Check correct time format and split into components
     time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
 
