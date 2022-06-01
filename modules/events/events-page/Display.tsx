@@ -27,27 +27,33 @@ import paginateList from "@/modules/pagination/paginateList";
 import MyPagination from "@/modules/pagination/Pagination";
 import useTimeConverter from "@/modules/utilities/useTimeConverter";
 import pageVisit from "@/public/images/sidebar_icons/web-design.png";
+import cart from "@/public/images/sidebar_icons/buy.png";
+import newOrder from "@/public/images/sidebar_icons/order-history.png";
+import login from "@/public/images/sidebar_icons/password.png";
 import useColorAssigner from "@/modules/utilities/useColorAssigner";
 import useSetDate from "@/modules/utilities/useSetDate";
 import useToDayName from "@/modules/utilities/useToDayName";
 import useToMonthName from "@/modules/utilities/useToMonthName";
+import Client from "@/modules/client/client";
 
 type Props = {};
 
 export default function Display({}: Props) {
   const dispatch = useAppDispatch();
+  const client = new Client();
   const timeConverter = useTimeConverter();
   const assignColor = useColorAssigner();
-  const setDate = useSetDate()
-  const toDayName = useToDayName()
-  const toMonthName = useToMonthName()
+  const setDate = useSetDate();
+  const toDayName = useToDayName();
+  const toMonthName = useToMonthName();
   const multipleEvents = useAppSelector(selectMultipleFilteredSortedEvts);
   const eventsLoaded = useAppSelector(selectEventsLoaded);
   const eventsPerPage = useAppSelector(selectEventsPerPage);
   const loadingTimes = useAppSelector((state) => state.events.loadingCount);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [firstEventTimestamp, setFirstEventTimestamp] = useState(0)
+  const [firstEventTimestamp, setFirstEventTimestamp] = useState(0);
+  const [userEmails, setUserEmails] = useState<string[]>([]);
   let eventList = paginateList(multipleEvents, currentPage, eventsPerPage);
   const totalPages = Math.ceil(multipleEvents.length / eventsPerPage);
 
@@ -68,8 +74,8 @@ export default function Display({}: Props) {
   };
 
   useEffect(() => {
-      if (eventsLoaded) setFirstEventTimestamp(eventList[0].meta.timestamp)
-  }, [eventsLoaded])
+    if (eventsLoaded) setFirstEventTimestamp(eventList[0].meta.timestamp);
+  }, [eventsLoaded]);
 
   const assignBorderColor = (event: string) => {
     if (
@@ -114,7 +120,9 @@ export default function Display({}: Props) {
               <TimelineSeparator className="mr-3">
                 <TimelineDot className="rounded-full !bg-white !shadow-none !border-3 !border-[#0090d3] h-12 w-12 flex items-center justify-center">
                   <span className="text-sm font-bold text-black">
-                    {eventsLoaded ? setDate(eventList[0].meta.timestamp, 'year') : ""}
+                    {eventsLoaded
+                      ? setDate(eventList[0].meta.timestamp, "year")
+                      : ""}
                   </span>
                 </TimelineDot>
                 <TimelineConnector className="h-6 bg-[#0090d3] w-1" />
@@ -133,7 +141,11 @@ export default function Display({}: Props) {
               </TimelineSeparator>
               <TimelineContent className="bg-[#0090d3] h-10 flex items-center">
                 <span className="font-bold text-base uppercase text-white ml-8">
-                {eventsLoaded ? `${toMonthName(setDate(firstEventTimestamp, 'month'))} ${setDate(firstEventTimestamp, 'year')}` : ""}
+                  {eventsLoaded
+                    ? `${toMonthName(
+                        setDate(firstEventTimestamp, "month")
+                      )} ${setDate(firstEventTimestamp, "year")}`
+                    : ""}
                 </span>
               </TimelineContent>
             </TimelineItem>
@@ -145,13 +157,17 @@ export default function Display({}: Props) {
               ></TimelineOppositeContent>
               <TimelineSeparator className="mr-3">
                 <TimelineDot className="rounded-full !bg-white !text-black !font-bold flex items-center justify-center h-10 w-10 !shadow-none !border-3 !border-[#0090d3]">
-                {eventsLoaded ? setDate(firstEventTimestamp, 'day') : ""}
+                  {eventsLoaded ? setDate(firstEventTimestamp, "day") : ""}
                 </TimelineDot>
                 <TimelineConnector className="h-6 bg-[#0090d3] w-1" />
               </TimelineSeparator>
               <TimelineContent className="bg-white flex items-center h-14 mt-3">
                 <Typography className="font-bold text-base uppercase text-black ml-7">
-                {eventsLoaded ? `${toDayName(setDate(firstEventTimestamp))}, ${setDate(firstEventTimestamp)}` : ""}
+                  {eventsLoaded
+                    ? `${toDayName(setDate(firstEventTimestamp))}, ${setDate(
+                        firstEventTimestamp
+                      )}`
+                    : ""}
                 </Typography>
               </TimelineContent>
             </TimelineItem>
@@ -171,7 +187,27 @@ export default function Display({}: Props) {
                           event.event
                         )}]`}
                       >
-                        <Image src={pageVisit} width={30} height={30} />
+                        {event.event.includes("Page") ||
+                        event.event.includes("button") ||
+                        event.event.includes("search") ||
+                        event.event.includes("exit") ? (
+                          <Image src={pageVisit} width={30} height={30} />
+                        ) : null}
+
+                        {event.event.includes("Cart") ? (
+                          <Image src={cart} width={30} height={30} />
+                        ) : null}
+
+                        {event.event.includes("Order") ||
+                        event.event.includes("payment") ? (
+                          <Image src={newOrder} width={30} height={30} />
+                        ) : null}
+
+                        {event.event.includes("login") ||
+                        event.event.includes("register") ||
+                        event.event.includes("comment") ? (
+                          <Image src={login} width={30} height={30} />
+                        ) : null}
                       </TimelineDot>
                       <TimelineConnector className="h-6 bg-[#0090d3] w-1" />
                     </TimelineSeparator>
@@ -187,6 +223,9 @@ export default function Display({}: Props) {
                         <span>
                           {event.event} at {setDate(event.meta.timestamp)}
                         </span>
+                      </Typography>
+                      <Typography className="text-base text-black !ml-auto">
+                        <span>kingzoo254.2021@gmail.com</span>
                       </Typography>
                     </TimelineContent>
                   </TimelineItem>

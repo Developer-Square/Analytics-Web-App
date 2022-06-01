@@ -35,6 +35,7 @@ export default function NavItem({ title, index }: NavItemProps) {
         dispatch(categoriesFilterAdded(result))
         dispatch(addPreviousFilter(result))
     }
+
     return (
         <ListItemButton
             sx={{
@@ -55,7 +56,7 @@ export default function NavItem({ title, index }: NavItemProps) {
                 onClick={() => handleClick(title)}
                 primary={
                     <Typography color="inherit" className='text-sm'>
-                        {title} <span className='font-bold'>{Object.keys(eventTotals).length ? `(${eventTotals[camelize(title)]})` : 0}</span>
+                        {title} <span className='font-bold'>{Object.keys(eventTotals).length ? `(${eventTotals[camelize(title)] ? eventTotals[camelize(title)] : 0})` : 0}</span>
                     </Typography>
                 }
             >
