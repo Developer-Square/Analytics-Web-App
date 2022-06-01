@@ -46,8 +46,7 @@ const seed = async () => {
             traits: {
                 companyName: faker.company.companyName(),
                 country: faker.address.country(),
-                traitOne: faker.lorem.word(),
-                traitTwo: faker.lorem.word(),
+                email: faker.internet.email(),
             },
             meta: {
                 timestamp: faker.date.past().getTime(),
