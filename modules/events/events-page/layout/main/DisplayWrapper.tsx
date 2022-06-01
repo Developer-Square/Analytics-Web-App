@@ -5,6 +5,7 @@ const drawerWidth = 300;
 
 // styles
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }: { theme: Theme, open: boolean }) => ({
+  // @ts-ignore
   ...theme.typography.mainContent,
   ...(!open && {
     borderBottomLeftRadius: 0,

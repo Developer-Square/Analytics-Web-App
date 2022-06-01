@@ -1,12 +1,11 @@
 import axios, { AxiosInstance } from 'axios';
-import config from '../config/config';
 
 class Client {
     instance: AxiosInstance;
 
     constructor() {
-        this.instance =  axios.create({
-            baseURL: config.apiKey,
+        this.instance = axios.create({
+            baseURL: '',
             timeout: 9000,
         })
     }
@@ -40,40 +39,40 @@ class Client {
 
     User() {
         return {
-            getUser: (id: string) => this.instance.get(`users/${id}`),
+            getUser: (id: string) => this.instance.get(`/api/users/${id}`),
             getAllUsers: () => this.instance({
                 method: 'GET',
-                url: 'users/',
+                url: '/api/users/',
             }),
-            createUser: (data: Record<string, any>) => this.instance.post(`users/`, data),
-            updateUser: (id: string, data: Record<string, any>) => this.instance.patch(`users/${id}`, data),
-            deleteUser: (id: string) => this.instance.delete(`users/${id}`),
+            createUser: (data: Record<string, any>) => this.instance.post(`/api/users/`, data),
+            updateUser: (id: string, data: Record<string, any>) => this.instance.patch(`/api/users/${id}`, data),
+            deleteUser: (id: string) => this.instance.delete(`/api/users/${id}`),
         }
     }
 
     Visit() {
         return {
-            getVisit: (id: string) => this.instance.get(`visits/${id}`),
+            getVisit: (id: string) => this.instance.get(`/api/visits/${id}`),
             getAllVisits: () => this.instance({
                 method: 'GET',
-                url: 'visits/',
+                url: '/api/visits/',
             }),
-            createVisit: (data: Record<string, any>) => this.instance.post(`visits/`, data),
-            updateVisit: (id: string, data: Record<string, any>) => this.instance.patch(`visits/${id}`, data),
-            deleteVisit: (id: string) => this.instance.delete(`visits/${id}`),
+            createVisit: (data: Record<string, any>) => this.instance.post(`/api/visits/`, data),
+            updateVisit: (id: string, data: Record<string, any>) => this.instance.patch(`/api/visits/${id}`, data),
+            deleteVisit: (id: string) => this.instance.delete(`/api/visits/${id}`),
         }
     }
 
     Event() {
         return {
-            getEvent: (id: string) => this.instance.get(`events/${id}`),
+            getEvent: (id: string) => this.instance.get(`/api/events/${id}`),
             getAllEvents: () => this.instance({
                 method: 'GET',
-                url: 'events/',
+                url: '/api/events/',
             }),
-            createEvent: (data: Record<string, any>) => this.instance.post(`events/`, data),
-            updateEvent: (id: string, data: Record<string, any>) => this.instance.patch(`events/${id}`, data),
-            deleteEvent: (id: string) => this.instance.delete(`events/${id}`),
+            createEvent: (data: Record<string, any>) => this.instance.post(`/api/events/`, data),
+            updateEvent: (id: string, data: Record<string, any>) => this.instance.patch(`/api/events/${id}`, data),
+            deleteEvent: (id: string) => this.instance.delete(`/api/events/${id}`),
         }
     }
 }

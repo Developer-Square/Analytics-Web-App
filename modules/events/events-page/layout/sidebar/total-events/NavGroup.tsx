@@ -1,10 +1,9 @@
-import React from 'react'
 import NavItem from './NavItem'
 
 type Props = {}
 
 export default function NavGroup() {
-    const totalEventsTitles = ['Visit Page', 'Add to Cart', 'New Order', 'User Identified', 'Login']
+    const totalEventsTitles = ['Visit Page', 'Add to Cart', 'New Order', 'Login']
     return (
         <>
             {totalEventsTitles.map((title, index) => (

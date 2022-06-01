@@ -10,6 +10,7 @@ export default function Categories({ }: Props) {
             <MiniHeader className='mt-3'>Categories</MiniHeader>
             <NavItem title='Commerce' />
             <NavItem title='User' />
+            <NavItem title='Traffic' />
         </>
     )
 }

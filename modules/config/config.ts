@@ -19,7 +19,6 @@ const config = {
         url: process.env.MONGODB_URI + (process.env.NODE_ENV === 'test' ? 'test' : ''),
         dbName: process.env.DB_NAME,
     },
-    apiKey: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api/' : 'http://localhost:3000/api/'
 };
 
 export default config;

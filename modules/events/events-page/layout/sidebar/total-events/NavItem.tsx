@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import Image from 'next/image';
 
@@ -7,14 +7,31 @@ import cart from '@/public/images/sidebar_icons/cart.png'
 import newOrder from '@/public/images/sidebar_icons/new-order.png'
 import user from '@/public/images/sidebar_icons/user.png'
 import login from '@/public/images/sidebar_icons/login.png'
-
+import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
+import camelize from '@/modules/utilities/camelize';
+import { addPreviousFilter, categoriesFilterAdded, categoriesFilterRemoved } from '@/modules/events/events.multifilter.slice';
+import { selectEventTotals } from '@/modules/events/events.slice';
 interface NavItemProps {
     title: string,
     index: number
 }
 
 export default function NavItem({ title, index }: NavItemProps) {
-    const icons = [pageVisit, cart, newOrder, user, login]
+    const dispatch = useAppDispatch()
+    const eventTotals = useAppSelector(selectEventTotals)
+    const previousFilter = useAppSelector(state => state.eventsMultipleFilters.previousFilter)
+    const icons = [pageVisit, cart, newOrder, login]
+
+    const handleClick = (title: string) => {
+        const result = camelize(title)
+        // When a user had previously clicked on a sidebar item like 'Visit Page' and now they
+        // want to view 'Add to Cart' events, we should first get rid of the 'Visit Page' events.
+        if (previousFilter) {
+            dispatch(categoriesFilterRemoved(previousFilter))
+        }
+        dispatch(categoriesFilterAdded(result))
+        dispatch(addPreviousFilter(result))
+    }
     return (
         <ListItemButton
             sx={{
@@ -32,9 +49,10 @@ export default function NavItem({ title, index }: NavItemProps) {
             </ListItemIcon>
             <ListItemText
                 sx={{ fontFamily: 'Inter' }}
+                onClick={() => handleClick(title)}
                 primary={
                     <Typography color="inherit" className='text-sm'>
-                        {title}
+                        {title} <span className='font-bold'>{Object.keys(eventTotals).length ? `(${eventTotals[camelize(title)]})` : (0)}</span>
                     </Typography>
                 }
             >
