@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent, useMemo } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -34,13 +34,11 @@ import useColorAssigner from "@/modules/utilities/useColorAssigner";
 import useSetDate from "@/modules/utilities/useSetDate";
 import useToDayName from "@/modules/utilities/useToDayName";
 import useToMonthName from "@/modules/utilities/useToMonthName";
-import Client from "@/modules/client/client";
 
 type Props = {};
 
 export default function Display({}: Props) {
   const dispatch = useAppDispatch();
-  const client = new Client();
   const timeConverter = useTimeConverter();
   const assignColor = useColorAssigner();
   const setDate = useSetDate();
@@ -53,7 +51,6 @@ export default function Display({}: Props) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [firstEventTimestamp, setFirstEventTimestamp] = useState(0);
-  const [userEmails, setUserEmails] = useState<string[]>([]);
   let eventList = paginateList(multipleEvents, currentPage, eventsPerPage);
   const totalPages = Math.ceil(multipleEvents.length / eventsPerPage);
 
