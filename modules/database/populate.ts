@@ -84,6 +84,7 @@ const seed = async () => {
                     options: {},
                     userId: newUser._id,
                     anonymousId: newUser.anonymousId,
+                    email: newUser.traits.email,
                     meta: {
                         "timestamp": faker.date.recent(getEpochDays(newUser.meta.timestamp)).getTime(),
                     }
