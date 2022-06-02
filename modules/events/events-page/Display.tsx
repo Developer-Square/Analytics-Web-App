@@ -34,6 +34,8 @@ import useColorAssigner from "@/modules/utilities/useColorAssigner";
 import useSetDate from "@/modules/utilities/useSetDate";
 import useToDayName from "@/modules/utilities/useToDayName";
 import useToMonthName from "@/modules/utilities/useToMonthName";
+import DisplaySkeleton from './DisplaySkeleton'
+import { Skeleton } from "@mui/material";
 
 type Props = {};
 
@@ -157,17 +159,15 @@ export default function Display({}: Props) {
                 <TimelineConnector className="h-6 bg-[#0090d3] w-1" />
               </TimelineSeparator>
               <TimelineContent className="bg-white flex items-center h-14 mt-3">
-                <Typography className="font-bold text-base uppercase text-black ml-7">
                   {eventsLoaded
-                    ? `${toDayName(setDate(firstEventTimestamp))}, ${setDate(
+                    ? <Typography className="font-bold text-base uppercase text-black ml-7">{toDayName(setDate(firstEventTimestamp))}, {setDate(
                         firstEventTimestamp
-                      )}`
-                    : ""}
-                </Typography>
+                      )}</Typography>
+                    : <Skeleton width='100%' height={60} />}
               </TimelineContent>
             </TimelineItem>
             {/* Information */}
-            {eventsLoaded &&
+            {eventsLoaded ?
               eventList.map((event, index) => (
                 <Border>
                   <TimelineItem key={index}>
@@ -225,7 +225,7 @@ export default function Display({}: Props) {
                     </TimelineContent>
                   </TimelineItem>
                 </Border>
-              ))}
+              )) : <><DisplaySkeleton /> <DisplaySkeleton /> <DisplaySkeleton /></>}
             <Grid container justifyContent="center">
               <MyPagination
                 count={totalPages}
