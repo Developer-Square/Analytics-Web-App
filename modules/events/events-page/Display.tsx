@@ -58,13 +58,11 @@ export default function Display({}: Props) {
     // This is meant to reduce the endless loop that happens
     // when there no events in the database or when you filter
     // and there are no events for that filter
-    if (multipleEvents.length === 0 && loadingTimes < 5) {
+    if (multipleEvents.length === 0) {
       dispatch(fetchEvents());
-      dispatch(addLoadingTimes());
     }
 
-    if (multipleEvents.length > 0) dispatch(resetLoadingTimes());
-  }, [dispatch]);
+  }, [multipleEvents, dispatch]);
 
   const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
@@ -180,9 +178,9 @@ export default function Display({}: Props) {
                     ></TimelineOppositeContent>
                     <TimelineSeparator className="mr-3">
                       <TimelineDot
-                        className={`rounded-full !text-black !font-bold flex items-center justify-center h-8 w-8 !shadow-none !bg-[${assignColor(
+                        className={`rounded-full flex items-center justify-center h-8 w-8 !shadow-none ${assignColor(
                           event.event
-                        )}]`}
+                        )}`}
                       >
                         {event.event.includes("Page") ||
                         event.event.includes("button") ||
@@ -202,7 +200,7 @@ export default function Display({}: Props) {
 
                         {event.event.includes("login") ||
                         event.event.includes("register") ||
-                        event.event.includes("comment") ? (
+                        event.event.includes("comment") || event.event.includes('contact') ? (
                           <Image src={login} width={30} height={30} />
                         ) : null}
                       </TimelineDot>
@@ -222,7 +220,7 @@ export default function Display({}: Props) {
                         </span>
                       </Typography>
                       <Typography className="text-base text-black !ml-auto">
-                        <span>kingzoo254.2021@gmail.com</span>
+                        <span>{event.email}</span>
                       </Typography>
                     </TimelineContent>
                   </TimelineItem>
@@ -242,7 +240,23 @@ export default function Display({}: Props) {
   );
 }
 
-const Border = styled.div`
+export const Border = styled.div`
+  .page {
+    background-color: #2A97D7 !important;
+  }
+
+  .cart {
+    background-color: #F36959 !important;
+  }
+
+  .order {
+    background-color: #A24A92 !important;
+  }
+
+  .login {
+    background-color: #fcc914 !important;
+  }
+
   .page-border {
     border-color: #2a97d7 !important;
   }

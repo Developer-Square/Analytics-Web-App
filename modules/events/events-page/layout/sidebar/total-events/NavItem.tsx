@@ -12,6 +12,7 @@ import camelize from '@/modules/utilities/camelize';
 import { addPreviousFilter, categoriesFilterAdded, categoriesFilterRemoved } from '@/modules/events/events.multifilter.slice';
 import { selectEventTotals } from '@/modules/events/events.slice';
 import useColorAssigner from '@/modules/utilities/useColorAssigner';
+import { Border } from '../../../Display';
 interface NavItemProps {
     title: string,
     index: number
@@ -37,6 +38,7 @@ export default function NavItem({ title, index }: NavItemProps) {
     }
 
     return (
+        <Border>
         <ListItemButton
             sx={{
                 borderRadius: '12px',
@@ -47,7 +49,7 @@ export default function NavItem({ title, index }: NavItemProps) {
                 pl: '24px'
             }}
         >
-            <ListItemIcon sx={{ my: 'auto', minWidth: 36, height: '34px' }} className={`rounded-full flex items-center justify-center bg-[${assignColor(title)}]`}>
+            <ListItemIcon sx={{ my: 'auto', minWidth: 36, height: '34px' }} className={`rounded-full flex items-center justify-center ${assignColor(title)}`}>
                 {index >= 0 ? <IconImage><Image src={icons[index]} width={30} height={30} /></IconImage> : 'loading'}
 
             </ListItemIcon>
@@ -64,8 +66,10 @@ export default function NavItem({ title, index }: NavItemProps) {
             </ListItemText>
 
         </ListItemButton>
+        </Border>
     )
 }
+
 
 const IconImage = styled.div`
     img {
