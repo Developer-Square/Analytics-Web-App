@@ -1,6 +1,6 @@
 import DisplayWrapper from './layout/main/DisplayWrapper'
 import SideBarWrapper from './layout/sidebar/SideBarWrapper'
-import Display from './layout/main/Display'
+import Display from './Display'
 import Sidebar from './layout/sidebar'
 
 

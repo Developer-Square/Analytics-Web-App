@@ -83,6 +83,7 @@ const seed = async () => {
                     },
                     options: {},
                     userId: newUser._id,
+                    email: newUser.traits.email,
                     anonymousId: newUser.anonymousId,
                     email: newUser.traits.email,
                     meta: {
