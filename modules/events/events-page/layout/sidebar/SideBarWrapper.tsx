@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Box, Drawer, useMediaQuery } from '@mui/material';
+import { Box, Drawer, useMediaQuery, Button } from '@mui/material';
 import { BrowserView, MobileView } from 'react-device-detect';
 import Image from 'next/image';
 
@@ -14,7 +14,7 @@ type Props = {
 	setOpen: Function;
 };
 
-export default function SideBarWrapper({ children, open }: Props) {
+export default function SideBarWrapper({ children, open, setOpen }: Props) {
 	const theme = useTheme();
 	const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -30,6 +30,12 @@ export default function SideBarWrapper({ children, open }: Props) {
 						alt='logo'
 					/>
 					<p className='font-bold ml-3 my-auto'>TecHive Technologies</p>
+					<button
+						onClick={() => setOpen(!open)}
+						className='btn btn-outline rounded-full w-12 btn-error ml-6'
+					>
+						X
+					</button>
 				</Box>
 			</Box>
 			<BrowserView>{children}</BrowserView>
