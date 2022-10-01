@@ -4,7 +4,7 @@ import { Box, Drawer, useMediaQuery } from '@mui/material';
 import { BrowserView, MobileView } from 'react-device-detect';
 import Image from 'next/image';
 
-import logoImage from '@/public/images/logo/Logo dark surface.png';
+import logoImage from '@/public/images/logo/Logo_dark_surface.png';
 
 const drawerWidth = 300;
 
@@ -27,6 +27,7 @@ export default function SideBarWrapper({ children, open }: Props) {
 						className='rounded-full'
 						width={50}
 						height={50}
+						alt='logo'
 					/>
 					<p className='font-bold ml-3 my-auto'>TecHive Technologies</p>
 				</Box>
