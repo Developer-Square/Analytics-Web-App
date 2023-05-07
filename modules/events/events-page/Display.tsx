@@ -16,12 +16,12 @@ import { gridSpacing } from '@/modules/themes/Constants';
 import colors from 'assets/_themes-vars.module.css';
 import { useAppDispatch, useAppSelector } from '@/modules/redux/app/hooks';
 import {
-	selectMultipleFilteredSortedEvts,
-	selectEventsLoaded,
-	fetchEvents,
-	selectEventsPerPage,
-	addLoadingTimes,
-	resetLoadingTimes,
+  selectMultipleFilteredSortedEvts,
+  selectEventsLoaded,
+  fetchEvents,
+  selectEventsPerPage,
+  addLoadingTimes,
+  resetLoadingTimes,
 } from '@/modules/events/events.slice';
 import paginateList from '@/modules/pagination/paginateList';
 import MyPagination from '@/modules/pagination/Pagination';
@@ -39,260 +39,265 @@ import { DominoLoader } from '@/modules/common';
 type Props = {};
 
 export default function Display({}: Props) {
-	const dispatch = useAppDispatch();
-	const timeConverter = useTimeConverter();
-	const assignColor = useColorAssigner();
-	const setDate = useSetDate();
-	const toDayName = useToDayName();
-	const toMonthName = useToMonthName();
-	const multipleEvents = useAppSelector(selectMultipleFilteredSortedEvts);
-	const eventsLoaded = useAppSelector(selectEventsLoaded);
-	const eventsPerPage = useAppSelector(selectEventsPerPage);
-	const loadingTimes = useAppSelector((state) => state.events.loadingCount);
+  const dispatch = useAppDispatch();
+  const timeConverter = useTimeConverter();
+  const assignColor = useColorAssigner();
+  const setDate = useSetDate();
+  const toDayName = useToDayName();
+  const toMonthName = useToMonthName();
+  const multipleEvents = useAppSelector(selectMultipleFilteredSortedEvts);
+  const eventsLoaded = useAppSelector(selectEventsLoaded);
+  const eventsPerPage = useAppSelector(selectEventsPerPage);
+  const loadingTimes = useAppSelector((state) => state.events.loadingCount);
 
-	const [currentPage, setCurrentPage] = useState(1);
-	const [firstEventTimestamp, setFirstEventTimestamp] = useState(0);
-	let eventList = paginateList(multipleEvents, currentPage, eventsPerPage);
-	const totalPages = Math.ceil(multipleEvents.length / eventsPerPage);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [firstEventTimestamp, setFirstEventTimestamp] = useState(0);
+  let eventList = paginateList(multipleEvents, currentPage, eventsPerPage);
+  const totalPages = Math.ceil(multipleEvents.length / eventsPerPage);
 
-	useEffect(() => {
-		// This is meant to reduce the endless loop that happens
-		// when there no events in the database or when you filter
-		// and there are no events for that filter
-		if (multipleEvents.length === 0) {
-			dispatch(fetchEvents());
-		}
-	}, [multipleEvents, dispatch]);
+  useEffect(() => {
+    // This is meant to reduce the endless loop that happens
+    // when there no events in the database or when you filter
+    // and there are no events for that filter
+    if (multipleEvents.length === 0 && loadingTimes <= 3) {
+      dispatch(fetchEvents());
+      dispatch(addLoadingTimes());
+    }
+  }, [multipleEvents, dispatch, loadingTimes]);
 
-	const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
-		setCurrentPage(value);
-	};
+  const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+  };
 
-	useEffect(() => {
-		if (eventsLoaded) setFirstEventTimestamp(eventList[0].meta.timestamp);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [eventsLoaded]);
+  useEffect(() => {
+    if (eventsLoaded && eventList.length) {
+      dispatch(resetLoadingTimes());
+      setFirstEventTimestamp(eventList[0].meta.timestamp);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eventsLoaded]);
 
-	const assignBorderColor = (event: string) => {
-		if (
-			event.includes('Page') ||
-			event.includes('button') ||
-			event.includes('search') ||
-			event.includes('exit')
-		) {
-			return 'page-border';
-		} else if (event.includes('Cart')) {
-			return 'cart-border';
-		} else if (event.includes('Order') || event.includes('payment')) {
-			return 'order-border';
-		} else if (
-			event.includes('login') ||
-			event.includes('register') ||
-			event.includes('comment')
-		) {
-			return 'login-border';
-		}
-	};
+  const assignBorderColor = (event: string) => {
+    if (
+      event.includes('Page') ||
+      event.includes('button') ||
+      event.includes('search') ||
+      event.includes('exit')
+    ) {
+      return 'page-border';
+    } else if (event.includes('Cart')) {
+      return 'cart-border';
+    } else if (event.includes('Order') || event.includes('payment')) {
+      return 'order-border';
+    } else if (
+      event.includes('login') ||
+      event.includes('register') ||
+      event.includes('comment')
+    ) {
+      return 'login-border';
+    }
+  };
 
-	return (
-		<Card
-			sx={{
-				border: '1px solid',
-				borderColor: colors.primary200 + 75,
-				':hover': {
-					boxShadow: '0 2px 14px 0 rgb(32 40 45 / 8%)',
-				},
-			}}
-		>
-			<Grid container spacing={gridSpacing}>
-				<Grid item xs={12}>
-					<Timeline>
-						<DominoLoader loading={!eventsLoaded} />
-						<TimelineItem>
-							<TimelineOppositeContent
-								sx={{
-									marginLeft: '-90%',
-								}}
-							></TimelineOppositeContent>
-							<TimelineSeparator className='mr-3'>
-								<TimelineDot className='rounded-full !bg-white !shadow-none !border-3 !border-[#0090d3] h-12 w-12 flex items-center justify-center'>
-									<span className='text-sm font-bold text-black'>
-										{eventsLoaded
-											? setDate(eventList[0].meta.timestamp, 'year')
-											: ''}
-									</span>
-								</TimelineDot>
-								<TimelineConnector className='h-6 bg-[#0090d3] w-1' />
-							</TimelineSeparator>
-							<TimelineContent></TimelineContent>
-						</TimelineItem>
-						<TimelineItem>
-							<TimelineOppositeContent
-								sx={{
-									marginLeft: '-90%',
-								}}
-							></TimelineOppositeContent>
-							<TimelineSeparator className='mr-3'>
-								<TimelineDot className='rounded-full !bg-white h-5 w-5 !shadow-none !border-3 !border-[#0090d3]'></TimelineDot>
-								<TimelineConnector className='h-14 bg-[#0090d3] w-1' />
-							</TimelineSeparator>
-							<TimelineContent className='bg-[#0090d3] h-10 flex items-center'>
-								<span className='font-bold text-base uppercase text-white ml-8'>
-									{eventsLoaded
-										? `${toMonthName(
-												setDate(firstEventTimestamp, 'month')
-										  )} ${setDate(firstEventTimestamp, 'year')}`
-										: ''}
-								</span>
-							</TimelineContent>
-						</TimelineItem>
-						<TimelineItem>
-							<TimelineOppositeContent
-								sx={{
-									marginLeft: '-90%',
-								}}
-							></TimelineOppositeContent>
-							<TimelineSeparator className='mr-3'>
-								<TimelineDot className='rounded-full !bg-white !text-black !font-bold flex items-center justify-center h-10 w-10 !shadow-none !border-3 !border-[#0090d3]'>
-									{eventsLoaded ? setDate(firstEventTimestamp, 'day') : ''}
-								</TimelineDot>
-								<TimelineConnector className='h-6 bg-[#0090d3] w-1' />
-							</TimelineSeparator>
-							<TimelineContent className='bg-white flex items-center h-14 mt-3'>
-								<Typography className='font-bold text-base uppercase text-black ml-7'>
-									{eventsLoaded
-										? `${toDayName(setDate(firstEventTimestamp))}, ${setDate(
-												firstEventTimestamp
-										  )}`
-										: ''}
-								</Typography>
-							</TimelineContent>
-						</TimelineItem>
-						{/* Information */}
-						{eventsLoaded &&
-							eventList.map((event, index) => (
-								<Border key={index}>
-									<TimelineItem key={index}>
-										<TimelineOppositeContent
-											sx={{
-												marginLeft: '-90%',
-											}}
-										></TimelineOppositeContent>
-										<TimelineSeparator className='mr-3'>
-											<TimelineDot
-												className={`rounded-full flex items-center justify-center h-8 w-8 !shadow-none ${assignColor(
-													event.event
-												)}`}
-											>
-												{event.event.includes('Page') ||
-												event.event.includes('button') ||
-												event.event.includes('search') ||
-												event.event.includes('exit') ? (
-													<Image
-														src={pageVisit}
-														width={30}
-														height={30}
-														alt='image'
-													/>
-												) : null}
+  return (
+    <Card
+      sx={{
+        border: '1px solid',
+        borderColor: colors.primary200 + 75,
+        ':hover': {
+          boxShadow: '0 2px 14px 0 rgb(32 40 45 / 8%)',
+        },
+      }}
+      onClick={() => dispatch(resetLoadingTimes())}
+    >
+      <Grid container spacing={gridSpacing}>
+        <Grid item xs={12}>
+          <Timeline>
+            <DominoLoader loading={!eventsLoaded} />
+            <TimelineItem>
+              <TimelineOppositeContent
+                sx={{
+                  marginLeft: '-90%',
+                }}
+              ></TimelineOppositeContent>
+              <TimelineSeparator className='mr-3'>
+                <TimelineDot className='rounded-full !bg-white !shadow-none !border-3 !border-[#0090d3] h-12 w-12 flex items-center justify-center'>
+                  <span className='text-sm font-bold text-black'>
+                    {eventsLoaded && eventList.length
+                      ? setDate(eventList[0].meta.timestamp, 'year')
+                      : ''}
+                  </span>
+                </TimelineDot>
+                <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
+              </TimelineSeparator>
+              <TimelineContent></TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineOppositeContent
+                sx={{
+                  marginLeft: '-90%',
+                }}
+              ></TimelineOppositeContent>
+              <TimelineSeparator className='mr-3'>
+                <TimelineDot className='rounded-full !bg-white h-5 w-5 !shadow-none !border-3 !border-[#0090d3]'></TimelineDot>
+                <TimelineConnector className='h-14 bg-[#0090d3] w-1' />
+              </TimelineSeparator>
+              <TimelineContent className='bg-[#0090d3] h-10 flex items-center'>
+                <span className='font-bold text-base uppercase text-white ml-8'>
+                  {eventsLoaded
+                    ? `${toMonthName(
+                        setDate(firstEventTimestamp, 'month')
+                      )} ${setDate(firstEventTimestamp, 'year')}`
+                    : ''}
+                </span>
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem>
+              <TimelineOppositeContent
+                sx={{
+                  marginLeft: '-90%',
+                }}
+              ></TimelineOppositeContent>
+              <TimelineSeparator className='mr-3'>
+                <TimelineDot className='rounded-full !bg-white !text-black !font-bold flex items-center justify-center h-10 w-10 !shadow-none !border-3 !border-[#0090d3]'>
+                  {eventsLoaded ? setDate(firstEventTimestamp, 'day') : ''}
+                </TimelineDot>
+                <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
+              </TimelineSeparator>
+              <TimelineContent className='bg-white flex items-center h-14 mt-3'>
+                <Typography className='font-bold text-base uppercase text-black ml-7'>
+                  {eventsLoaded
+                    ? `${toDayName(setDate(firstEventTimestamp))}, ${setDate(
+                        firstEventTimestamp
+                      )}`
+                    : ''}
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+            {/* Information */}
+            {eventsLoaded &&
+              eventList.map((event, index) => (
+                <Border key={index}>
+                  <TimelineItem key={index}>
+                    <TimelineOppositeContent
+                      sx={{
+                        marginLeft: '-90%',
+                      }}
+                    ></TimelineOppositeContent>
+                    <TimelineSeparator className='mr-3'>
+                      <TimelineDot
+                        className={`rounded-full flex items-center justify-center h-8 w-8 !shadow-none ${assignColor(
+                          event.event
+                        )}`}
+                      >
+                        {event.event.includes('Page') ||
+                        event.event.includes('button') ||
+                        event.event.includes('search') ||
+                        event.event.includes('exit') ? (
+                          <Image
+                            src={pageVisit}
+                            width={30}
+                            height={30}
+                            alt='image'
+                          />
+                        ) : null}
 
-												{event.event.includes('Cart') ? (
-													<Image
-														src={cart}
-														width={30}
-														height={30}
-														alt='image'
-													/>
-												) : null}
+                        {event.event.includes('Cart') ? (
+                          <Image
+                            src={cart}
+                            width={30}
+                            height={30}
+                            alt='image'
+                          />
+                        ) : null}
 
-												{event.event.includes('Order') ||
-												event.event.includes('payment') ? (
-													<Image
-														src={newOrder}
-														width={30}
-														height={30}
-														alt='image'
-													/>
-												) : null}
+                        {event.event.includes('Order') ||
+                        event.event.includes('payment') ? (
+                          <Image
+                            src={newOrder}
+                            width={30}
+                            height={30}
+                            alt='image'
+                          />
+                        ) : null}
 
-												{event.event.includes('login') ||
-												event.event.includes('register') ||
-												event.event.includes('comment') ||
-												event.event.includes('contact') ? (
-													<Image
-														src={login}
-														width={30}
-														height={30}
-														alt='image'
-													/>
-												) : null}
-											</TimelineDot>
-											<TimelineConnector className='h-6 bg-[#0090d3] w-1' />
-										</TimelineSeparator>
-										<TimelineContent
-											className={`shadow-lg border-l-4 ${assignBorderColor(
-												event.event
-											)} flex items-center h-14 group mt-3`}
-										>
-											<Typography component='span' className='font-bold ml-7'>
-												{timeConverter(event.meta.timestamp)}
-											</Typography>
-											<Typography className='!font-bold text-base text-black !ml-3'>
-												<span>
-													{event.event} at {setDate(event.meta.timestamp)}
-												</span>
-											</Typography>
-											<Typography className='text-base text-black !ml-auto'>
-												<span>{event.email}</span>
-											</Typography>
-										</TimelineContent>
-									</TimelineItem>
-								</Border>
-							))}
-						<Grid container justifyContent='center'>
-							<MyPagination
-								count={totalPages}
-								page={currentPage}
-								onChange={handlePageChange}
-							/>
-						</Grid>
-					</Timeline>
-				</Grid>
-			</Grid>
-		</Card>
-	);
+                        {event.event.includes('login') ||
+                        event.event.includes('register') ||
+                        event.event.includes('comment') ||
+                        event.event.includes('contact') ? (
+                          <Image
+                            src={login}
+                            width={30}
+                            height={30}
+                            alt='image'
+                          />
+                        ) : null}
+                      </TimelineDot>
+                      <TimelineConnector className='h-6 bg-[#0090d3] w-1' />
+                    </TimelineSeparator>
+                    <TimelineContent
+                      className={`shadow-lg border-l-4 ${assignBorderColor(
+                        event.event
+                      )} flex items-center h-14 group mt-3`}
+                    >
+                      <Typography component='span' className='font-bold ml-7'>
+                        {timeConverter(event.meta.timestamp)}
+                      </Typography>
+                      <Typography className='!font-bold text-base text-black !ml-3'>
+                        <span>
+                          {event.event} at {setDate(event.meta.timestamp)}
+                        </span>
+                      </Typography>
+                      <Typography className='text-base text-black !ml-auto'>
+                        <span>{event.email}</span>
+                      </Typography>
+                    </TimelineContent>
+                  </TimelineItem>
+                </Border>
+              ))}
+            <Grid container justifyContent='center'>
+              <MyPagination
+                count={totalPages}
+                page={currentPage}
+                onChange={handlePageChange}
+              />
+            </Grid>
+          </Timeline>
+        </Grid>
+      </Grid>
+    </Card>
+  );
 }
 
 export const Border = styled.div`
-	.page {
-		background-color: #2a97d7 !important;
-	}
+  .page {
+    background-color: #2a97d7 !important;
+  }
 
-	.cart {
-		background-color: #f36959 !important;
-	}
+  .cart {
+    background-color: #f36959 !important;
+  }
 
-	.order {
-		background-color: #a24a92 !important;
-	}
+  .order {
+    background-color: #a24a92 !important;
+  }
 
-	.login {
-		background-color: #fcc914 !important;
-	}
+  .login {
+    background-color: #fcc914 !important;
+  }
 
-	.page-border {
-		border-color: #2a97d7 !important;
-	}
+  .page-border {
+    border-color: #2a97d7 !important;
+  }
 
-	.cart-border {
-		border-color: #f36959 !important;
-	}
+  .cart-border {
+    border-color: #f36959 !important;
+  }
 
-	.order-border {
-		border-color: #a24a92 !important;
-	}
+  .order-border {
+    border-color: #a24a92 !important;
+  }
 
-	.login-border {
-		border-color: #fcc914 !important;
-	}
+  .login-border {
+    border-color: #fcc914 !important;
+  }
 `;
